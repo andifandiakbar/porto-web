@@ -163,8 +163,8 @@ body {
     padding: 10px 0;
   }
 
-  .logo img { height: 35px; }
-  .logo span { font-size: 14px; }
+  .logo img { height: 30px; }
+  .logo span { font-size: 13px; }
 
   .menu-toggle { 
     display: block; 
