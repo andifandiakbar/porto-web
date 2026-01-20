@@ -806,15 +806,15 @@ body {
   
   .news-date-v2 {
     color: #00021d;
-    font-size: 7px;
-    font-weight: 490;
+    font-size: 6px;
+    font-weight: 480;
     margin-bottom: 2px;
   }
   
   .news-title-v2 {
     font-size: 9px;
     color: #0e0e0e; 
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     text-transform: capitalize;
     display: -webkit-box;
