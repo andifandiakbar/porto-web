@@ -61,8 +61,8 @@ body {
 
 .navbar {
   background-color: #ffffff;
-  padding: 4px 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 6% 0;
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.116);
   position: sticky;
   top: 35px;
   z-index: 1000;
@@ -77,14 +77,14 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 11px;
   color: #0b2d57;
   font-weight: bold;
   line-height: 1.1;
 }
 
 .logo img {
-  height: 50px;
+  height: 45px;
   width: auto;
 }
 
@@ -154,17 +154,71 @@ body {
 }
 
 @media (max-width: 768px) {
-  .topbar-info span:last-child { 
-    display: none; 
+  .topbar-flex {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 0 1px !important;
+    overflow: hidden;
+  }
+
+  .topbar-social {
+    display: flex !important;
+    gap: 8px !important;
+    flex-shrink: 0;
+  }
+
+  .topbar-social a {
+    font-size: 10px !important;
+  }
+
+  .topbar-info {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important; 
+    white-space: nowrap !important;
+    padding-left: 5px;
+    scrollbar-width: none; 
+  }
+
+  .topbar-info::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topbar-info span {
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    font-size: 9px !important;
+    gap: 4px !important;
   }
 
   .navbar {
-    top: 33px;
-    padding: 10px 0;
+    background-color: #ffffff;
+    padding: 8px 0;
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.13);
+    position: sticky;
+    top: 34px;
+    z-index: 1000;
   }
 
-  .logo img { height: 30px; }
-  .logo span { font-size: 13px; }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #0b2d57;
+    font-weight: bold;
+    line-height: 0.9;
+  }
+
+  .logo img {
+    height: 32px;
+    width: auto;
+  }
 
   .menu-toggle { 
     display: block; 
@@ -410,7 +464,7 @@ body {
   padding: 25px 25px;
   text-align: center;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.151);
   border: 1px solid #f0f0f0;
 }
 
@@ -487,7 +541,7 @@ body {
     padding: 15px 10px;
     text-align: center;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.13);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1099,6 +1153,7 @@ body {
 .footer-col ul li a:hover {
   text-decoration: underline;
 }
+
 .footer-col ul li a:hover, 
 .footer-col ul li a:active {
   background: linear-gradient(90deg, #ffcc00 0%, #ffcc00 100%);
@@ -1106,6 +1161,7 @@ body {
   -webkit-text-fill-color: transparent;
   text-decoration: none;
 }
+
 .footer-map-container {
   border-radius: 0px;
   overflow: hidden;
@@ -1152,42 +1208,42 @@ body {
     line-height: 1.2;
   }
   
-.footer-col h4 {
-  margin-bottom: 7px;
-  font-size: 13px;
-  border-bottom: 2px solid #ffcc00;
-  display: inline-block;
-  padding-bottom: 3px;
-}
+  .footer-col h4 {
+    margin-bottom: 7px;
+    font-size: 13px;
+    border-bottom: 2px solid #ffcc00;
+    display: inline-block;
+    padding-bottom: 3px;
+  }
 
-.footer-col ul {
-  list-style: none;
-  padding: 0;
-}
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+  }
 
-.footer-col ul li {
-  margin-bottom: 1px;
-}
+  .footer-col ul li {
+    margin-bottom: 1px;
+  }
 
-.footer-col ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 12px;
-}
+  .footer-col ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+  }
 
-.footer-col ul li a:hover {
-  text-decoration: underline;
-}
-.footer-col ul li a:hover, 
-.footer-col ul li a:active {
-  background: linear-gradient(90deg, #ffe600 0%, #ffcc00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-decoration: none;
-}
+  .footer-col ul li a:hover {
+    text-decoration: underline;
+  }
+  .footer-col ul li a:hover, 
+  .footer-col ul li a:active {
+    background: linear-gradient(90deg, #ffe600 0%, #ffcc00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
 
-.footer-map-container {
-  border-radius: 0px;
-  overflow: hidden;
-}
+  .footer-map-container {
+    border-radius: 0px;
+    overflow: hidden;
+  }
 }
