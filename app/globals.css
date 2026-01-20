@@ -159,7 +159,7 @@ body {
   }
 
   .navbar {
-    top: 35px;
+    top: 34.5px;
     padding: 10px 0;
   }
 
@@ -176,7 +176,7 @@ body {
     display: none; 
     flex-direction: column;
     position: absolute;
-    top: 91%; 
+    top: 99%; 
     right: 0;
     width: 100%;
     background: white;
