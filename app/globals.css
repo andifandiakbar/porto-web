@@ -642,7 +642,7 @@ body {
   .announcement-content {
     flex: 3;
     color: #0b2d57;
-    font-size: 10px;
+    font-size: 7px;
     padding-left: 10px;
     white-space: nowrap;
     overflow: hidden;
