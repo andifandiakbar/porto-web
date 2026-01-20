@@ -159,7 +159,7 @@ body {
   }
 
   .navbar {
-    top: 3opx;
+    top: 30px;
     padding: 10px 0;
   }
 
@@ -343,7 +343,7 @@ body {
   }
 
   .headline-text {
-    font-size: 16px !important; 
+    font-size: 18px !important; 
     padding: 0 15px;
     line-height: 1.3;
     text-align: center;
