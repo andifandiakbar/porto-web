@@ -815,7 +815,7 @@ body {
     font-size: 11px;
     color: #0e0e0e; 
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.2;
     text-transform: capitalize;
     display: -webkit-box;
     -webkit-line-clamp: 2;
