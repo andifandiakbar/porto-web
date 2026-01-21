@@ -117,5 +117,5 @@ const descStyle = {
   margin: 0,
   color: '#64748b',
   fontSize: '14px',
-  line-height: '1.6'
+  lineheight: '1.6'
 };
