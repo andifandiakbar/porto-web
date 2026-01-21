@@ -63,6 +63,16 @@ export default function NamaKomponenAnda() {
   };
 
   useEffect(() => {
+    let interval;
+    if (!isPaused) {
+      interval = setInterval(() => {
+        nextSlide();
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [isPaused, currentSlide]);
+
+  useEffect(() => {
     if (countPenghuni < 40) {
       const timer = setTimeout(() => setCountPenghuni(prev => prev + 1), 30);
       return () => clearTimeout(timer);
@@ -97,8 +107,9 @@ export default function NamaKomponenAnda() {
         className="slider-container"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
+        onMouseDown={() => setIsPaused(true)}
       >
-        <button className="nav-arrow arrow-left" onClick={prevSlide}>
+        <button className="nav-arrow arrow-left" onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
         </button>
 
@@ -117,7 +128,7 @@ export default function NamaKomponenAnda() {
           ))}
         </div>
 
-        <button className="nav-arrow arrow-right" onClick={nextSlide}>
+        <button className="nav-arrow arrow-right" onClick={(e) => { e.stopPropagation(); nextSlide(); }}>
           <i className="fa-solid fa-chevron-right"></i>
         </button>
 
