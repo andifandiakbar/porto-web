@@ -6,16 +6,31 @@ import "./globals.css";
 export default function RootLayout({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeSubMenu, setActiveSubMenu] = useState(false);
+  const [activeItem, setActiveItem] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) setIsMenuOpen(false);
+      const mobileStatus = window.innerWidth < 768;
+      setIsMobile(mobileStatus);
+      if (!mobileStatus) {
+        setIsMenuOpen(false);
+        setActiveSubMenu(false);
+      }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleItemClick = (id, href) => {
+    setActiveItem(id); 
+    setTimeout(() => {
+      setIsMenuOpen(false);
+      setActiveItem(null);
+      window.location.href = href;
+    }, 250); 
+  };
 
   return (
     <html lang="id">
@@ -51,9 +66,11 @@ export default function RootLayout({ children }) {
                 <img src="/assets/logo.png" alt="Logo Rutan" />
                 <span>Rutan Sinjai<br /><small style={{ fontWeight: 'normal' }}>Kelas IIB</small></span>
               </div>
+
               <div className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 <i className={isMenuOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i>
               </div>
+
               <ul className={`menu ${isMenuOpen ? 'active' : ''}`}>
                 <li><a href="/"><i className="fa-solid fa-house"></i>Beranda</a></li>
                 <li><a href="#"><i className="fa-solid fa-user"></i> Profil</a></li>
@@ -61,19 +78,59 @@ export default function RootLayout({ children }) {
                 <li className="dropdown">
                   <a href="#"><i className="fa-solid fa-circle-info"></i> Layanan</a>
                   <ul className="dropdown-menu">
-                    <li>
-                      <a href="/Layanan">
-                        Informasi Layanan
-                      </a>
-                    </li>
+                    <li><a href="/Layanan">Informasi Layanan</a></li>
                     <li><a href="#">Administrasi</a></li>
                     <li><a href="#">Pusat Terpadu (PTSP)</a></li>
                   </ul>
                 </li>
-                <li><a href="/Pengaduan"><i className="fa-solid fa-bullhorn"></i> Pengaduan</a></li>
+                <li><a href="/Pengaduan"><i className="fa-solid fa-headset"></i> Pengaduan</a></li>
               </ul>
             </div>
           </nav>
+
+          {isMenuOpen && isMobile && (
+            <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)}>
+              <div className="mobile-menu-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="mobile-menu-header">
+                  <i className="fa-solid fa-xmark close-icon" onClick={() => setIsMenuOpen(false)}></i>
+                </div>
+                <ul className="mobile-menu-list">
+                  <li><a href="/">Beranda</a></li>
+                  <li><a href="#">Profil</a></li>
+                  <li><a href="#">Media</a></li>
+                  
+                  <li className={`mobile-dropdown ${activeSubMenu ? 'active-parent-blue' : ''}`}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setActiveSubMenu(!activeSubMenu); }}>
+                      Layanan 
+                      <i className={`fa-solid fa-chevron-${activeSubMenu ? 'up' : 'down'}`} style={{float: 'right', fontSize: '14px', marginTop: '5px'}}></i>
+                    </a>
+                    
+                    {activeSubMenu && (
+                      <ul className="mobile-submenu">
+                        <li className={activeItem === 'info' ? 'active-item-blue' : ''}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('info', '/Layanan'); }}>
+                            Informasi Layanan
+                          </a>
+                        </li>
+                        <li className={activeItem === 'admin' ? 'active-item-blue' : ''}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('admin', '#'); }}>
+                            Administrasi
+                          </a>
+                        </li>
+                        <li className={activeItem === 'ptsp' ? 'active-item-blue' : ''}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '#'); }}>
+                            Pusat Terpadu (PTSP)
+                          </a>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                  
+                  <li><a href="/Pengaduan">Pengaduan</a></li>
+                </ul>
+              </div>
+            </div>
+          )}
 
           {children}
 
