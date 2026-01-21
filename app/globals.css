@@ -24,7 +24,7 @@ body {
   font-size: 11px;
   position: sticky;
   top: 0;
-  z-index: 1001;
+  z-index: 2000;
 }
 
 .topbar-flex {
@@ -61,7 +61,7 @@ body {
 
 .navbar {
   background-color: #ffffff;
-  padding: 6% 0;
+  padding: 0.5% 0;
   box-shadow: 0 5px 11px rgba(0, 0, 0, 0.116);
   position: sticky;
   top: 35px;
@@ -122,6 +122,7 @@ body {
   background: white;
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   display: none;
+  pointer-events: auto;
   list-style: none;
   min-width: 220px;
   padding: 10px 0;
@@ -202,7 +203,7 @@ body {
     padding: 8px 0;
     box-shadow: 0 4px 9px rgba(0, 0, 0, 0.13);
     position: sticky;
-    top: 32px;
+    top: 34px;
     z-index: 1000;
   }
 
@@ -308,7 +309,7 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 100;
+  z-index: 10;
   background: transparent;
   border: none;
   width: 10px;
@@ -1153,7 +1154,6 @@ body {
 .footer-col ul li a:hover {
   text-decoration: underline;
 }
-
 .footer-col ul li a:hover, 
 .footer-col ul li a:active {
   background: linear-gradient(90deg, #ffcc00 0%, #ffcc00 100%);
@@ -1161,7 +1161,6 @@ body {
   -webkit-text-fill-color: transparent;
   text-decoration: none;
 }
-
 .footer-map-container {
   border-radius: 0px;
   overflow: hidden;
@@ -1208,42 +1207,42 @@ body {
     line-height: 1.2;
   }
   
-  .footer-col h4 {
-    margin-bottom: 7px;
-    font-size: 13px;
-    border-bottom: 2px solid #ffcc00;
-    display: inline-block;
-    padding-bottom: 3px;
-  }
+.footer-col h4 {
+  margin-bottom: 7px;
+  font-size: 13px;
+  border-bottom: 2px solid #ffcc00;
+  display: inline-block;
+  padding-bottom: 3px;
+}
 
-  .footer-col ul {
-    list-style: none;
-    padding: 0;
-  }
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
 
-  .footer-col ul li {
-    margin-bottom: 1px;
-  }
+.footer-col ul li {
+  margin-bottom: 1px;
+}
 
-  .footer-col ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 12px;
-  }
+.footer-col ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+}
 
-  .footer-col ul li a:hover {
-    text-decoration: underline;
-  }
-  .footer-col ul li a:hover, 
-  .footer-col ul li a:active {
-    background: linear-gradient(90deg, #ffe600 0%, #ffcc00 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-decoration: none;
-  }
+.footer-col ul li a:hover {
+  text-decoration: underline;
+}
+.footer-col ul li a:hover, 
+.footer-col ul li a:active {
+  background: linear-gradient(90deg, #ffe600 0%, #ffcc00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
 
-  .footer-map-container {
-    border-radius: 0px;
-    overflow: hidden;
-  }
+.footer-map-container {
+  border-radius: 0px;
+  overflow: hidden;
+}
 }
