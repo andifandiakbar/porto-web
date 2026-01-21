@@ -1,34 +1,50 @@
-"use client";
+"use client"; // TAMBAHKAN INI DI BARIS 1
 
 import { useState, useEffect } from 'react';
-import "./globals.css";
+// Import di bawah dihapus karena file globals.css tidak ditemukan di folder app Anda
+// import "./globals.css"; 
+import "./desktop.css";
+import "./mobile.css";
 
 export default function RootLayout({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeSubMenu, setActiveSubMenu] = useState(false);
+  const [activeItem, setActiveItem] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) setIsMenuOpen(false);
+      const mobileStatus = window.innerWidth < 768;
+      setIsMobile(mobileStatus);
+      if (!mobileStatus) {
+        setIsMenuOpen(false);
+        setActiveSubMenu(false);
+      }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleItemClick = (id, href) => {
+    setActiveItem(id); 
+    setTimeout(() => {
+      setIsMenuOpen(false);
+      setActiveItem(null);
+      window.location.href = href;
+    }, 250); 
+  };
+
   return (
     <html lang="id">
       <head>
         <title>Rutan Sinjai Kelas IIB</title>
         <meta name="description" content="Website Resmi Rumah Tahanan Negara Kelas IIB Sinjai" />
-        <link 
-          rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
-        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
       </head>
       <body>
         <main className="main-wrapper">
+          {/* TOPBAR */}
           <div className="topbar">
             <div className="container topbar-flex">
               <div className="topbar-social">
@@ -40,7 +56,7 @@ export default function RootLayout({ children }) {
               <div className="topbar-info">
                 <span><i className="fa-solid fa-phone"></i> 0724-7333024</span>
                 <span><i className="fa-brands fa-whatsapp"></i> +628714409435</span>
-                {!isMobile && <span><i className="fa-solid fa-envelope"></i> rutan.sinjai@kemenkumham.go.id</span>}
+                <span><i className="fa-solid fa-envelope"></i> rutan.sinjai@kemenkumham.go.id</span>
               </div>
             </div>
           </div>
@@ -51,9 +67,11 @@ export default function RootLayout({ children }) {
                 <img src="/assets/logo.png" alt="Logo Rutan" />
                 <span>Rutan Sinjai<br /><small style={{ fontWeight: 'normal' }}>Kelas IIB</small></span>
               </div>
+
               <div className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 <i className={isMenuOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i>
               </div>
+
               <ul className={`menu ${isMenuOpen ? 'active' : ''}`}>
                 <li><a href="/"><i className="fa-solid fa-house"></i>Beranda</a></li>
                 <li><a href="#"><i className="fa-solid fa-user"></i> Profil</a></li>
@@ -61,22 +79,64 @@ export default function RootLayout({ children }) {
                 <li className="dropdown">
                   <a href="#"><i className="fa-solid fa-circle-info"></i> Layanan</a>
                   <ul className="dropdown-menu">
-                    <li>
-                      <a href="/Layanan">
-                        Informasi Layanan
-                      </a>
-                    </li>
+                    <li><a href="/Layanan">Informasi Layanan</a></li>
                     <li><a href="#">Administrasi</a></li>
                     <li><a href="#">Pusat Terpadu (PTSP)</a></li>
                   </ul>
                 </li>
-                <li><a href="/Pengaduan"><i className="fa-solid fa-bullhorn"></i> Pengaduan</a></li>
+                <li><a href="/Pengaduan"><i className="fa-solid fa-headset"></i> Pengaduan</a></li>
               </ul>
             </div>
           </nav>
 
+          {/* MODAL MENU MOBILE */}
+          {isMenuOpen && isMobile && (
+            <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)}>
+              <div className="mobile-menu-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="mobile-menu-header">
+                  <i className="fa-solid fa-xmark close-icon" onClick={() => setIsMenuOpen(false)}></i>
+                </div>
+                <ul className="mobile-menu-list">
+                  <li><a href="/">Beranda</a></li>
+                  <li><a href="#">Profil</a></li>
+                  <li><a href="#">Media</a></li>
+                  
+                  <li className={`mobile-dropdown ${activeSubMenu ? 'active-parent-blue' : ''}`}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setActiveSubMenu(!activeSubMenu); }}>
+                      Layanan 
+                      <i className={`fa-solid fa-chevron-${activeSubMenu ? 'up' : 'down'}`} style={{float: 'right', fontSize: '14px', marginTop: '5px'}}></i>
+                    </a>
+                    
+                    {activeSubMenu && (
+                      <ul className="mobile-submenu">
+                        <li className={activeItem === 'info' ? 'active-item-blue' : ''}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('info', '/Layanan'); }}>
+                            Informasi Layanan
+                          </a>
+                        </li>
+                        <li className={activeItem === 'admin' ? 'active-item-blue' : ''}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('admin', '#'); }}>
+                            Administrasi
+                          </a>
+                        </li>
+                        <li className={activeItem === 'ptsp' ? 'active-item-blue' : ''}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '#'); }}>
+                            Pusat Terpadu (PTSP)
+                          </a>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                  
+                  <li><a href="/Pengaduan">Pengaduan</a></li>
+                </ul>
+              </div>
+            </div>
+          )}
+
           {children}
 
+          {/* FOOTER */}
           <footer className="main-footer">
             <div className="container">
               <div className="footer-grid">
@@ -120,7 +180,7 @@ export default function RootLayout({ children }) {
                   <div className="footer-map-container" style={{ position: 'relative' }}>
                     <iframe 
                       id="google-map"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.1158525046294!2d120.2525164!3d-5.1172828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbe25d7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1705220000000!5m2!1sid!2sid" 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.541444100344!2d120.2479!3d-5.1234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMDcnMjQuMiJTIDEyMMKwMTQnNTIuNCJF!5e0!3m2!1sid!2sid!4v1700000000000" 
                       width="100%" 
                       height="200" 
                       style={{ border: 0, borderRadius: "0px" }} 
@@ -128,7 +188,6 @@ export default function RootLayout({ children }) {
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
-                    <div className="map-controls" style={{ pointerEvents: 'none' }}></div>
                   </div>
                 </div>
               </div>
