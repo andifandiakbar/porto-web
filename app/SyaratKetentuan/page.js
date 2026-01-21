@@ -101,7 +101,7 @@ const iconWrapperStyle = {
   borderRadius: '12px',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center', // Sudah diperbaiki (tanpa strip)
+  justifyContent: 'center',
   fontSize: '22px',
   color: '#093b77'
 };
@@ -117,5 +117,5 @@ const descStyle = {
   margin: 0,
   color: '#64748b',
   fontSize: '14px',
-  lineHeight: '1.6'
+  line-height: '1.6'
 };

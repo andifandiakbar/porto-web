@@ -34,6 +34,7 @@ export default function LayananIntegrasi() {
               <li>Telah menjalani masa pidana paling singkat 2/3 (dua per tiga), dengan ketentuan 2/3 (dua per tiga) masa pidana tersebut paling sedikit 9 (sembilan) bulan</li>
               <li>Berkelakuan baik selama menjalani masa pidana paling singkat 9 (sembilan) bulan terakhir dihitung sebelum tanggal 2/3 (dua per tiga) masa pidana</li>
               <li>Telah menjalani Asimilasi paling sedikit 1/2 (satu per dua) dari sisa masa pidana yang wajib dijalani (Narapidana tindak pidana terorisme, narkotika dan precursor narkotika, psikotropika, korupsi, kejahatan HAM yang berat, kejahatan transnasional, dan kejahatan terhadap keamanan negara )</li>
+              <li>Telah menjalani Asimilasi paling sedikit 1/2 (satu per dua) dari sisa masa pidana yang wajib dijalani (Narapidana tindak pidana terorisme, narkotika dan precursor narkotika, psikotropika, korupsi, kejahatan HAM yang berat, kejahatan transnasional, dan kejahatan terhadap keamanan negara )</li>
               <li>Telah mengikuti program pembinaan dengan baik, tekun,dan bersemangat</li>
               <li>Masyarakat dapat menerima program kegiatan pembinaan Narapidana</li>
               <li>PB dapat diberikan bagi Anak Negara setelah menjalani pembinaan paling sedikit 1 (satu) tahun. Sedangkan untuk Dewasa telah menjalani pidana lebih dari 1 (satu) tahun 6 (enam) bulan.</li>

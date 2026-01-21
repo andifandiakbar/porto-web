@@ -11,8 +11,6 @@ export default function NamaKomponenAnda() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [newsIndex, setNewsIndex] = useState(0); 
 
-  // ... sisa kode banners dan newsData
-
   const banners = [
     {
       img: '/assets/Banner.png',
@@ -62,15 +60,14 @@ export default function NamaKomponenAnda() {
     }
   };
 
-  // LOGIKA AUTOPLAY BANNER
   useEffect(() => {
     let interval;
     if (!isPaused) {
       interval = setInterval(() => {
         nextSlide();
-      }, 3000); // Bergeser setiap 3 detik
+      }, 3000);
     }
-    return () => clearInterval(interval); // Bersihkan interval saat komponen di-unmount atau di-pause
+    return () => clearInterval(interval);
   }, [isPaused, currentSlide]);
 
   useEffect(() => {
@@ -104,12 +101,11 @@ export default function NamaKomponenAnda() {
     <main className="main-wrapper">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-      {/* SECTION BANNER SLIDER */}
       <section
         className="slider-container"
-        onMouseEnter={() => setIsPaused(true)} // Berhenti otomatis saat kursor masuk
-        onMouseLeave={() => setIsPaused(false)} // Jalan lagi saat kursor keluar
-        onMouseDown={() => setIsPaused(true)} // Berhenti saat gambar ditekan
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onMouseDown={() => setIsPaused(true)}
       >
         <button className="nav-arrow arrow-left" onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
@@ -145,7 +141,6 @@ export default function NamaKomponenAnda() {
         </div>
       </section>
 
-      {/* SECTION SERVICES / CARD GRID */}
       <section className="services-section">
         <div className="services-wrapper">
           <div className="services-grid">
@@ -190,7 +185,6 @@ export default function NamaKomponenAnda() {
         </div>
       </div>
 
-      {/* SECTION NEWS SLIDER */}
       <section className="latest-news-section">
         <div className="container">
           <div className="news-slider-wrapper">
@@ -238,7 +232,6 @@ export default function NamaKomponenAnda() {
         </div>
       </section>
 
-      {/* SECTION WBP SEARCH & STATS */}
       <section className="wbp-info-section">
         <div className="container-wbp">
           <div className="wbp-header-text">

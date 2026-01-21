@@ -1,8 +1,6 @@
-"use client"; // TAMBAHKAN INI DI BARIS 1
+"use client";
 
 import { useState, useEffect } from 'react';
-// Import di bawah dihapus karena file globals.css tidak ditemukan di folder app Anda
-// import "./globals.css"; 
 import "./desktop.css";
 import "./mobile.css";
 
@@ -44,7 +42,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <main className="main-wrapper">
-          {/* TOPBAR */}
           <div className="topbar">
             <div className="container topbar-flex">
               <div className="topbar-social">
@@ -89,7 +86,6 @@ export default function RootLayout({ children }) {
             </div>
           </nav>
 
-          {/* MODAL MENU MOBILE */}
           {isMenuOpen && isMobile && (
             <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)}>
               <div className="mobile-menu-modal" onClick={(e) => e.stopPropagation()}>
@@ -136,7 +132,6 @@ export default function RootLayout({ children }) {
 
           {children}
 
-          {/* FOOTER */}
           <footer className="main-footer">
             <div className="container">
               <div className="footer-grid">

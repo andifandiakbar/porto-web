@@ -1,633 +1,613 @@
-/* Responsif Mobile untuk Navbar & Topbar */
 @media (max-width: 768px) {
-    /* 1. Pastikan container utama tetap menyamping (Row) */
-    .topbar-flex {
-      display: flex !important;
-      flex-direction: row !important;
-      justify-content: space-between !important; 
-      align-items: center !important;
-      gap: 5px !important;
-      padding: 0 0px !important;
-      overflow: hidden; 
-    }
-  
-/* 2. Sosmed tetap di kiri, perkecil sedikit ikonnya */
-.topbar-social {
-  display: flex !important;
-  gap: 8px !important;
-  flex-shrink: 0; 
+  .topbar-flex {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important; 
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 0 0px !important;
+    overflow: hidden; 
+  }
+
+  .topbar-social {
+    display: flex !important;
+    gap: 8px !important;
+    flex-shrink: 0; 
+  }
+
+  .topbar-social a {
+    font-size: 10px !important;
+  }
+
+  .topbar-info {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; 
+    gap: 12px !important;
+    overflow-x: auto !important; 
+    white-space: nowrap !important;
+    scrollbar-width: none; 
+    padding-left: 10px;
+  }
+
+  .topbar-info span {
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    font-size: 9px !important; 
+    gap: 4px !important;
+    flex-shrink: 0;
+  }
+
+  .topbar-info span:last-child {
+    display: none !important;
+  }
+
+  .topbar-info::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar {
+    background-color: #ffffff;
+    padding: 8px 0;
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.13);
+    position: sticky;
+    top: 31px;
+    z-index: 1000;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #0b2d57;
+    font-weight: bold;
+    line-height: 0.9;
+  }
+
+  .logo img {
+    height: 32px;
+    width: auto;
+  }
+
+  .menu-toggle { 
+    display: block; 
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .menu { 
+    display: none; 
+  }
+
+  .slider-container { 
+    height: 160px; 
+    margin: 10px auto; 
+  }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 31, 63, 0.7); 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 60px;
+    z-index: 10000;
+  }
+
+  .mobile-menu-modal {
+    background: #ffffff;
+    width: 90%;
+    max-width: 380px;
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .mobile-menu-header {
+    text-align: right;
+    margin-bottom: 5px;
+  }
+
+  .close-icon {
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .mobile-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-menu-list li {
+    border-bottom: 1px solid #eee;
+  }
+
+  .mobile-menu-list li a {
+    display: block;
+    padding: 15px 5px;
+    color: #0b2d57; 
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .active-parent-blue > a {
+    color: #0056b3 !important;
+    background-color: #f0f7ff; 
+  }
+
+  .active-item-blue {
+    background-color: #e6f0ff !important; 
+  }
+
+  .active-item-blue a {
+    color: #0056b3 !important; 
+    font-weight: 700 !important;
+  }
+
+  .mobile-menu-list li a, .mobile-submenu li {
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .mobile-submenu {
+    list-style: none;
+    background: #fafafa;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-submenu li {
+    border-bottom: 1px solid #eee;
+    padding-left: 20px;
+  }
 }
 
-.topbar-social a {
-  font-size: 10px !important;
+@media (max-width: 768px) {
+  .slider-container {
+    width: 95%; 
+    margin: 15px auto;
+    border-radius: 5px;
+    height: 140px;
+    overflow: hidden;
+  }
+
+  .slide img {
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .headline-text {
+    font-size: 17px !important; 
+    padding: 0 15px;
+    line-height: 1.3;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .nav-arrow {
+    font-size: 12px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .nav-arrow:hover {
+    color: #e6b800;
+    transform: translateY(-50%) scale(1.1);
+  }   
+  .arrow-left { left: 5px; }
+  .arrow-right { right: 5px; }
+
+  .dots-container {
+    bottom: 3px;
+    gap: 3px;
+    padding: 4px 8px;
+  }
+
+  .dot {
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.363);
+  }
+
+  .dot.active {
+    background-color: #f1c40fc4;
+    width: 11px;
+  }
+
+  .dot.inactive {
+    width: 5px;
+  }
 }
 
-/* 3. KOREKSI: Area Info (Container Utama) agar bisa digeser */
-.topbar-info {
-  display: flex !important; /* Gunakan flex pada container, bukan span */
-  flex-direction: row !important;
-  flex-wrap: nowrap !important; 
-  gap: 12px !important; /* Jarak antar info (Telp & WA) */
-  overflow-x: auto !important; 
-  white-space: nowrap !important;
-  scrollbar-width: none; 
-  padding-left: 10px;
+@media (max-width: 768px) {
+  .services-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+  }
+  
+  .services-wrapper {
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
+  }
+  
+  .card {
+    background: #ffffff;
+    padding: 15px 10px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.13);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+    background: #0b2d57;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  
+  .card h3 {
+    color: #0b2d57;
+    font-size: 10px;
+    margin-bottom: 5px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  
+  .card p {
+    font-size: 9px;
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    display: block;
+  }
+
+  .btn {
+    display: inline-block;
+    background: #f1c40f; 
+    color: #0b2d57;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 9px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn:active {
+    background: #0b2d57;
+    color: #fff;
+    transform: scale(0.95);
+  }
 }
 
-/* 4. Pastikan teks tetap lurus satu baris dan ukuran font */
-.topbar-info span {
-  display: flex !important;
-  align-items: center !important;
-  white-space: nowrap !important;
-  font-size: 9px !important; 
-  gap: 4px !important;
-  flex-shrink: 0; /* Agar teks tidak gepeng saat digeser */
+@media (max-width: 768px) {
+  .announcement-bar {
+    width: 95%;
+    max-width: 350px;
+    margin: 15px auto 0;
+    background-color: #e9f0f8;
+    display: flex;
+    align-items: center;
+    border-radius: 0px;
+    overflow: hidden;
+    height: auto;
+    flex-wrap: wrap;
+  }
+
+  .announcement-label {
+    background-color: #0b2d57;
+    color: #f1c40f;
+    padding: 5px 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 7px;
+    text-transform: uppercase;
+    position: relative;
+    clip-path: none;
+    z-index: 50;
+    min-width: 80px;
+    width: 14%;
+  }
+  
+  .announcement-content {
+    flex: 3;
+    color: #0b2d57;
+    font-size: 7px;
+    padding: 5px 5px 5px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .running-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 22s linear infinite;
+  }
 }
 
-/* 5. KHUSUS: Sembunyikan Email saja agar tidak berantakan saat refresh */
-.topbar-info span:last-child {
-  display: none !important; /* Ini yang menghilangkan email di mobile */
+@media (max-width: 992px) {
+  .news-grid-4 { 
+    grid-template-columns: 1fr; 
+    gap: 20px;
+  }
+
+  .slide-arrow { 
+    display: flex;
+    width: 20px;
+    height: 20px;
+    margin-top: 45px;
+    font-size: 10px;
+  }
+
+  .latest-news-section {
+    padding: 20px 15px;
+    text-align: center;
+    background-color: #ffffff;
+  }
+
+  .news-thumb {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  .news-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .news-date-v2 {
+    color: #00021d;
+    font-size: 7px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  
+  .news-title-v2 {
+    font-size: 9px;
+    color: #0e0e0e; 
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: capitalize;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 5px;
+  }
+  
+  .news-title-link:active .news-title-v2 {
+    color: #0b2d57;
+  }
+
+  .btn-view-more {
+    margin-top: 15px;
+    padding: 8px 4px;
+    border: 1px solid #0b2d57;
+    background: transparent;
+    color: #0b2d57;
+    font-size: 9px;
+    font-weight: 600;
+    border-radius: 4px;
+    width: 95%;
+    max-width: 100px;
+  }
 }
 
-.topbar-info::-webkit-scrollbar {
-  display: none;
+@media (max-width: 768px) {
+  .wbp-info-section {
+    padding: 6px 0;
+    background-color: #ffffff;
+    text-align: center;
+  }
+  
+  .container-wbp {
+    max-width:550px;
+    margin: 0 auto;
+    padding: 0 50px;
+  }
+
+  .wbp-header-text h2 {
+    color: #0b2d57;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 1px;
+    letter-spacing: 0px;
+  }
+  
+  .wbp-header-text p {
+    color: #063166;
+    font-size: 11px;
+    font-weight: 620;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  .wbp-stats-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .wbp-stat-card {
+    background-color: #0b2d57;
+    color: #ffffff;
+    padding: 16px 7px;
+    border-radius: 18px;
+    width: 110px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+  }
+  
+  .stat-number {
+    font-size: 30px;
+    font-weight: 700;
+    color: #f1c40f;
+    line-height: 1;
+    margin-bottom: 7px;
+  }
+  
+  .stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    line-height: 1.1;
+  }
+  
+  .wbp-search-container p {
+    font-size: 13px;
+    font-weight: 620;
+    color: #0b2d57;
+    margin-bottom: 7px;
+  }
+  
+  .search-box {
+    display: flex;
+    max-width: 700px;
+    margin: 18 auto;
+    border: 0.1px solid #b5beca57;
+    border-radius: 0px;
+    overflow: hidden;
+  }
+  
+  .search-box input {
+    flex: 100;
+    padding: 5px 20px;
+    border: none;
+    outline: none;
+    font-size: 19x;
+  }
+  
+  .btn-cari {
+    background-color: #1f416b;
+    color: white;
+    border: none;
+    padding: 2 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .btn-cari:hover {
+    background-color: #0c294d;
+  }   
 }
-  
-    /* Bagian Navigasi Utama (Navbar) */
-    .navbar {
-      background-color: #ffffff;
-      padding: 8px 0;
-      box-shadow: 0 4px 9px rgba(0, 0, 0, 0.13);
-      position: sticky;
-      top: 31px;
-      z-index: 1000;
-    }
-  
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      color: #0b2d57;
-      font-weight: bold;
-      line-height: 0.9;
-    }
-  
-    .logo img {
-      height: 32px;
-      width: auto;
-    }
-  
-    .menu-toggle { 
-      display: block; 
-      font-size: 22px;
-      cursor: pointer;
-    }
-  
-    .menu { 
-      display: none; 
-    }
-  
-    .slider-container { 
-      height: 160px; 
-      margin: 10px auto; 
-    }
-  
-    /* --- MOBILE MODAL MENU STYLE --- */
-    .mobile-menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: rgba(0, 31, 63, 0.7); 
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding-top: 60px;
-      z-index: 10000;
-    }
-  
-    .mobile-menu-modal {
-      background: #ffffff;
-      width: 90%;
-      max-width: 380px;
-      border-radius: 12px;
-      padding: 15px 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-      animation: slideDown 0.3s ease-out;
-    }
-  
-    @keyframes slideDown {
-      from { transform: translateY(-30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-  
-    .mobile-menu-header {
-      text-align: right;
-      margin-bottom: 5px;
-    }
-  
-    .close-icon {
-      font-size: 24px;
-      color: #333;
-      cursor: pointer;
-    }
-  
-    .mobile-menu-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-  
-    .mobile-menu-list li {
-      border-bottom: 1px solid #eee;
-    }
-  
-    .mobile-menu-list li a {
-      display: block;
-      padding: 15px 5px;
-      color: #0b2d57; 
-      text-decoration: none;
-      font-size: 17px;
-      font-weight: 600;
-    }
-  
-    .active-parent-blue > a {
-      color: #0056b3 !important;
-      background-color: #f0f7ff; 
-    }
-  
-    .active-item-blue {
-      background-color: #e6f0ff !important; 
-    }
-  
-    .active-item-blue a {
-      color: #0056b3 !important; 
-      font-weight: 700 !important;
-    }
-  
-    .mobile-menu-list li a, .mobile-submenu li {
-      transition: background-color 0.2s, color 0.2s;
-    }
-  
-    .mobile-submenu {
-      list-style: none;
-      background: #fafafa;
-      padding: 0;
-      margin: 0;
-    }
-  
-    .mobile-submenu li {
-      border-bottom: 1px solid #eee;
-      padding-left: 20px;
-    }
+
+@media (max-width: 768px) {
+  .main-footer {
+    background-color: #003366;
+    color: white;
+    padding: 25px 10px;
+    font-family: sans-serif;
+  }
+
+  .footer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+  }
+
+  .footer-col {
+    width: 100%;
+    flex: none;
+  }
+
+  .footer-logo {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .footer-logo img {
+    width: 80px; 
+    margin-bottom: 9px;
+  }
+
+  .footer-info p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.2;
   }
   
-  /* Responsif Mobile untuk Slider */
-  @media (max-width: 768px) {
-    .slider-container {
-      width: 95%; 
-      margin: 15px auto;
-      border-radius: 5px;
-      height: 140px;
-      overflow: hidden;
-    }
-  
-    .slide img {
-      height: 140px;
-      object-fit: cover;
-    }
-  
-    .headline-text {
-      font-size: 17px !important; 
-      padding: 0 15px;
-      line-height: 1.3;
-      text-align: center;
-      font-weight: 700;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    }
-  
-    .nav-arrow {
-      font-size: 12px;
-      width: 28px;
-      height: 28px;
-    }
-  
-    .nav-arrow:hover {
-      color: #e6b800;
-      transform: translateY(-50%) scale(1.1);
-    }   
-    .arrow-left { left: 5px; }
-    .arrow-right { right: 5px; }
-  
-    .dots-container {
-      bottom: 3px;
-      gap: 3px;
-      padding: 4px 8px;
-    }
-  
-    .dot {
-      height: 4px;
-      background-color: rgba(255, 255, 255, 0.363);
-    }
-  
-    .dot.active {
-      background-color: #f1c40fc4;
-      width: 11px;
-    }
-  
-    .dot.inactive {
-      width: 5px;
-    }
+  .footer-col h4 {
+    margin-top: 8px;
+    margin-bottom: 7px;
+    font-size: 13px;
+    border-bottom: 2px solid #ffcc00;
+    display: inline-block;
+    padding-bottom: 3px;
   }
-  
-  /* Responsif Mobile untuk Layanan */
-  @media (max-width: 768px) {
-    .services-section {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      padding: 10px 0;
-    }
-    
-    .services-wrapper {
-      width: 90%;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); 
-      gap: 10px; 
-    }
-    
-    .card {
-      background: #ffffff;
-      padding: 15px 10px;
-      text-align: center;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.13);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .icon {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 8px;
-      background: #0b2d57;
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-    
-    .card h3 {
-      color: #0b2d57;
-      font-size: 10px;
-      margin-bottom: 5px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-    
-    .card p {
-      font-size: 9px;
-      color: #666;
-      margin-bottom: 10px;
-      line-height: 1.3;
-      display: block;
-    }
-  
-    .btn {
-      display: inline-block;
-      background: #f1c40f; 
-      color: #0b2d57;
-      padding: 5px 10px;
-      font-weight: bold;
-      border-radius: 5px;
-      font-size: 9px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-  
-    .btn:active {
-      background: #0b2d57;
-      color: #fff;
-      transform: scale(0.95);
-    }
+
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
   }
-  
-  /* Responsif Mobile untuk Pengumuman */
-  @media (max-width: 768px) {
-    .announcement-bar { width: 96%; height: auto; flex-wrap: wrap; }
-    .announcement-label { width: 14%; clip-path: none; justify-content: center; padding: 5px 0; }
-    .announcement-content { padding: 5px; }
-  
-    .announcement-bar {
-      width: 95%;
-      max-width: 350px;
-      margin: 15px auto 0;
-      background-color: #e9f0f8;
-      display: flex;
-      align-items: center;
-      border-radius: 0px;
-      overflow: hidden;
-      height: 100%;
-    }
-    .announcement-label {
-      background-color: #0b2d57;
-      color: #f1c40f;
-      padding: 4 0px;
-      height: 100%;
-      display: flex;
-      align-items: flex-start;
-      font-weight: bold;
-      font-size: 7px;
-      text-transform: uppercase;
-      position: relative;
-      clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
-      z-index: 50;
-      min-width: 80px;
-    }
-    
-    .announcement-content {
-      flex: 3;
-      color: #0b2d57;
-      font-size: 7px;
-      padding-left: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    
-    .running-text {
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 22s linear infinite;
-    }
+
+  .footer-col ul li {
+    margin-bottom: 1px;
   }
-  
-  /* Responsif Mobile untuk Berita */
-  @media (max-width: 992px) {
-    .news-grid-4 { 
-      grid-template-columns: 1fr; 
-      gap: 20px;
-    }
-  
-    .slide-arrow { 
-      display: flex;
-      width: 20px;
-      height: 20px;
-      margin-top: 45px;
-      font-size: 10px;
-    }
-  
-    .latest-news-section {
-      padding: 20px 15px;
-      text-align: center;
-      background-color: #ffffff;
-    }
-  
-    .news-thumb {
-      width: 100%;
-      height: 120px;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    
-    .news-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .news-date-v2 {
-      color: #00021d;
-      font-size: 7px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    
-    .news-title-v2 {
-      font-size: 9px;
-      color: #0e0e0e; 
-      font-weight: 800;
-      line-height: 1.2;
-      text-transform: capitalize;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 5px;
-    }
-    
-    .news-title-link:active .news-title-v2 {
-      color: #0b2d57;
-    }
-  
-    .btn-view-more {
-      margin-top: 15px;
-      padding: 8px 4px;
-      border: 1px solid #0b2d57;
-      background: transparent;
-      color: #0b2d57;
-      font-size: 9px;
-      font-weight: 600;
-      border-radius: 4px;
-      width: 95%;
-      max-width: 100px;
-    }
+
+  .footer-col ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
   }
-  
-  /* Responsif Mobile untuk WBP */
-  @media (max-width: 768px) {
-    .wbp-stats-grid {
-      flex-direction: row;
-      gap: 10px;
-    }
-    .wbp-info-section {
-      padding: 6px 0;
-      background-color: #ffffff;
-      text-align: center;
-    }
-    
-    .container-wbp {
-      max-width:550px;
-      margin: 0 auto;
-      padding: 0 50px;
-    }
-    .wbp-header-text h2 {
-      color: #0b2d57;
-      font-weight: 700;
-      font-size: 20px;
-      margin-bottom: 1px;
-      letter-spacing: 0px;
-    }
-    
-    .wbp-header-text p {
-      color: #063166;
-      font-size: 11px;
-      font-weight: 620;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-    
-    .wbp-stats-grid {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .wbp-stat-card {
-      background-color: #0b2d57;
-      color: #ffffff;
-      padding: 16px 7px;
-      border-radius: 18px;
-      width: 110px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-    
-    .stat-number {
-      font-size: 30px;
-      font-weight: 700;
-      color: #f1c40f;
-      line-height: 1;
-      margin-bottom: 7px;
-    }
-    
-    .stat-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      line-height: 1.1;
-    }
-    
-    .wbp-search-container p {
-      font-size: 13px;
-      font-weight: 620;
-      color: #0b2d57;
-      margin-bottom: 7px;
-    }
-    
-    .search-box {
-      display: flex;
-      max-width: 700px;
-      margin: 18 auto;
-      border: 0.1px solid #b5beca57;
-      border-radius: 0px;
-      overflow: hidden;
-    }
-    
-    .search-box input {
-      flex: 100;
-      padding: 5px 20px;
-      border: none;
-      outline: none;
-      font-size: 19x;
-    }
-    
-    .btn-cari {
-      background-color: #1f416b;
-      color: white;
-      border: none;
-      padding: 2 15px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    
-    .btn-cari:hover {
-      background-color: #0c294d;
-    }   
+
+  .footer-col ul li a:hover, 
+  .footer-col ul li a:active {
+    background: linear-gradient(90deg, #ffe600 0%, #ffcc00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
   }
-  
-  /* Responsif Mobile untuk Footer */
-  @media (max-width: 768px) {
-    .main-footer {
-      background-color: #003366;
-      color: white;
-      padding: 25px 10px;
-      font-family: sans-serif;
-    }
-    .footer-grid {
-      flex-direction: column;
-      gap: 8px;
-      text-align: left;
-    }
-  
-    .footer-col {
-      width: 100%;
-      flex: none;
-    }
-  
-    .footer-logo {
-      display: flex;
-      justify-content: flex-start;
-    }
-  
-    .footer-col h4 {
-      margin-top: 8px;
-      margin-bottom: 4px;
-    }
-  
-    .footer-map-container iframe {
-      height: 150px;
-    }
-    .footer-logo img {
-      width: 80px; 
-      margin-bottom: 9px;
-    }
-    .footer-info p {
-      margin: 0;
-      font-size: 12px;
-      line-height: 1.2;
-    }
-    
-    .footer-col h4 {
-      margin-bottom: 7px;
-      font-size: 13px;
-      border-bottom: 2px solid #ffcc00;
-      display: inline-block;
-      padding-bottom: 3px;
-    }
-  
-    .footer-col ul {
-      list-style: none;
-      padding: 0;
-    }
-  
-    .footer-col ul li {
-      margin-bottom: 1px;
-    }
-  
-    .footer-col ul li a {
-      color: white;
-      text-decoration: none;
-      font-size: 12px;
-    }
-  
-    .footer-col ul li a:hover {
-      text-decoration: underline;
-    }
-    
-    .footer-col ul li a:hover, 
-    .footer-col ul li a:active {
-      background: linear-gradient(90deg, #ffe600 0%, #ffcc00 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-decoration: none;
-    }
-  
-    .footer-map-container {
-      border-radius: 0px;
-      overflow: hidden;
-    }
+
+  .footer-map-container {
+    border-radius: 0px;
+    overflow: hidden;
   }
+
+  .footer-map-container iframe {
+    height: 150px;
+  }
+}
