@@ -161,7 +161,7 @@ body {
     justify-content: space-between !important;
     align-items: center !important;
     gap: 5px !important;
-    padding: 0 1px !important;
+    padding: 0 0px !important;
     overflow: hidden;
   }
 
