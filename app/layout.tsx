@@ -12,6 +12,7 @@ export default function RootLayout({ children }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [activeSubMenu, setActiveSubMenu] = useState<boolean>(false);
+  const [activeMediaMenu, setActiveMediaMenu] = useState<boolean>(false); 
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: LayoutProps) {
       if (!mobileStatus) {
         setIsMenuOpen(false);
         setActiveSubMenu(false);
+        setActiveMediaMenu(false);
       }
     };
     handleResize();
@@ -55,9 +57,9 @@ export default function RootLayout({ children }: LayoutProps) {
                 <a href="#"><i className="fa-brands fa-youtube"></i></a>
               </div>
               <div className="topbar-info">
-                <span><i className="fa-solid fa-phone"></i> 0724-7333024</span>
-                <span><i className="fa-brands fa-whatsapp"></i> +628714409435</span>
-                <span><i className="fa-solid fa-envelope"></i> rutan.sinjai@kemenkumham.go.id</span>
+                <a href="tel:07247333024" className="info-item"><i className="fa-solid fa-phone"></i> 0724-7333024</a>
+                <a href="https://wa.me/628714409435" target="_blank" rel="noopener noreferrer" className="info-item"><i className="fa-brands fa-whatsapp"></i> +628714409435</a>
+                <a href="mailto:rutan.sinjai@kemenkumham.go.id" className="info-item"><i className="fa-solid fa-envelope"></i> rutan.sinjai@kemenkumham.go.id</a>
               </div>
             </div>
           </div>
@@ -76,7 +78,14 @@ export default function RootLayout({ children }: LayoutProps) {
               <ul className={`menu ${isMenuOpen ? 'active' : ''}`}>
                 <li><a href="/"><i className="fa-solid fa-house"></i>Beranda</a></li>
                 <li><a href="#"><i className="fa-solid fa-user"></i> Profil</a></li>
-                <li><a href="#"><i className="fa-solid fa-image"></i> Media</a></li>
+                <li className="dropdown">
+                  <a href="#"><i className="fa-solid fa-image"></i> Media</a>
+                  <ul className="dropdown-menu">
+                    <li><a href="/karya">Karya Binaan</a></li>
+                    <li><a href="#">Galeri Foto</a></li>
+                    <li><a href="#">Video Kegiatan</a></li>
+                  </ul>
+                </li>
                 <li className="dropdown">
                   <a href="#"><i className="fa-solid fa-circle-info"></i> Layanan</a>
                   <ul className="dropdown-menu">
@@ -99,7 +108,20 @@ export default function RootLayout({ children }: LayoutProps) {
                 <ul className="mobile-menu-list">
                   <li><a href="/">Beranda</a></li>
                   <li><a href="#">Profil</a></li>
-                  <li><a href="#">Media</a></li>
+
+                  <li className={`mobile-dropdown ${activeMediaMenu ? 'active-parent-blue' : ''}`}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setActiveMediaMenu(!activeMediaMenu); }}>
+                      Media
+                      <i className={`fa-solid fa-chevron-${activeMediaMenu ? 'up' : 'down'}`} style={{float: 'right', fontSize: '14px', marginTop: '5px'}}></i>
+                    </a>
+                    {activeMediaMenu && (
+                      <ul className="mobile-submenu">
+                        <li><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('karya', '/karya'); }}>Karya Binaan</a></li>
+                        <li><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('foto', '#'); }}>Galeri Foto</a></li>
+                        <li><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('video', '#'); }}>Video Kegiatan</a></li>
+                      </ul>
+                    )}
+                  </li>
                   
                   <li className={`mobile-dropdown ${activeSubMenu ? 'active-parent-blue' : ''}`}>
                     <a href="#" onClick={(e) => { e.preventDefault(); setActiveSubMenu(!activeSubMenu); }}>
@@ -179,8 +201,8 @@ export default function RootLayout({ children }: LayoutProps) {
                   <div className="footer-map-container" style={{ position: 'relative' }}>
                     <iframe 
                       id="google-map"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.1158525046294!2d120.2525164!3d-5.1172828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbe25d7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1705220000000!5m2!1sid!2sid" 
-                      width="100%" 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.8451579422!2d120.25041197353876!3d-5.12863180189476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbc25d7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1765462160401!5m2!1sid!2sid" 
+                      width="250" 
                       height="200" 
                       style={{ border: 0, borderRadius: "0px" }} 
                       allowFullScreen={true} 

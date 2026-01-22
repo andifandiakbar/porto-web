@@ -53,10 +53,18 @@ body {
   gap: 20px;
 }
 
-.topbar-info span {
+.topbar-info a {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: #f1c40f; 
+  text-decoration: none;
+  transition: 0.3s ease;
+  font-size: 13px; 
+}
+
+.topbar-info a:hover {
+  color: white;
 }
 
 .navbar {
@@ -115,6 +123,7 @@ body {
   position: relative;
 }
 
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -124,11 +133,10 @@ body {
   display: none;
   pointer-events: auto;
   list-style: none;
-  min-width: 220px;
+  min-width: 150px;
   padding: 10px 0;
   border-radius: 0 0 8px 8px;
   z-index: 1001;
-  border-top: 3px solid #ecbd00;
 }
 
 .dropdown:hover .dropdown-menu {

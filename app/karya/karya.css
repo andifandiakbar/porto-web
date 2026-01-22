@@ -1,0 +1,267 @@
+.karya-page-wrapper {
+    padding: 80px 0;
+    background-color: #ffffff; 
+    min-height: 100vh;
+  }
+  
+  .karya-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .karya-header-section {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  .karya-header-section h1 {
+    font-size: 2.2rem;
+    color: #0b2d57;
+    font-weight: 800;
+  }
+  
+  .karya-underline {
+    width: 60px;
+    height: 4px;
+    background: #f1c40f;
+    margin: 15px auto;
+  }
+  
+  .karya-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+  }
+  
+  .karya-item-card {
+    background: #0b2d57; 
+    border-radius: 15px;
+    overflow: hidden; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+    border: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+
+  .karya-item-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .karya-image-container {
+    position: relative;
+    width: 100%;
+    height: 160px; 
+    background: #ffffff; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    overflow: hidden;
+  }
+  
+  .karya-image-container img {
+    max-width: 150%; 
+    max-height: 150%; 
+    object-fit: contain; 
+  }
+  
+  .karya-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #f1c40f; 
+    color: #0b2d57;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+  }
+  
+  .karya-info-box {
+    padding: 20px;
+    flex-grow: 1;
+    color: #ffffff; 
+  }
+  
+  .karya-info-box h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #ffffff;
+    font-weight: 700;
+  }
+  
+  .karya-brand {
+    font-size: 12px;
+    color: #bdc3c7; 
+    margin-bottom: 18px;
+  }
+  
+  .karya-footer-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .karya-price-tag {
+    font-weight: 800;
+    color: #f1c40f; 
+    font-size: 1.2rem;
+  }
+  
+  .karya-btn-buy {
+    background: #f1c40f;
+    color: #0b2d57;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .karya-btn-buy:hover {
+    background: #ffffff;
+    transform: scale(1.05);
+  }
+  
+  .karya-btn-buy:active {
+    background: #bdc3c7 !important; 
+    transform: scale(0.90); 
+  }
+  
+  @media (max-width: 768px) {
+    .karya-page-wrapper {
+        padding: 70px 0;
+        background-color: #ffffff; 
+        min-height: 1vh;
+      }
+      
+      .karya-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      
+      .karya-header-section {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+      
+      .karya-header-section h1 {
+        font-size: 1.5rem;
+        color: #0b2d57;
+        font-weight: 800;
+      }
+      
+      .karya-underline {
+        width: 60px;
+        height: 4px;
+        background: #f1c40f;
+        margin: 15px auto;
+      }
+      
+      .karya-product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+        gap: 17px;
+      }
+      
+      .karya-item-card {
+        background: #0b2d57; 
+        border-radius: 15px;
+        overflow: hidden; 
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+        border: none;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+      }
+    
+      .karya-item-card:hover {
+        transform: translateY(-1px);
+      }
+      
+      .karya-image-container {
+        position: relative;
+        width: 100%;
+        height: 130px; 
+        background: #ffffff; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        overflow: hidden;
+      }
+      
+      .karya-image-container img {
+        max-width: 190%; 
+        max-height: 190%; 
+        object-fit: contain; 
+      }
+      
+      .karya-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #f1c40f; 
+        color: #0b2d57;
+        padding: 3px 10px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: bold;
+      }
+      
+      .karya-info-box {
+        padding: 12px;
+        flex-grow: 1;
+        color: #ffffff; 
+      }
+      
+      .karya-info-box h3 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        color: #ffffff;
+        font-weight: 700;
+      }
+      
+      .karya-brand {
+        font-size: 11px;
+        color: #bdc3c7; 
+        margin-bottom: 11px;
+      }
+      
+      .karya-footer-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .karya-price-tag {
+        font-weight: 700;
+        color: #f1c40f; 
+        font-size: 1rem;
+      }
+      
+      .karya-btn-buy {
+        background: #f1c40f;
+        color: #0b2d57;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 6px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+    
+      .karya-btn-buy:hover {
+        background: #ffffff;
+        transform: scale(1.05);
+      }
+      
+      .karya-btn-buy:active {
+        background: #bdc3c7 !important; 
+        transform: scale(0.90); 
+      }
+  }

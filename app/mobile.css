@@ -19,33 +19,42 @@
     font-size: 10px !important;
   }
 
-  .topbar-info {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important; 
-    gap: 12px !important;
-    overflow-x: auto !important; 
-    white-space: nowrap !important;
-    scrollbar-width: none; 
-    padding-left: 10px;
-  }
+ .topbar-info {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 12px !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  scrollbar-width: none;
+  padding-left: 10px;
+}
 
-  .topbar-info span {
-    display: flex !important;
-    align-items: center !important;
-    white-space: nowrap !important;
-    font-size: 9px !important; 
-    gap: 4px !important;
-    flex-shrink: 0;
-  }
+.topbar-info span,
+.topbar-info a {
+  display: flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  color: #f1c40f;
+  text-decoration: none;
+  transition: 0.3s ease;
+  font-size: 9px !important;
+  gap: 4px !important;
+  flex-shrink: 0;
+}
 
-  .topbar-info span:last-child {
-    display: none !important;
-  }
+.topbar-info a:hover {
+  color: white;
+}
 
-  .topbar-info::-webkit-scrollbar {
-    display: none;
-  }
+.topbar-info span:last-child,
+.topbar-info a:last-child {
+  display: none !important;
+}
+
+.topbar-info::-webkit-scrollbar {
+  display: none;
+}
 
   .navbar {
     background-color: #ffffff;
@@ -173,6 +182,7 @@
     border-bottom: 1px solid #eee;
     padding-left: 20px;
   }
+
 }
 
 @media (max-width: 768px) {
@@ -576,7 +586,7 @@
     font-size: 13px;
     border-bottom: 2px solid #ffcc00;
     display: inline-block;
-    padding-bottom: 3px;
+    padding-bottom: 2px;
   }
 
   .footer-col ul {
