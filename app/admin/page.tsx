@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 
 export default function AdminPage() {
-  // --- Kodingan Logika Anda Tetap Di Sini ---
-  // (Pastikan useState dan fungsi handleSimpan Anda tidak dihapus)
 
   return (
     <main style={{ 
@@ -21,7 +19,6 @@ export default function AdminPage() {
         boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
       }}>
         
-        {/* Header CMS yang Rapi */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <h2 style={{ color: '#0b2d57', fontSize: '24px', fontWeight: '700', margin: '0' }}>
             PANEL CMS - INPUT WBP
@@ -34,7 +31,6 @@ export default function AdminPage() {
           }}></div>
         </div>
 
-        {/* Form Input dengan Border Biru Halus */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
           <div>
             <label style={{ fontSize: '14px', color: '#666', marginBottom: '5px', display: 'block' }}>Nama Lengkap</label>
@@ -63,7 +59,6 @@ export default function AdminPage() {
             />
           </div>
 
-          {/* Tombol Simpan Biru Solid */}
           <button style={{
             backgroundColor: '#0b2d57',
             color: 'white',
@@ -83,7 +78,6 @@ export default function AdminPage() {
   );
 }
 
-// Style untuk Input agar Seragam & Smooth
 const inputStyle = {
   width: '100%',
   padding: '12px 15px',
