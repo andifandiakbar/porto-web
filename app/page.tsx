@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
-// Menggunakan stylesheet asli Anda
 import "./desktop.css"; 
 import "./mobile.css";
 
@@ -34,7 +33,6 @@ export default function NamaKomponenAnda() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [newsIndex, setNewsIndex] = useState<number>(0); 
 
-  // --- LOGIKA PENCARIAN ASLI ---
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [wbpResults, setWbpResults] = useState<WBP[]>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -77,7 +75,6 @@ export default function NamaKomponenAnda() {
     else setNewsIndex(extendedNews.length - 4);
   };
 
-  // --- FUNGSI PENCARIAN TETAP SAMA ---
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
       alert("Masukkan nama terlebih dahulu");
@@ -130,7 +127,6 @@ export default function NamaKomponenAnda() {
     <main className="main-wrapper" style={{ fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-      {/* Hero Slider */}
       <section className="slider-container" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
         <button className="nav-arrow arrow-left" onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
@@ -152,7 +148,6 @@ export default function NamaKomponenAnda() {
         </button>
       </section>
 
-      {/* Services Grid */}
       <section className="services-section">
         <div className="services-wrapper">
           <div className="services-grid">
@@ -178,7 +173,6 @@ export default function NamaKomponenAnda() {
         </div>
       </section>
 
-      {/* Running Text */}
       <div className="announcement-bar">
         <div className="announcement-label">Berita Terkini </div>
         <div className="announcement-content">
@@ -188,7 +182,6 @@ export default function NamaKomponenAnda() {
         </div>
       </div>
 
-      {/* Latest News */}
       <section className="latest-news-section">
         <div className="container">
           <div className="news-slider-wrapper">
@@ -211,7 +204,6 @@ export default function NamaKomponenAnda() {
         </div>
       </section>
 
-      {/* WBP Info Section */}
       <section className="wbp-info-section">
         <div className="container-wbp">
           <div className="wbp-header-text">
@@ -244,7 +236,6 @@ export default function NamaKomponenAnda() {
               </button>
             </div>
 
-            {/* HASIL PENCARIAN SIMPEL & RAPI */}
             {wbpResults.length > 0 && (
               <div style={{ marginTop: '30px', textAlign: 'left' }}>
                 <h4 style={{ 
