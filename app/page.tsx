@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
+// Menggunakan stylesheet asli Anda
 import "./desktop.css"; 
 import "./mobile.css";
 
@@ -16,15 +17,27 @@ interface News {
   meta: string;
 }
 
+interface WBP {
+  id: number;
+  nama: string;
+  nik: string;
+  kasus: string;
+  status: string;
+  blok_kamar: string;
+}
+
 export default function NamaKomponenAnda() {
-  const [activeFilter, setActiveFilter] = useState<string>('berita');
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [countPenghuni, setCountPenghuni] = useState<number>(1);
   const [countKunjungan, setCountKunjungan] = useState<number>(1);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [newsIndex, setNewsIndex] = useState<number>(0); 
+
+  // --- LOGIKA PENCARIAN ASLI ---
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [wbpResults, setWbpResults] = useState<WBP[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const banners: Banner[] = [
     {
@@ -51,40 +64,45 @@ export default function NamaKomponenAnda() {
 
   const extendedNews: News[] = [...newsData, ...newsData, ...newsData, ...newsData].slice(0, 8);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
-  };
+  const nextSlide = () => setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
 
   const nextNews = () => {
-    if (newsIndex < extendedNews.length - 4) {
-      setNewsIndex(prev => prev + 1);
-    } else {
-      setNewsIndex(0);
-    }
+    if (newsIndex < extendedNews.length - 4) setNewsIndex(prev => prev + 1);
+    else setNewsIndex(0);
   };
 
   const prevNews = () => {
-    if (newsIndex > 0) {
-      setNewsIndex(prev => prev - 1);
-    } else {
-      setNewsIndex(extendedNews.length - 4);
+    if (newsIndex > 0) setNewsIndex(prev => prev - 1);
+    else setNewsIndex(extendedNews.length - 4);
+  };
+
+  // --- FUNGSI PENCARIAN TETAP SAMA ---
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      alert("Masukkan nama terlebih dahulu");
+      return;
+    }
+    setIsSearching(true);
+    try {
+      const response = await fetch(`/api/wbp?search=${searchTerm}`);
+      const data = await response.json();
+      setWbpResults(data);
+      if (data.length === 0) alert("Data tidak ditemukan");
+    } catch (error) {
+      console.error("Gagal mengambil data:", error);
+      alert("Terjadi kesalahan sistem");
+    } finally {
+      setIsSearching(false);
     }
   };
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (!isPaused) {
-      interval = setInterval(() => {
-        nextSlide();
-      }, 3000);
+      interval = setInterval(() => nextSlide(), 3000);
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
+    return () => { if (interval) clearInterval(interval); };
   }, [isPaused, currentSlide]);
 
   useEffect(() => {
@@ -102,62 +120,39 @@ export default function NamaKomponenAnda() {
   }, [countKunjungan]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setIsMenuOpen(false);
-      }
-    };
-    
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);   
   
   return (
-    <main className="main-wrapper">
+    <main className="main-wrapper" style={{ fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-      <section
-        className="slider-container"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onMouseDown={() => setIsPaused(true)}
-      >
+      {/* Hero Slider */}
+      <section className="slider-container" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
         <button className="nav-arrow arrow-left" onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
         </button>
-
         <div className="slider-wrapper" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
           {banners.map((item, i) => (
             <div key={i} className="slide">
-              <img src={item.img} alt={`Banner Rutan Sinjai ${i + 1}`} />
+              <img src={item.img} alt={`Banner ${i + 1}`} />
               {item.showText && (
                 <div className="headline-overlay">
-                  <h1 className="headline-text" style={{ fontSize: isMobile ? '20px' : '38px' }}>
-                    {item.headline}
-                  </h1>
+                  <h1 className="headline-text" style={{ fontSize: isMobile ? '20px' : '38px' }}>{item.headline}</h1>
                 </div>
               )}
             </div>
           ))}
         </div>
-
         <button className="nav-arrow arrow-right" onClick={(e) => { e.stopPropagation(); nextSlide(); }}>
           <i className="fa-solid fa-chevron-right"></i>
         </button>
-
-        <div className="dots-container">
-          {banners.map((_, i) => (
-            <div
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              className={`dot ${currentSlide === i ? 'active' : 'inactive'}`}
-            ></div>
-          ))}
-        </div>
       </section>
 
+      {/* Services Grid */}
       <section className="services-section">
         <div className="services-wrapper">
           <div className="services-grid">
@@ -167,28 +162,23 @@ export default function NamaKomponenAnda() {
               <p>Lihat jam operasional kunjungan WBP</p>
               <a href="/JadwalKunjungan" className="btn">Lihat Jadwal</a>
             </div>
-
             <div className="card">
               <div className="icon"><i className="fa-solid fa-clipboard-list"></i></div>
               <h3>Sistem Antrian</h3>
               <p>Pendaftaran antrian kunjungan online</p>
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSctP_AqsA1_CMpp0LQpqjCKCRaRAAre0mi2C_gnERtZdQlB5g/viewform" className="btn">Daftar Sekarang</a>
+              <a href="https://docs.google.com/forms/..." className="btn">Daftar Sekarang</a>
             </div>
-
             <div className="card">
-              <div className="icon">
-                <i className="fa-solid fa-file-lines"></i>
-              </div>
+              <div className="icon"><i className="fa-solid fa-file-lines"></i></div>
               <h3>Syarat & Ketentuan</h3>
               <p>Prosedur dan ketentuan kunjungan</p>
-              <a href="/SyaratKetentuan" className="btn">
-                Baca Detail
-              </a>
+              <a href="/SyaratKetentuan" className="btn">Baca Detail</a>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Running Text */}
       <div className="announcement-bar">
         <div className="announcement-label">Berita Terkini </div>
         <div className="announcement-content">
@@ -196,59 +186,32 @@ export default function NamaKomponenAnda() {
             Selamat Datang di Website Resmi Rutan Kelas II B Sinjai - Pantau terus jadwal kunjungan dan informasi terbaru di sini.
           </div>
         </div>
-        <div className="announcement-nav">
-          <i className="fa-solid fa-chevron-left"></i>
-          <i className="fa-solid fa-chevron-right"></i>
-        </div>
       </div>
 
+      {/* Latest News */}
       <section className="latest-news-section">
         <div className="container">
           <div className="news-slider-wrapper">
             <button className="slide-arrow prev" onClick={prevNews}><i className="fa-solid fa-chevron-left"></i></button>
-
             <div className="news-viewport" style={{ overflow: 'hidden', width: '100%' }}>
-              <div
-                className="news-track"
-                style={{
-                  display: 'flex',
-                  transition: 'transform 0.5s ease-in-out',
-                  transform: `translateX(-${newsIndex * (100 / (isMobile ? 1 : 4))}%)`
-                }}
-              >
+              <div className="news-track" style={{ display: 'flex', transition: 'transform 0.5s ease', transform: `translateX(-${newsIndex * (100 / (isMobile ? 1 : 4))}%)` }}>
                 {extendedNews.map((item, index) => (
-                  <div
-                    key={index}
-                    className="news-card-v2"
-                    style={{
-                      minWidth: isMobile ? '100%' : '25%',
-                      padding: '0 10px',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    <div className="news-thumb">
-                      <img src={item.img} alt="Berita" style={{ width: '100%' }} />
-                    </div>
+                  <div key={index} className="news-card-v2" style={{ minWidth: isMobile ? '100%' : '25%', padding: '0 10px' }}>
+                    <div className="news-thumb"><img src={item.img} alt="Berita" style={{ width: '100%' }} /></div>
                     <div className="news-content-v2">
-                      <p className="news-date-v2">{item.meta.split('|')[1]?.trim() || "Oct 7, 2024"}</p>
-                      <a href="#" className="news-title-link">
-                        <h3 className="news-title-v2">{item.headline.toLowerCase()}</h3>
-                      </a>
+                      <p className="news-date-v2">{item.meta.split('|')[1]?.trim()}</p>
+                      <h3 className="news-title-v2">{item.headline.toLowerCase()}</h3>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
             <button className="slide-arrow next" onClick={nextNews}><i className="fa-solid fa-chevron-right"></i></button>
-          </div>
-
-          <div className="view-more-container">
-            <button className="btn-view-more">Lihat Lebih Lengkap</button>
           </div>
         </div>
       </section>
 
+      {/* WBP Info Section */}
       <section className="wbp-info-section">
         <div className="container-wbp">
           <div className="wbp-header-text">
@@ -265,16 +228,61 @@ export default function NamaKomponenAnda() {
               <div className="stat-label">KUNJUNGAN BULAN INI</div>
             </div>
           </div>
+          
           <div className="wbp-search-container">
             <p>Silahkan Cari Nama WBP yang akan dikunjungi</p>
             <div className="search-box">
-              <input type="text" placeholder="Masukkan nama..." id="inputNama" />
-              <button type="button" className="btn-cari" onClick={() => alert('Fitur pencarian sedang disiapkan')}>Cari</button>
+              <input 
+                type="text" 
+                placeholder="Masukkan nama..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <button type="button" className="btn-cari" onClick={handleSearch} disabled={isSearching}>
+                {isSearching ? '...' : 'Cari'}
+              </button>
             </div>
+
+            {/* HASIL PENCARIAN SIMPEL & RAPI */}
+            {wbpResults.length > 0 && (
+              <div style={{ marginTop: '30px', textAlign: 'left' }}>
+                <h4 style={{ 
+                  fontSize: '20px', 
+                  color: '#0b2d57', 
+                  marginBottom: '15px', 
+                  borderBottom: '1px solid #eee', 
+                  paddingBottom: '10px',
+                  fontWeight: '600'
+                }}>
+                  Hasil Pencarian:
+                </h4>
+                {wbpResults.map((wbp) => (
+                  <div key={wbp.id} style={{ 
+                    padding: '10px 0', 
+                    marginBottom: '20px', 
+                    borderBottom: '1px dashed #ddd' 
+                  }}>
+                    <div style={{ marginBottom: '8px' }}>
+                      <span style={{ color: '#0b2d57', fontWeight: 'bold', fontSize: '18px' }}>
+                        Nama: {wbp.nama.toUpperCase()}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '15px', color: '#444', lineHeight: '1.6' }}>
+                      <p style={{ margin: '2px 0' }}>
+                        <strong style={{ color: '#0b2d57' }}>Kasus:</strong> {wbp.kasus}
+                      </p>
+                      <p style={{ margin: '2px 0' }}>
+                        <strong style={{ color: '#0b2d57' }}>Blok:</strong> {wbp.blok_kamar} | <strong style={{ color: '#0b2d57' }}>Status:</strong> {wbp.status}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
-
     </main>
   );
 }
