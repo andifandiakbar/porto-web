@@ -1,17 +1,32 @@
 "use client";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import "./desktop.css"; 
+import "./mobile.css";
+
+interface Banner {
+  img: string;
+  headline?: string;
+  showText: boolean;
+}
+
+interface News {
+  img: string;
+  headline: string;
+  meta: string;
+}
 
 export default function NamaKomponenAnda() {
-  const [activeFilter, setActiveFilter] = useState('berita');
-  const [isMobile, setIsMobile] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [countPenghuni, setCountPenghuni] = useState(1);
-  const [countKunjungan, setCountKunjungan] = useState(1);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [newsIndex, setNewsIndex] = useState(0); 
+  const [activeFilter, setActiveFilter] = useState<string>('berita');
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [countPenghuni, setCountPenghuni] = useState<number>(1);
+  const [countKunjungan, setCountKunjungan] = useState<number>(1);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [newsIndex, setNewsIndex] = useState<number>(0); 
 
-  const banners = [
+  const banners: Banner[] = [
     {
       img: '/assets/Banner.png',
       headline: "SELAMAT DATANG DI LAMAN RESMI RUMAH TAHANAN NEGARA KELAS II B KABUPATEN SINJAI",
@@ -21,7 +36,7 @@ export default function NamaKomponenAnda() {
     { img: '/assets/Banner3.png', showText: false }
   ];
 
-  const newsData = [
+  const newsData: News[] = [
     {
       img: '/assets/berita1.png',
       headline: 'GANDENG LBH BAKTI KEADILAN, RUTAN SINJAI FASILITASI TAHANAN DAPATKAN BANTUAN HUKUM',
@@ -34,7 +49,7 @@ export default function NamaKomponenAnda() {
     }
   ];
 
-  const extendedNews = [...newsData, ...newsData, ...newsData, ...newsData].slice(0, 8);
+  const extendedNews: News[] = [...newsData, ...newsData, ...newsData, ...newsData].slice(0, 8);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
@@ -61,13 +76,15 @@ export default function NamaKomponenAnda() {
   };
 
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout | undefined;
     if (!isPaused) {
       interval = setInterval(() => {
         nextSlide();
       }, 3000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isPaused, currentSlide]);
 
   useEffect(() => {
@@ -95,7 +112,7 @@ export default function NamaKomponenAnda() {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);  
+  }, []);   
   
   return (
     <main className="main-wrapper">
@@ -173,7 +190,7 @@ export default function NamaKomponenAnda() {
       </section>
 
       <div className="announcement-bar">
-        <div className="announcement-label">Berita Terbaru </div>
+        <div className="announcement-label">Berita Terkini </div>
         <div className="announcement-content">
           <div className="running-text">
             Selamat Datang di Website Resmi Rutan Kelas II B Sinjai - Pantau terus jadwal kunjungan dan informasi terbaru di sini.

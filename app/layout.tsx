@@ -1,14 +1,18 @@
 "use client";
+import React, { useState, useEffect, ReactNode } from 'react';
 
-import { useState, useEffect } from 'react';
-import "./desktop.css";
+import "./desktop.css"; 
 import "./mobile.css";
 
-export default function RootLayout({ children }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState(false);
-  const [activeItem, setActiveItem] = useState(null);
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({ children }: LayoutProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [activeSubMenu, setActiveSubMenu] = useState<boolean>(false);
+  const [activeItem, setActiveItem] = useState<string | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,7 +28,7 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleItemClick = (id, href) => {
+  const handleItemClick = (id: string, href: string) => {
     setActiveItem(id); 
     setTimeout(() => {
       setIsMenuOpen(false);
@@ -179,7 +183,7 @@ export default function RootLayout({ children }) {
                       width="100%" 
                       height="200" 
                       style={{ border: 0, borderRadius: "0px" }} 
-                      allowFullScreen="" 
+                      allowFullScreen={true} 
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
