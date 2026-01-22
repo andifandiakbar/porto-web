@@ -202,7 +202,7 @@ export default function NamaKomponenAnda() {
             <button className="slide-arrow next" onClick={nextNews}><i className="fa-solid fa-chevron-right"></i></button>
           </div>
 
-          {/* Tombol Lihat Lebih Lengkap dimasukkan di sini */}
+          {}
           <div className="view-more-container">
             <button className="btn-view-more">Lihat Lebih Lengkap</button>
           </div>
