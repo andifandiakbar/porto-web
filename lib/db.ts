@@ -10,3 +10,4 @@ export const db = mysql.createPool({
     rejectUnauthorized: true,
   },
 });
+// fix
