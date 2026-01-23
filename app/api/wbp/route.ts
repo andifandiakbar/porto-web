@@ -7,11 +7,12 @@ export async function GET(request: Request) {
 
   try {
     const connection = await mysql.createConnection({
-      host: 'localhost',
-      port: 3306,
-      user: 'root',
-      password: '', 
-      database: 'db_rutan',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT) || 4000,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      ssl: { rejectUnauthorized: true } // Wajib aktif untuk TiDB Cloud
     });
 
     const [rows] = await connection.execute(
