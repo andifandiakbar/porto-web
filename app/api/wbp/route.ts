@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      ssl: { rejectUnauthorized: true } // Wajib aktif untuk TiDB Cloud
+      ssl: { rejectUnauthorized: true }
     });
 
     const [rows] = await connection.execute(
