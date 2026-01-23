@@ -1,8 +1,18 @@
-import mysql from 'mysql2/promise';
+try {
+    const connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      ssl: { rejectUnauthorized: true }
+    });
 
-export const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '', 
-  database: 'db_rutan',
-});
+    const [rows] = await connection.execute(
+      'SELECT * FROM wbp_data WHERE nama LIKE ?',
+      [`%${search}%`]
+    );
+
+    await connection.end();
+    return NextResponse.json(rows);
+  }
