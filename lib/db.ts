@@ -7,6 +7,6 @@ export const db = mysql.createPool({
   database: process.env.DB_NAME,
   port: Number(process.env.DB_PORT) || 4000,
   ssl: {
-    rejectUnauthorized: true, // WAJIB untuk TiDB Cloud
+    rejectUnauthorized: true, 
   },
 });
