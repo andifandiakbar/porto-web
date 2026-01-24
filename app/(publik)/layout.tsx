@@ -40,13 +40,7 @@ export default function RootLayout({ children }: LayoutProps) {
   };
 
   return (
-    <html lang="id">
-      <head>
-        <title>Rutan Sinjai Kelas IIB</title>
-        <meta name="description" content="Website Resmi Rumah Tahanan Negara Kelas IIB Sinjai" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-      </head>
-      <body>
+    <>
         <main className="main-wrapper">
           <div className="topbar">
             <div className="container topbar-flex">
@@ -166,12 +160,9 @@ export default function RootLayout({ children }: LayoutProps) {
                     <img src="/assets/logo.png" alt="logo" />
                   </div>
                   <div className="footer-info">
-                    <p>Kementerian Imigrasi Dan</p>
-                    <p>Pemasyarakatan Kanwil</p>
-                    <p>Direktorat Jenderal</p>
-                    <p>Pemasyarakatan Sulsel</p>
-                    <p>Rumah Tahanan Negara Kelas</p>
-                    <p>IIB Sinjai</p>
+                    <p>Kementerian Imigrasi Dan Pemasyarakatan</p>
+                    <p>Kanwil Direktorat Jenderal Pemasyarakatan Sulsel</p>
+                    <p>Rumah Tahanan Negara Kelas IIB Sinjai</p>
                   </div>
                 </div>
 
@@ -180,34 +171,18 @@ export default function RootLayout({ children }: LayoutProps) {
                   <ul>
                     <li><a href="#">Ditjen Pemasyarakatan</a></li>
                     <li><a href="#">Kepolisian RI</a></li>
-                    <li><a href="#">Kejaksaan RI</a></li>
-                    <li><a href="#">Mahkamah Agung RI</a></li>
-                    <li><a href="#">Peradi</a></li>
-                  </ul>
-                </div>
-
-                <div className="footer-col">
-                  <h4>Profil Unit Pelaksana Teknis</h4>
-                  <ul>
-                    <li><a href="#">Sejarah Pemasyarakatan</a></li>
-                    <li><a href="#">Selayang Pandang Satuan Kerja</a></li>
-                    <li><a href="#">Kedudukan Tugas dan Fungsi</a></li>
-                    <li><a href="#">Visi Misi dan Tata Nilai</a></li>
-                    <li><a href="#">Mars Pemasyarakatan</a></li>
                   </ul>
                 </div>
                 
                 <div className="footer-col">
-                  <div className="footer-map-container" style={{ position: 'relative' }}>
+                  <div className="footer-map-container">
                     <iframe 
-                      id="google-map"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.8451579422!2d120.25041197353876!3d-5.12863180189476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbc25d7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1765462160401!5m2!1sid!2sid" 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.1384469792473!2d120.2483!3d-5.1147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMDYnNTIuOSJTIDEyMMKwMTQnNTMuOSJF!5e0!3m2!1sid!2sid!4v1640000000000" 
                       width="250" 
                       height="200" 
-                      style={{ border: 0, borderRadius: "0px" }} 
+                      style={{ border: 0 }} 
                       allowFullScreen={true} 
                       loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
                   </div>
                 </div>
@@ -215,7 +190,6 @@ export default function RootLayout({ children }: LayoutProps) {
             </div>
           </footer>
         </main>
-      </body>
-    </html>
+    </>
   );
 }
