@@ -266,6 +266,8 @@ export default function NamaKomponenAnda() {
                       </span>
                     </div>
                     <div style={{ fontSize: '15px', color: '#444', lineHeight: '1.6' }}>
+                    <p style={{ margin: '2px 0' }}><strong style={{ color: '#0b2d57' }}>NIK:</strong> {wbp.nik}
+                      </p>
                       <p style={{ margin: '2px 0' }}>
                         <strong style={{ color: '#0b2d57' }}>Kasus:</strong> {wbp.kasus}
                       </p>
