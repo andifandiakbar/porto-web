@@ -1,29 +1,23 @@
 import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
+
+// Data simulasi manual
+const dataWBP = [
+  { id: 1, nama: "Ahmad Zulkarnaen", nik: "320102030", kasus: "Narkotika", status: "Narapidana", blok_kamar: "A-04" },
+  { id: 2, nama: "Cahyadi", nik: "304050002", kasus: "Pencurian", status: "Tahanan", blok_kamar: "B-02" },
+  { id: 3, nama: "Andi Wijaya", nik: "32010203040", kasus: "Penggelapan", status: "Narapidana", blok_kamar: "C-01" },
+  { id: 4, nama: "Fandi", nik: "355334", kasus: "Mencuri", status: "Narapidana", blok_kamar: "C-02" },
+  { id: 5, nama: "Syiar", nik: "3939484", kasus: "Maling Sendal", status: "Narapidana", blok_kamar: "B-01" }
+];
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const search = searchParams.get('search') || '';
+  const search = searchParams.get('search')?.toLowerCase() || '';
 
-  try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT) || 4000,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      ssl: { rejectUnauthorized: true }
-    });
+  // Filter data berdasarkan input pencarian
+  const filteredData = dataWBP.filter(item => 
+    item.nama.toLowerCase().includes(search) || 
+    item.nik.includes(search)
+  );
 
-    const [rows] = await connection.execute(
-      'SELECT * FROM wbp_data WHERE nama LIKE ?',
-      [`%${search}%`]
-    );
-
-    await connection.end();
-    return NextResponse.json(rows);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Gagal ambil data" }, { status: 500 });
-  }
+  return NextResponse.json(filteredData);
 }
