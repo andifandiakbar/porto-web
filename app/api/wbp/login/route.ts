@@ -5,7 +5,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { username, password } = body;
 
-    // DATA LOGIN SIMULASI (Ganti sesukanya)
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "123";
 

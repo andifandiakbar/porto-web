@@ -10,7 +10,6 @@ const dataWBP = [
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  // .trim() akan menghapus spasi di awal/akhir teks pencarian
   const search = searchParams.get('search')?.toLowerCase().trim() || '';
 
   const filteredData = dataWBP.filter(item => 
