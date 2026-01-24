@@ -40,13 +40,9 @@ export default function RootLayout({ children }: LayoutProps) {
   };
 
   return (
-    <html lang="id">
-      <head>
-        <title>Rutan Sinjai Kelas IIB</title>
-        <meta name="description" content="Website Resmi Rumah Tahanan Negara Kelas IIB Sinjai" />
+    <div className="layout-wrapper">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-      </head>
-      <body>
+        
         <main className="main-wrapper">
           <div className="topbar">
             <div className="container topbar-flex">
@@ -57,9 +53,9 @@ export default function RootLayout({ children }: LayoutProps) {
                 <a href="#"><i className="fa-brands fa-youtube"></i></a>
               </div>
               <div className="topbar-info">
-                <a href="tel:07247333024" className="info-item"><i className="fa-solid fa-phone"></i> 0724-7333024</a>
-                <a href="https://wa.me/628714409435" target="_blank" rel="noopener noreferrer" className="info-item"><i className="fa-brands fa-whatsapp"></i> +628714409435</a>
-                <a href="mailto:rutan.sinjai@kemenkumham.go.id" className="info-item"><i className="fa-solid fa-envelope"></i> rutan.sinjai@kemenkumham.go.id</a>
+                <a href="tel:07247333024" className="info-item"><i className="fa-solid fa-phone"></i> 048222188</a>
+                <a href="https://wa.me/6281356640175" target="_blank" rel="noopener noreferrer" className="info-item"><i className="fa-brands fa-whatsapp"></i> +6281356640175</a>
+                <a href="mailto:rutanIIBsinjai@email.go.id" className="info-item"><i className="fa-solid fa-envelope"></i> rutan.kelas-IIB.sinjai@email.go.id</a>
               </div>
             </div>
           </div>
@@ -215,7 +211,6 @@ export default function RootLayout({ children }: LayoutProps) {
             </div>
           </footer>
         </main>
-      </body>
-    </html>
+    </div>
   );
 }

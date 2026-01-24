@@ -247,7 +247,7 @@ export default function NamaKomponenAnda() {
           type="text" 
           style={{ 
             width: '100%', 
-            padding: '12px', 
+            padding: '9px', 
             border: '2px solid #e0e0e0', 
             borderRadius: '4px', 
             outline: 'none', 
