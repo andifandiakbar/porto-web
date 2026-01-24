@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; 
 
 import "./desktop.css"; 
 import "./mobile.css";
@@ -26,6 +27,7 @@ interface WBP {
 }
 
 export default function NamaKomponenAnda() {
+  const router = useRouter(); 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [countPenghuni, setCountPenghuni] = useState<number>(1);
@@ -75,23 +77,12 @@ export default function NamaKomponenAnda() {
     else setNewsIndex(extendedNews.length - 4);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (!searchTerm.trim()) {
       alert("Masukkan nama terlebih dahulu");
       return;
     }
-    setIsSearching(true);
-    try {
-      const response = await fetch(`/api/wbp?search=${searchTerm}`);
-      const data = await response.json();
-      setWbpResults(data);
-      if (data.length === 0) alert("Data tidak ditemukan");
-    } catch (error) {
-      console.error("Gagal mengambil data:", error);
-      alert("Terjadi kesalahan sistem");
-    } finally {
-      setIsSearching(false);
-    }
+    router.push(`/dashboard-pencarian?nama=${encodeURIComponent(searchTerm)}`);
   };
 
   useEffect(() => {
@@ -201,87 +192,111 @@ export default function NamaKomponenAnda() {
             </div>
             <button className="slide-arrow next" onClick={nextNews}><i className="fa-solid fa-chevron-right"></i></button>
           </div>
-
-          {}
           <div className="view-more-container">
             <button className="btn-view-more">Lihat Lebih Lengkap</button>
           </div>
-          
         </div>
       </section>
 
-      <section className="wbp-info-section">
-        <div className="container-wbp">
-          <div className="wbp-header-text">
-            <h2>RUTAN KELAS IIB SINJAI</h2>
-            <p>SISTEM INFORMASI DATA WARGA BINAAN</p>
-          </div>
-          <div className="wbp-stats-grid">
-            <div className="wbp-stat-card">
-              <div className="stat-number">{countPenghuni}</div>
-              <div className="stat-label">TOTAL PENGHUNI SAAT INI</div>
-            </div>
-            <div className="wbp-stat-card">
-              <div className="stat-number">{countKunjungan}</div>
-              <div className="stat-label">KUNJUNGAN BULAN INI</div>
-            </div>
-          </div>
-          
-          <div className="wbp-search-container">
-            <p>Silahkan Cari Nama WBP yang akan dikunjungi</p>
-            <div className="search-box">
-              <input 
-                type="text" 
-                placeholder="Masukkan nama..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              />
-              <button type="button" className="btn-cari" onClick={handleSearch} disabled={isSearching}>
-                {isSearching ? '...' : 'Cari'}
-              </button>
-            </div>
+      <section className="wbp-info-section" style={{ width: '100%', padding: '40px 0' }}>
 
-            {wbpResults.length > 0 && (
-              <div style={{ marginTop: '30px', textAlign: 'left' }}>
-                <h4 style={{ 
-                  fontSize: '20px', 
-                  color: '#0b2d57', 
-                  marginBottom: '15px', 
-                  borderBottom: '1px solid #eee', 
-                  paddingBottom: '10px',
-                  fontWeight: '600'
-                }}>
-                  Hasil Pencarian:
-                </h4>
-                {wbpResults.map((wbp) => (
-                  <div key={wbp.id} style={{ 
-                    padding: '10px 0', 
-                    marginBottom: '20px', 
-                    borderBottom: '1px dashed #ddd' 
-                  }}>
-                    <div style={{ marginBottom: '8px' }}>
-                      <span style={{ color: '#0b2d57', fontWeight: 'bold', fontSize: '18px' }}>
-                        Nama: {wbp.nama.toUpperCase()}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '15px', color: '#444', lineHeight: '1.6' }}>
-                    <p style={{ margin: '2px 0' }}><strong style={{ color: '#0b2d57' }}>NIK:</strong> {wbp.nik}
-                      </p>
-                      <p style={{ margin: '2px 0' }}>
-                        <strong style={{ color: '#0b2d57' }}>Kasus:</strong> {wbp.kasus}
-                      </p>
-                      <p style={{ margin: '2px 0' }}>
-                        <strong style={{ color: '#0b2d57' }}>Blok:</strong> {wbp.blok_kamar} | <strong style={{ color: '#0b2d57' }}>Status:</strong> {wbp.status}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+  <div className="container-wbp" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+    <div className="wbp-header-text">
+
+      <h2 style={{ color: '#093661', fontWeight: 'bold' }}>RUTAN KELAS IIB SINJAI</h2>
+      <p style={{ color: '#555' }}>SISTEM INFORMASI DATA WARGA BINAAN</p>
+    </div>
+    
+    <div className="wbp-stats-grid">
+      <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
+        <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
+        <div className="stat-label" style={{ color: '#fff' }}>TOTAL PENGHUNI SAAT INI</div>
+      </div>
+      <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
+        <div className="stat-number" style={{ color: '#ffc107' }}>{countKunjungan}</div>
+        <div className="stat-label" style={{ color: '#fff' }}>KUNJUNGAN BULAN INI</div>
+      </div>
+    </div>
+    
+
+    <div className="wbp-search-container" style={{ 
+      backgroundColor: '#FAFBFF', 
+      padding: '30px', 
+      borderRadius: '12px', 
+      width: '100%',
+      boxSizing: 'border-box' 
+    }}>
+
+      <div className="search-header-btn" style={{ 
+        backgroundColor: '#093661', 
+        color: 'white', 
+        padding: '18px', 
+        borderRadius: '8px', 
+        fontSize: isMobile ? '18px' : '24px', 
+        fontWeight: '600', 
+        marginBottom: '25px', 
+        width: '100%', 
+        textAlign: 'center',
+        boxSizing: 'border-box'
+      }}>
+        Silahkan Cari Nama WBP yang akan dikunjungi
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+        <input 
+          type="text" 
+          style={{ 
+            width: '100%', 
+            padding: '12px', 
+            border: '2px solid #e0e0e0', 
+            borderRadius: '4px', 
+            outline: 'none', 
+            textAlign: 'center',
+            fontSize: '16px'
+          }}
+          placeholder="Masukkan nama wbp..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+        />
+        <div style={{ marginTop: '15px' }}>
+          <button 
+            type="button" 
+            style={{ 
+              backgroundColor: '#238b59', 
+              color: 'white', 
+              border: 'none', 
+              padding: '10px 60px', 
+              fontSize: '18px', 
+              borderRadius: '5px', 
+              cursor: 'pointer', 
+              fontWeight: 'bold',
+              transition: 'transform 0.1s ease, opacity 0.1s ease, background-color 0.2s ease', 
+              outline: 'none',
+              boxShadow: '0 4px 6px rgba(35, 139, 89, 0.2)'
+            }}
+
+            onMouseDown={(e) => {
+              e.currentTarget.style.transform = 'scale(0.95)';
+              e.currentTarget.style.backgroundColor = '#1a6a44';
+            }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = '#238b59';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = '#238b59';
+            }}
+            onClick={handleSearch} 
+          >
+            Cari
+          </button>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
     </main>
   );
 }

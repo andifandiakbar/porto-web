@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 
-// Data simulasi manual
 const dataWBP = [
   { id: 1, nama: "Ahmad Zulkarnaen", nik: "320102030", kasus: "Narkotika", status: "Narapidana", blok_kamar: "A-04" },
   { id: 2, nama: "Cahyadi", nik: "304050002", kasus: "Pencurian", status: "Tahanan", blok_kamar: "B-02" },
@@ -11,9 +10,9 @@ const dataWBP = [
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const search = searchParams.get('search')?.toLowerCase() || '';
+  // .trim() akan menghapus spasi di awal/akhir teks pencarian
+  const search = searchParams.get('search')?.toLowerCase().trim() || '';
 
-  // Filter data berdasarkan input pencarian
   const filteredData = dataWBP.filter(item => 
     item.nama.toLowerCase().includes(search) || 
     item.nik.includes(search)
