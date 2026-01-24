@@ -221,7 +221,7 @@ export default function NamaKomponenAnda() {
 
     <div className="wbp-search-container" style={{ 
       backgroundColor: '#FAFBFF', 
-      padding: '30px', 
+      padding: '40px', 
       borderRadius: '12px', 
       width: '100%',
       boxSizing: 'border-box' 
