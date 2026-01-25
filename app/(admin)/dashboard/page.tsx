@@ -162,7 +162,7 @@ export default function RutanSinjaiDashboard() {
                     <label style={labelStyled}>Deskripsi Produk</label>
                     <textarea style={{ ...inputStyled, height: '80px', width: '100%' }} placeholder="Detail produk..."></textarea>
                   </div>
-                  <button style={{ ...submitBtn, gridColumn: 'span 2' }}>Tambah Produk Karya</button>
+                  <button style={{ ...submitBtn, gridColumn: 'span 2' }}>Tambah Produk Karya Binaan</button>
                 </div>
               </div>
             ) : null}
