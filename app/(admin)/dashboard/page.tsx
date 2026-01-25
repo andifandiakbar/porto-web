@@ -167,7 +167,7 @@ export default function RutanSinjaiDashboard() {
               </div>
             ) : null}
           </div>
-        </main>n
+        </main>
       </div>
     </div>
   );
