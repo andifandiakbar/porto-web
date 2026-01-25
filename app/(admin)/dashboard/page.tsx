@@ -7,11 +7,13 @@ export default function RutanSinjaiDashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const router = useRouter();
 
+  const [activeExit, setActiveExit] = useState(false);
+
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ display: 'flex', height: '96vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: "'Inter', sans-serif" }}>
       
       <aside style={{ 
-        width: isSidebarVisible ? '280px' : '0px', 
+        width: isSidebarVisible ? '210px' : '0px', 
         backgroundColor: '#FFFFFF', 
         borderRight: isSidebarVisible ? '1px solid #EBEBEB' : 'none', 
         display: 'flex', 
@@ -23,7 +25,7 @@ export default function RutanSinjaiDashboard() {
       }}>
         
         <div style={{ 
-          padding: '300px 28px', 
+          padding: '10px 30px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'flex-start', 
@@ -70,7 +72,19 @@ export default function RutanSinjaiDashboard() {
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#2D3748' }}>Staf Admin</div>
           </div>
-          <button onClick={() => router.push('/admin')} style={exitBtn}>Keluar</button>
+          <button 
+            onMouseDown={() => setActiveExit(true)}
+            onMouseUp={() => setActiveExit(false)}
+            onClick={() => router.push('/admin')} 
+            style={{
+              ...exitBtn,
+              transform: activeExit ? 'scale(0.92)' : 'scale(1)',
+              backgroundColor: activeExit ? '#FED7D7' : '#FFF5F5',
+              transition: 'all 0.2s'
+            }}
+          >
+            Keluar
+          </button>
         </div>
       </aside>
 
@@ -84,7 +98,7 @@ export default function RutanSinjaiDashboard() {
           boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
         }}>
           <span onClick={() => setIsSidebarVisible(!isSidebarVisible)} style={{ cursor: 'pointer', fontSize: '22px', color: '#093661' }}>☰</span>
-          <div style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>Sistem Informasi Manajemen Rutan Kelas II B Sinjai</div>
+          <div style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai</div>
         </header>
 
         <main style={{ flex: 1, overflowY: 'auto', padding: '30px' }}>
@@ -121,7 +135,7 @@ export default function RutanSinjaiDashboard() {
                   <FormInput label="Lama Pidana" placeholder="Contoh: 5 Tahun 6 Bulan" />
                   <FormInput label="Tanggal Ekspirasi" type="date" />
                   <FormInput label="Blok / Kamar" placeholder="Contoh: Blok A - Kamar 04" />
-                  <button style={{ ...submitBtn, gridColumn: 'span 2' }}>Simpan Data Narapidana</button>
+                  <SubmitButton label="Simpan Data Narapidana" style={{ gridColumn: 'span 2' }} />
                 </div>
               </div>
             ) : activeMenu === 'berita' ? (
@@ -129,8 +143,9 @@ export default function RutanSinjaiDashboard() {
                 <h3 style={sectionTitle}>📰 Posting Berita Terbaru</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                   <input style={inputStyled} placeholder="Judul Berita" />
+                  <FormInput label="Upload Foto Berita" type="file" accept="image/*" />
                   <textarea style={{ ...inputStyled, height: '150px' }} placeholder="Isi Berita..."></textarea>
-                  <button style={submitBtn}>Publikasikan Berita</button>
+                  <SubmitButton label="Publikasikan Berita" />
                 </div>
               </div>
             ) : activeMenu === 'foto' ? (
@@ -139,7 +154,7 @@ export default function RutanSinjaiDashboard() {
                 <div style={formGrid}>
                   <FormInput label="Keterangan Foto" placeholder="Deskripsi singkat foto" />
                   <FormInput label="Pilih File Foto" type="file" />
-                  <button style={{ ...submitBtn, gridColumn: 'span 2' }}>Upload Foto</button>
+                  <SubmitButton label="Upload Foto" style={{ gridColumn: 'span 2' }} />
                 </div>
               </div>
             ) : activeMenu === 'video' ? (
@@ -148,7 +163,7 @@ export default function RutanSinjaiDashboard() {
                 <div style={formGrid}>
                   <FormInput label="Judul Video" placeholder="Judul video..." />
                   <FormInput label="Link URL Video" placeholder="https://youtube.com/watch?v=..." />
-                  <button style={{ ...submitBtn, gridColumn: 'span 2' }}>Simpan Video</button>
+                  <SubmitButton label="Simpan Video" style={{ gridColumn: 'span 2' }} />
                 </div>
               </div>
             ) : activeMenu === 'produk' ? (
@@ -162,7 +177,7 @@ export default function RutanSinjaiDashboard() {
                     <label style={labelStyled}>Deskripsi Produk</label>
                     <textarea style={{ ...inputStyled, height: '80px', width: '100%' }} placeholder="Detail produk..."></textarea>
                   </div>
-                  <button style={{ ...submitBtn, gridColumn: 'span 2' }}>Tambah Produk Karya Binaan</button>
+                  <SubmitButton label="Tambah Produk Karya Binaan" style={{ gridColumn: 'span 2' }} />
                 </div>
               </div>
             ) : null}
@@ -183,22 +198,55 @@ const topHeaderStyle: any = { height: '75px', backgroundColor: '#FFF', borderBot
 const statsGrid: any = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '30px' };
 const contentCard: any = { backgroundColor: 'white', borderRadius: '20px', border: '1px solid #EBEBEB', minHeight: '400px', marginBottom: '40px' };
 const inputStyled: any = { width: '100%', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' as const };
-const submitBtn: any = { padding: '14px', backgroundColor: '#093661', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' };
+const submitBtnBase: any = { padding: '14px', backgroundColor: '#093661', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px', transition: 'all 0.2s' };
 const glassBanner: any = { background: 'linear-gradient(135deg, #4680FF 0%, #0046E5 100%)', borderRadius: '20px', padding: '45px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
 const glassCircle1: any = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
 const glassCircle2: any = { position: 'absolute', bottom: '-40px', left: '20%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };
 
 function NavItem({ active, onClick, icon, label }: any) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
   return (
-    <div onClick={onClick} style={{
-      padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px',
-      marginBottom: '5px', transition: '0.3s',
-      backgroundColor: active ? '#F0F4FF' : 'transparent',
-      color: active ? '#093661' : '#5B6B79',
-      fontWeight: active ? '700' : '400'
-    }}>
+    <div 
+      onClick={onClick} 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
+      onMouseDown={() => setIsActive(true)}
+      onMouseUp={() => setIsActive(false)}
+      style={{
+        padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px',
+        marginBottom: '5px', transition: '0.3s',
+        backgroundColor: active ? '#F0F4FF' : isHovered ? '#F7FAFC' : 'transparent',
+        color: active ? '#093661' : '#5B6B79',
+        fontWeight: active ? '700' : '400',
+        transform: isActive ? 'scale(0.95)' : 'scale(1)',
+      }}
+    >
       <span style={{ fontSize: '18px' }}>{icon}</span><span style={{ fontSize: '14px' }}>{label}</span>
     </div>
+  );
+}
+
+function SubmitButton({ label, style }: any) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
+  return (
+    <button 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
+      onMouseDown={() => setIsActive(true)}
+      onMouseUp={() => setIsActive(false)}
+      style={{ 
+        ...submitBtnBase, 
+        ...style,
+        backgroundColor: isActive ? '#05213d' : isHovered ? '#0d4a85' : '#093661',
+        transform: isActive ? 'scale(0.98)' : 'scale(1)',
+      }}
+    >
+      {label}
+    </button>
   );
 }
 

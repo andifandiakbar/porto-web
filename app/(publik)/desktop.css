@@ -70,9 +70,9 @@ body {
 .navbar {
   background-color: #ffffff;
   padding: 0.5% 0;
-  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.116);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.116);
   position: sticky;
-  top: 35px;
+  top: 37px;
   z-index: 1000;
 }
 

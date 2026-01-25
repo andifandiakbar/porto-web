@@ -7,6 +7,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  const [isHovered, setIsHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -24,7 +27,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#093661' }}>
+    <div style={{ 
+      minHeight: '100vh', 
+      width: '100%', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      backgroundColor: '#093661',
+      margin: 0,
+      padding: 0,
+      position: 'fixed',
+      top: 0,
+      left: 0
+    }}>
       <form onSubmit={handleLogin} style={{ 
         backgroundColor: 'white', 
         padding: '40px', 
@@ -33,25 +48,24 @@ export default function LoginPage() {
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center',
-        boxShadow: '0 10px 25px rgba(0,0,0,0.2)' 
       }}>
         
-        <img 
-          src="/assets/logo.png" 
-          alt="Logo Rutan" 
-          style={{ width: '100px', height: '100px', marginBottom: '0px', objectFit: 'contain' }} 
-        />
-        <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-          <h1 style={{ fontSize: '18px', fontWeight: '800', color: '#093661', margin: 0, }}>
-            Rutan Kelas II B
-          </h1>
-          <p style={{ fontSize: '17px', fontWeight: '800', color: '#093661', margin: 0 }}>
-            Sinjai
-          </p>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+          <img 
+            src="/assets/logo.png" 
+            alt="Logo" 
+            style={{ width: '200px', height: '70px', objectFit: 'contain' }} 
+          />
         </div>
 
-        <h2 style={{ color: '#093661', fontSize: '14px', marginBottom: '20px', fontWeight: 'bold', letterSpacing: '1px' }}>
-          LOGIN CMS STAFF
+        <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+          <h1 style={{ fontSize: '21px', fontWeight: '800', color: '#093661', margin: 0 }}>
+            Rutan Kelas II B Sinjai
+          </h1>
+        </div>
+
+        <h2 style={{ color: '#093661', fontSize: '18px', marginBottom: '20px', fontWeight: 'bold', letterSpacing: '1px' }}>
+          Login Content Management System
         </h2>
         
         <input 
@@ -66,7 +80,8 @@ export default function LoginPage() {
             borderRadius: '8px', 
             border: '1px solid #E2E8F0', 
             boxSizing: 'border-box',
-            outlineColor: '#093661'
+            outlineColor: '#093661',
+            fontSize: '14px'
           }} 
         />
         <input 
@@ -81,16 +96,21 @@ export default function LoginPage() {
             borderRadius: '8px', 
             border: '1px solid #E2E8F0', 
             boxSizing: 'border-box',
-            outlineColor: '#093661'
+            outlineColor: '#093661',
+            fontSize: '14px'
           }} 
         />
         
         <button 
           type="submit" 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
+          onMouseDown={() => setIsActive(true)}
+          onMouseUp={() => setIsActive(false)}
           style={{ 
             width: '100%', 
             padding: '14px', 
-            backgroundColor: '#093661',
+            backgroundColor: isActive ? '#05213d' : isHovered ? '#0d4a85' : '#093661',
             color: 'white', 
             border: 'none', 
             borderRadius: '8px', 
@@ -98,7 +118,8 @@ export default function LoginPage() {
             fontWeight: 'bold', 
             marginTop: '15px',
             fontSize: '15px',
-            transition: '0.3s'
+            transform: isActive ? 'scale(0.96)' : 'scale(1)',
+            transition: 'all 0.2s ease'
           }}
         >
           Masuk ke Sistem
