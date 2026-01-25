@@ -43,13 +43,26 @@ export default function KaryaBinaanPage() {
   ];
 
   return (
-    <div className="karya-page-wrapper">
+    <div className="karya-page-wrapper" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <div className="karya-container">
         
-        <div className="karya-header-section">
-          <h1>Hasil Karya Warga Binaan</h1>
-          <p>Mendukung kreativitas dan kemandirian Rutan Sinjai</p>
-          <div className="karya-underline"></div>
+        <div className="karya-header-section" style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ 
+            color: '#093b77', 
+            fontSize: '28px', 
+            fontWeight: '700', 
+            marginBottom: '7px' 
+          }}>
+            Hasil Karya Warga Binaan
+          </h1>
+          <p style={{ color: '#64748b', margin: '0' }}>Mendukung kreativitas dan kemandirian Rutan Sinjai</p>
+          <div className="karya-underline" style={{
+            width: '50px',
+            height: '4px',
+            background: '#ddb309',
+            margin: '10px auto 0',
+            borderRadius: '2px'
+          }}></div>
         </div>
 
         <div className="karya-product-grid">
@@ -67,7 +80,7 @@ export default function KaryaBinaanPage() {
                   <span className="karya-price-tag">{item.harga}</span>
                   <button 
                     className="karya-btn-buy"
-                    onClick={() => window.open('https://wa.me/628714409435', '_blank')}
+                    onClick={() => window.open('https://wa.me/6281356640175', '_blank')}
                   >
                     Beli
                   </button>

@@ -1,7 +1,7 @@
 export default function Root({ children }) {
-    return (
-      <html lang="id">
-        <body>{children}</body>
-      </html>
-    )
-  }
+  return (
+    <html lang="id" suppressHydrationWarning>
+      <body suppressHydrationWarning>{children}</body>
+    </html>
+  )
+}
