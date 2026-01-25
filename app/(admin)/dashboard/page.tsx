@@ -23,7 +23,7 @@ export default function RutanSinjaiDashboard() {
       }}>
         
         <div style={{ 
-          padding: '30px 28px', 
+          padding: '300px 28px', 
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'flex-start', 

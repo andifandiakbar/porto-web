@@ -618,6 +618,7 @@
   }
 
   .footer-map-container iframe {
-    height: 150px;
+    height: 120px;
+    width: 220px; 
   }
 }
