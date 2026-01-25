@@ -100,7 +100,7 @@ export default function RutanSinjaiDashboard() {
           <div style={statsGrid}>
             <StatCard label="TOTAL PENGHUNI" value="40" sub="Orang" color="#4680FF" />
             <StatCard label="PENGUNJUNG" value="110" sub="Bulan Ini" color="#FFB811" />
-            <StatCard label="PRODUK KARYA" value="12" sub="Unit" color="#2ECC71" />
+            <StatCard label="PRODUK KARYA" value="4" sub="Unit" color="#2ECC71" />
             <StatCard label="BERITA" value="5" sub="Baru" color="#E74C3C" />
           </div>
 
@@ -167,7 +167,7 @@ export default function RutanSinjaiDashboard() {
               </div>
             ) : null}
           </div>
-        </main>
+        </main>n
       </div>
     </div>
   );
