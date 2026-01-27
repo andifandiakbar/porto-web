@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
+import { supabase } from '../../lib/supabase';
 
 import "./desktop.css"; 
 import "./mobile.css";
@@ -15,6 +16,7 @@ interface News {
   img: string;
   headline: string;
   meta: string;
+  status?: string; 
 }
 
 interface WBP {
@@ -26,7 +28,7 @@ interface WBP {
   blok_kamar: string;
 }
 
-export default function NamaKomponenAnda() {
+export default function LamanPublikRutan() {
   const router = useRouter(); 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -36,8 +38,7 @@ export default function NamaKomponenAnda() {
   const [newsIndex, setNewsIndex] = useState<number>(0); 
 
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [wbpResults, setWbpResults] = useState<WBP[]>([]);
-  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [newsFromCMS, setNewsFromCMS] = useState<News[]>([]);
 
   const banners: Banner[] = [
     {
@@ -49,20 +50,37 @@ export default function NamaKomponenAnda() {
     { img: '/assets/Banner3.png', showText: false }
   ];
 
-  const newsData: News[] = [
+  const newsDataDefault: News[] = [
     {
       img: '/assets/berita1.png',
       headline: 'GANDENG LBH BAKTI KEADILAN, RUTAN SINJAI FASILITASI TAHANAN DAPATKAN BANTUAN HUKUM',
       meta: 'Rutan Kelas IIB Sinjai | Oct 7, 2024'
-    },
-    {
-      img: '/assets/berita2.png',
-      headline: 'RUTAN SINJAI GELAR PEMBINAAN KEMANDIRIAN BAGI WARGA BINAAN',
-      meta: 'Rutan Kelas IIB Sinjai | Oct 10, 2024'
     }
   ];
 
-  const extendedNews: News[] = [...newsData, ...newsData, ...newsData, ...newsData].slice(0, 8);
+  useEffect(() => {
+    const fetchBeritaOnline = async () => {
+      const { data, error } = await supabase
+        .from('daftar_berita')
+        .select('*')
+        .eq('status', 'Publik')
+        .order('id', { ascending: false });
+
+      if (data) {
+        const formatted = data.map((item: any) => ({
+          img: item.img || '/assets/berita1.png',
+          headline: item.judul,
+          meta: `Rutan Kelas IIB Sinjai | ${item.tanggal}`
+        }));
+        setNewsFromCMS(formatted);
+      }
+    };
+
+    fetchBeritaOnline();
+  }, []);
+
+  const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
+  const extendedNews = [...combinedNews, ...combinedNews, ...combinedNews].slice(0, 8);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
@@ -199,104 +217,61 @@ export default function NamaKomponenAnda() {
       </section>
 
       <section className="wbp-info-section" style={{ width: '100%', padding: '40px 0' }}>
-
-  <div className="container-wbp" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-    <div className="wbp-header-text">
-
-      <h2 style={{ color: '#093661', fontWeight: 'bold' }}>RUTAN KELAS IIB SINJAI</h2>
-      <p style={{ color: '#555' }}>SISTEM INFORMASI DATA WARGA BINAAN</p>
-    </div>
-    
-    <div className="wbp-stats-grid">
-      <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
-        <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
-        <div className="stat-label" style={{ color: '#fff' }}>TOTAL PENGHUNI SAAT INI</div>
-      </div>
-      <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
-        <div className="stat-number" style={{ color: '#ffc107' }}>{countKunjungan}</div>
-        <div className="stat-label" style={{ color: '#fff' }}>KUNJUNGAN BULAN INI</div>
-      </div>
-    </div>
-    
-
-    <div className="wbp-search-container" style={{ 
-      backgroundColor: '#FAFBFF', 
-      padding: '40px', 
-      borderRadius: '12px', 
-      width: '100%',
-      boxSizing: 'border-box' 
-    }}>
-
-      <div className="search-header-btn" style={{ 
-        backgroundColor: '#093661', 
-        color: 'white', 
-        padding: '18px', 
-        borderRadius: '8px', 
-        fontSize: isMobile ? '18px' : '24px', 
-        fontWeight: '600', 
-        marginBottom: '25px', 
-        width: '100%', 
-        textAlign: 'center',
-        boxSizing: 'border-box'
-      }}>
-        Silahkan Cari Nama WBP yang akan dikunjungi
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <input 
-          type="text" 
-          style={{ 
-            width: '100%', 
-            padding: '9px', 
-            border: '2px solid #e0e0e0', 
-            borderRadius: '4px', 
-            outline: 'none', 
-            textAlign: 'center',
-            fontSize: '16px'
-          }}
-          placeholder="Masukkan nama wbp..." 
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-        />
-        <div style={{ marginTop: '15px' }}>
-          <button 
-            type="button" 
-            style={{ 
-              backgroundColor: '#238b59', 
-              color: 'white', 
-              border: 'none', 
-              padding: '10px 60px', 
-              fontSize: '18px', 
-              borderRadius: '5px', 
-              cursor: 'pointer', 
-              fontWeight: 'bold',
-              transition: 'transform 0.1s ease, opacity 0.1s ease, background-color 0.2s ease', 
-              outline: 'none',
-              boxShadow: '0 4px 6px rgba(35, 139, 89, 0.2)'
-            }}
-
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = 'scale(0.95)';
-              e.currentTarget.style.backgroundColor = '#1a6a44';
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.backgroundColor = '#238b59';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.backgroundColor = '#238b59';
-            }}
-            onClick={handleSearch} 
-          >
-            Cari
-          </button>
+        <div className="container-wbp" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <div className="wbp-header-text">
+            <h2 style={{ color: '#093661', fontWeight: 'bold' }}>RUTAN KELAS IIB SINJAI</h2>
+            <p style={{ color: '#555' }}>SISTEM INFORMASI DATA WARGA BINAAN</p>
+          </div>
+          
+          <div className="wbp-stats-grid">
+            <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
+              <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
+              <div className="stat-label" style={{ color: '#fff' }}>TOTAL PENGHUNI SAAT INI</div>
+            </div>
+            <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
+              <div className="stat-number" style={{ color: '#ffc107' }}>{countKunjungan}</div>
+              <div className="stat-label" style={{ color: '#fff' }}>KUNJUNGAN BULAN INI</div>
+            </div>
+          </div>
+          
+          <div className="wbp-search-container" style={{ backgroundColor: '#FAFBFF', padding: '40px', borderRadius: '12px', width: '100%', boxSizing: 'border-box' }}>
+            <div className="search-header-btn" style={{ backgroundColor: '#093661', color: 'white', padding: '18px', borderRadius: '8px', fontSize: isMobile ? '18px' : '24px', fontWeight: '600', marginBottom: '25px', width: '100%', textAlign: 'center', boxSizing: 'border-box' }}>
+              Silahkan Cari Nama WBP yang akan dikunjungi
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <input 
+                type="text" 
+                style={{ width: '100%', padding: '9px', border: '2px solid #e0e0e0', borderRadius: '4px', outline: 'none', textAlign: 'center', fontSize: '16px' }}
+                placeholder="Masukkan nama wbp..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <div style={{ marginTop: '15px' }}>
+                <button 
+                  type="button" 
+                  style={{ backgroundColor: '#238b59', color: 'white', border: 'none', padding: '10px 60px', fontSize: '18px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', outline: 'none', boxShadow: '0 4px 6px rgba(35, 139, 89, 0.2)' }}
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.95)';
+                    e.currentTarget.style.backgroundColor = '#1a6a44';
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.backgroundColor = '#238b59';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.backgroundColor = '#238b59';
+                  }}
+                  onClick={handleSearch} 
+                >
+                  Cari
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
+import { supabase } from '../../../lib/supabase';
 
 function PencarianContent() {
   const searchParams = useSearchParams();
@@ -13,9 +14,14 @@ function PencarianContent() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/wbp?search=${queryNama || ''}`);
-        const data = await response.json();
         
+        const { data, error } = await supabase
+          .from('daftar_wbp')
+          .select('*')
+          .ilike('nama', `%${queryNama || ''}%`);
+
+        if (error) throw error;
+
         setWbpList(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Gagal mengambil data:", error);
