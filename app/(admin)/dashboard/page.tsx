@@ -12,7 +12,14 @@ export default function RutanSinjaiDashboard() {
 
   const [judulBerita, setJudulBerita] = useState('');
   const [isiBerita, setIsiBerita] = useState('');
+  const [kategoriBerita, setKategoriBerita] = useState('Informasi'); 
   const [fileGambar, setFileGambar] = useState<File | null>(null);
+
+  const [pengaduanForm, setPengaduanForm] = useState({
+    pelapor: '',
+    kontak: '',
+    isi: ''
+  });
 
   const [wbpForm, setWbpForm] = useState({
     nama: '',
@@ -23,18 +30,23 @@ export default function RutanSinjaiDashboard() {
     blok_kamar: ''
   });
 
-  const [daftarPengaduan, setDaftarPengaduan] = useState([
-    { id: 1, pelapor: 'Andi Akbar', isi: 'Kualitas pelayanan kunjungan online...', tanggal: '27 Jan 2024', status: 'Proses' },
-    { id: 2, pelapor: 'Fandi', isi: 'Kipas angin di ruang tunggu pengunjung tidak berfungsi, mohon segera diperbaiki.', tanggal: '27 Jan 2026', status: 'Proses' }
-  ]);
-
+  const [daftarPengaduan, setDaftarPengaduan] = useState<any[]>([]);
   const [daftarBerita, setDaftarBerita] = useState<any[]>([]);
   const [daftarWBP, setDaftarWBP] = useState<any[]>([]);
 
   useEffect(() => {
     fetchBerita();
     fetchWBP();
+    fetchPengaduan();
   }, []);
+
+  const fetchPengaduan = async () => {
+    const { data } = await supabase
+      .from('daftar_pengaduan')
+      .select('*')
+      .order('id', { ascending: false });
+    if (data) setDaftarPengaduan(data);
+  };
 
   const fetchBerita = async () => {
     const { data } = await supabase
@@ -86,8 +98,9 @@ export default function RutanSinjaiDashboard() {
       .insert([{ 
         judul: judulBerita, 
         isi: isiBerita, 
+        konten: isiBerita, 
         tanggal: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }), 
-        status: 'Publik',
+        status: kategoriBerita, 
         img: publicUrl 
       }]);
 
@@ -95,9 +108,11 @@ export default function RutanSinjaiDashboard() {
       alert("Berita sudah Online!");
       setJudulBerita('');
       setIsiBerita('');
+      setKategoriBerita('Informasi');
       setFileGambar(null);
       fetchBerita();
     } else {
+      console.error(error);
       alert("Gagal mempublikasikan berita");
     }
   };
@@ -123,22 +138,52 @@ export default function RutanSinjaiDashboard() {
     }
   };
 
+  const handleSimpanPengaduan = async () => {
+    const { error } = await supabase
+      .from('daftar_pengaduan')
+      .insert([{
+        pelapor: pengaduanForm.pelapor,
+        kontak: pengaduanForm.kontak,
+        isi: pengaduanForm.isi,
+        status: 'Pending'
+      }]);
+
+    if (!error) {
+      alert("Pengaduan Berhasil Disimpan!");
+      setPengaduanForm({ pelapor: '', kontak: '', isi: '' });
+      fetchPengaduan();
+    } else {
+      alert("Gagal menyimpan pengaduan");
+    }
+  };
+
   const handleDelete = async (id: number, table: string) => {
     if (confirm("Hapus data ini secara permanen?")) {
       const { error } = await supabase.from(table).delete().eq('id', id);
       if (!error) {
-        table === 'daftar_berita' ? fetchBerita() : fetchWBP();
+        if (table === 'daftar_berita') fetchBerita();
+        else if (table === 'daftar_wbp') fetchWBP();
+        else fetchPengaduan();
       }
     }
   };
 
   const toggleStatusBerita = async (id: number, currentStatus: string) => {
-    const newStatus = currentStatus === 'Publik' ? 'Draft' : 'Publik';
+    const newStatus = currentStatus === 'Informasi' ? 'Wawasan' : 'Informasi';
     const { error } = await supabase
       .from('daftar_berita')
       .update({ status: newStatus })
       .eq('id', id);
     if (!error) fetchBerita();
+  };
+
+  const toggleStatusPengaduan = async (id: number, currentStatus: string) => {
+    const newStatus = currentStatus === 'Pending' ? 'Proses' : 'Pending';
+    const { error } = await supabase
+      .from('daftar_pengaduan')
+      .update({ status: newStatus })
+      .eq('id', id);
+    if (!error) fetchPengaduan();
   };
 
   return (
@@ -216,21 +261,115 @@ export default function RutanSinjaiDashboard() {
 
           <div style={contentCard}>
             {activeMenu === 'dashboard' ? (
-              <div style={{ textAlign: 'center', padding: '60px' }}>
-                <div style={{ fontSize: '50px', marginBottom: '20px' }}>🏠</div>
-                <h3 style={{ color: '#093661', margin: 0 }}>Selamat Datang di Panel Utama</h3>
+              <div style={{ padding: '40px' }}>
+                <div style={{ marginBottom: '35px' }}>
+                  <h3 style={{ color: '#093661', fontSize: '22px', fontWeight: '700', marginBottom: '8px' }}>Selamat Datang Kembali Admin! 👋</h3>
+                  <p style={{ color: '#718096', fontSize: '14px' }}>Pantau dan kelola data operasional Rutan Sinjai dalam satu panel.</p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '25px', marginBottom: '45px' }}>
+                  <QuickActionCard icon="👥" label="Data WBP" sub="Input Narapidana" onClick={() => setActiveMenu('wbp')} color="#4680FF" />
+                  <QuickActionCard icon="📰" label="Update Berita" sub="Posting info terbaru" onClick={() => setActiveMenu('berita')} color="#2ECC71" />
+                  <QuickActionCard icon="📩" label="Pengaduan" sub="Cek laporan masuk" onClick={() => setActiveMenu('pengaduan')} color="#FFB811" />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '30px' }}>
+                  <div style={{ backgroundColor: '#F8FAFC', padding: '25px', borderRadius: '18px', border: '1px solid #E2E8F0' }}>
+                    <h4 style={{ fontSize: '16px', color: '#093661', marginBottom: '20px', fontWeight: 'bold' }}>Aktivitas Terakhir</h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                      {daftarWBP.length > 0 && <ActivityItem label={`Input WBP: ${daftarWBP[0].nama}`} time="Baru saja" status="Selesai" />}
+                      {daftarPengaduan.length > 0 && <ActivityItem label={`Aduan Baru: ${daftarPengaduan[0].pelapor}`} time="Baru saja" status={daftarPengaduan[0].status || "Pending"} />}
+                      {daftarBerita.length > 0 && <ActivityItem label={`Update Berita: ${daftarBerita[0].judul}`} time="Baru saja" status="Selesai" />}
+                      {daftarWBP.length === 0 && daftarPengaduan.length === 0 && <p style={{fontSize: '13px', color: '#A0AEC0'}}>Belum ada aktivitas.</p>}
+                    </div>
+                  </div>
+
+                  <div style={{ backgroundColor: '#093661', padding: '25px', borderRadius: '18px', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <h4 style={{ fontSize: '16px', marginBottom: '15px', fontWeight: '600' }}>Status Sistem Cloud</h4>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#2ECC71' }}></div>
+                      <span style={{ fontSize: '14px', fontWeight: '500' }}>Database Supabase: Online</span>
+                    </div>
+                    <p style={{ fontSize: '13px', opacity: 0.7, lineHeight: '1.6' }}>Server berjalan optimal. Semua data terenkripsi dan aman di cloud server.</p>
+                  </div>
+                </div>
               </div>
             ) : activeMenu === 'pengaduan' ? (
               <div style={{ padding: '30px' }}>
                 <h3 style={sectionTitle}><span>📩</span> Manajemen Pengaduan Layanan</h3>
                 <div style={formGrid}>
-                  <FormInput label="Nama Pelapor" placeholder="Masukkan nama lengkap pelapor" />
-                  <FormInput label="Email / No. HP" placeholder="Kontak yang bisa dihubungi" />
+                  <FormInput 
+                    label="Nama Pelapor" 
+                    placeholder="Masukkan nama lengkap pelapor" 
+                    value={pengaduanForm.pelapor} 
+                    onChange={(e: any) => setPengaduanForm({...pengaduanForm, pelapor: e.target.value})} 
+                  />
+                  <FormInput 
+                    label="Email / No. HP" 
+                    placeholder="Kontak yang bisa dihubungi" 
+                    value={pengaduanForm.kontak} 
+                    onChange={(e: any) => setPengaduanForm({...pengaduanForm, kontak: e.target.value})} 
+                  />
                   <div style={{ gridColumn: 'span 2' }}>
                     <label style={labelStyled}>Isi Pengaduan</label>
-                    <textarea style={{ ...inputStyled, height: '100px', width: '100%' }} placeholder="Tuliskan detail pengaduan di sini..."></textarea>
+                    <textarea 
+                      style={{ ...inputStyled, height: '100px', width: '100%' }} 
+                      placeholder="Tuliskan detail pengaduan di sini..."
+                      value={pengaduanForm.isi}
+                      onChange={(e: any) => setPengaduanForm({...pengaduanForm, isi: e.target.value})}
+                    ></textarea>
                   </div>
-                  <SubmitButton label="Simpan Laporan Pengaduan" style={{ gridColumn: 'span 2' }} />
+                  <button onClick={handleSimpanPengaduan} style={{ ...submitBtnBase, gridColumn: 'span 2' }}>Simpan Laporan Pengaduan</button>
+                </div>
+
+                <div style={{ marginTop: '40px', borderTop: '1px solid #E2E8F0', paddingTop: '20px' }}>
+                  <h3 style={sectionTitle}>📋 Daftar Pengaduan Masuk</h3>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                    <thead>
+                      <tr style={{ backgroundColor: '#F8FAFC', textAlign: 'left' }}>
+                        <th style={tableHeaderStyle}>Identitas Pelapor</th>
+                        <th style={tableHeaderStyle}>Isi Pengaduan</th>
+                        <th style={tableHeaderStyle}>Status</th>
+                        <th style={tableHeaderStyle}>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {daftarPengaduan.map((item) => (
+                        <tr key={item.id}>
+                          <td style={tableCellStyle}>
+                            <div style={{ fontWeight: 'bold', color: '#2D3748' }}>Nama: {item.pelapor}</div>
+                            <div style={{ fontSize: '11px', color: '#718096' }}>Kontak: {item.kontak}</div>
+                          </td>
+                          <td style={tableCellStyle}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                               <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.isi}</span>
+                               <button onClick={() => alert(item.isi)} style={{ padding: '2px 8px', fontSize: '10px', borderRadius: '4px', border: '1px solid #CBD5E0', cursor: 'pointer', background: '#FFF' }}>Lihat</button>
+                            </div>
+                          </td>
+                          <td style={tableCellStyle}>
+                              <button 
+                                onClick={() => toggleStatusPengaduan(item.id, item.status)}
+                                style={{ 
+                                    padding: '5px 12px', 
+                                    borderRadius: '6px', 
+                                    border: 'none',
+                                    fontSize: '11px',
+                                    cursor: 'pointer',
+                                    fontWeight: '800',
+                                    backgroundColor: item.status === 'Proses' ? '#E9F9EF' : '#FFFBEB',
+                                    color: item.status === 'Proses' ? '#2ECC71' : '#FFB811'
+                                }}
+                              >
+                                {item.status || 'Pending'}
+                              </button>
+                          </td>
+                          <td style={tableCellStyle}>
+                            <button onClick={() => handleDelete(item.id, 'daftar_pengaduan')} style={{ border: 'none', background: 'none', color: '#E74C3C', cursor: 'pointer', fontWeight: 'bold' }}>Hapus</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             ) : activeMenu === 'berita' ? (
@@ -240,15 +379,21 @@ export default function RutanSinjaiDashboard() {
                   <input style={inputStyled} placeholder="Judul Berita" value={judulBerita} onChange={(e) => setJudulBerita(e.target.value)} />
                   
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={labelStyled}>Upload Foto Berita</label>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      onChange={(e: any) => setFileGambar(e.target.files[0])} 
+                    <label style={labelStyled}>Kategori Berita</label>
+                    <select 
                       style={inputStyled} 
-                    />
+                      value={kategoriBerita} 
+                      onChange={(e) => setKategoriBerita(e.target.value)}
+                    >
+                      <option value="Informasi">Informasi</option>
+                      <option value="Wawasan">Wawasan</option>
+                    </select>
                   </div>
 
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={labelStyled}>Upload Foto Berita</label>
+                    <input type="file" accept="image/*" onChange={(e: any) => setFileGambar(e.target.files[0])} style={inputStyled} />
+                  </div>
                   <textarea style={{ ...inputStyled, height: '150px' }} placeholder="Isi Berita..." value={isiBerita} onChange={(e) => setIsiBerita(e.target.value)}></textarea>
                   <button onClick={handlePublikasiBerita} style={submitBtnBase}>Publikasikan Berita</button>
                 </div>
@@ -260,7 +405,7 @@ export default function RutanSinjaiDashboard() {
                       <tr style={{ backgroundColor: '#F8FAFC', textAlign: 'left' }}>
                         <th style={tableHeaderStyle}>Judul</th>
                         <th style={tableHeaderStyle}>Tanggal</th>
-                        <th style={tableHeaderStyle}>Status</th>
+                        <th style={tableHeaderStyle}>Kategori</th>
                         <th style={tableHeaderStyle}>Aksi</th>
                       </tr>
                     </thead>
@@ -270,8 +415,18 @@ export default function RutanSinjaiDashboard() {
                           <td style={tableCellStyle}>{news.judul}</td>
                           <td style={tableCellStyle}>{news.tanggal}</td>
                           <td style={tableCellStyle}>
-                            <span onClick={() => toggleStatusBerita(news.id, news.status)} style={{ color: news.status === 'Publik' ? '#2ECC71' : '#A0AEC0', fontWeight: 'bold', cursor: 'pointer' }}>
-                              {news.status}
+                            <span 
+                              onClick={() => toggleStatusBerita(news.id, news.status)} 
+                              style={{ 
+                                color: news.status === 'Informasi' ? '#4680FF' : '#2ECC71', 
+                                fontWeight: 'bold', 
+                                cursor: 'pointer',
+                                backgroundColor: news.status === 'Informasi' ? '#EBF1FF' : '#E9F9EF',
+                                padding: '4px 10px',
+                                borderRadius: '6px'
+                              }}
+                            >
+                              {news.status || 'Informasi'}
                             </span>
                           </td>
                           <td style={tableCellStyle}>
@@ -322,10 +477,111 @@ export default function RutanSinjaiDashboard() {
                   </table>
                 </div>
               </div>
+            ) : activeMenu === 'foto' ? (
+              <div style={{ padding: '30px' }}>
+                <h3 style={sectionTitle}>📸 Upload Galeri Foto</h3>
+                <div style={formGrid}>
+                  <FormInput label="Keterangan Foto" placeholder="Deskripsi singkat foto" />
+                  <FormInput label="Pilih File Foto" type="file" />
+                  <button style={{ ...submitBtnBase, gridColumn: 'span 2' }}>Upload Foto</button>
+                </div>
+              </div>
+            ) : activeMenu === 'video' ? (
+              <div style={{ padding: '30px' }}>
+                <h3 style={sectionTitle}>🎥 Tambah Galeri Video</h3>
+                <div style={formGrid}>
+                  <FormInput label="Judul Video" placeholder="Judul video..." />
+                  <FormInput label="Link URL Video" placeholder="https://youtube.com/watch?v=..." />
+                  <button style={{ ...submitBtnBase, gridColumn: 'span 2' }}>Simpan Video</button>
+                </div>
+              </div>
+            ) : activeMenu === 'produk' ? (
+              <div style={{ padding: '30px' }}>
+                <h3 style={sectionTitle}>🎨 Manajemen Karya WBP</h3>
+                <div style={formGrid}>
+                  <FormInput label="Nama Produk" placeholder="Nama barang karya WBP" />
+                  <FormInput label="Harga (Rp)" placeholder="Masukkan nominal harga" />
+                  <div style={{ gridColumn: 'span 2' }}><FormInput label="Upload Foto Produk" type="file" accept="image/*" /></div>
+                  <div style={{ gridColumn: 'span 2' }}>
+                    <label style={labelStyled}>Deskripsi Produk</label>
+                    <textarea style={{ ...inputStyled, height: '80px', width: '100%' }} placeholder="Detail produk..."></textarea>
+                  </div>
+                  <button style={{ ...submitBtnBase, gridColumn: 'span 2' }}>Tambah Produk Karya Binaan</button>
+                </div>
+              </div>
             ) : null}
           </div>
         </main>
       </div>
+    </div>
+  );
+}
+
+function QuickActionCard({ icon, label, sub, onClick, color }: any) {
+  return (
+    <div onClick={onClick} style={{ 
+      padding: '15px 20px', backgroundColor: 'white', borderRadius: '14px', border: '1px solid #EBEBEB', 
+      cursor: 'pointer', transition: '0.3s', display: 'flex', gap: '15px', alignItems: 'center',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)'
+    }} onMouseEnter={(e) => {
+      e.currentTarget.style.borderColor = color;
+      e.currentTarget.style.transform = 'translateY(-2px)';
+    }} onMouseLeave={(e) => {
+      e.currentTarget.style.borderColor = '#EBEBEB';
+      e.currentTarget.style.transform = 'translateY(0)';
+    }}>
+      <div style={{ 
+        fontSize: '22px', width: '45px', height: '45px', 
+        backgroundColor: `${color}10`, borderRadius: '12px', 
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: color
+      }}>{icon}</div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontWeight: '700', fontSize: '14px', color: '#2D3748' }}>{label}</div>
+        <div style={{ fontSize: '12px', color: '#A0AEC0' }}>{sub}</div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityItem({ label, time, status }: any) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 15px', backgroundColor: 'white', borderRadius: '12px', border: '1px solid #EDF2F7' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: status === 'Selesai' ? '#2ECC71' : '#FFB811' }}></div>
+        <div>
+          <div style={{ fontSize: '13px', fontWeight: '600', color: '#4A5568' }}>{label}</div>
+          <div style={{ fontSize: '11px', color: '#CBD5E0' }}>{time}</div>
+        </div>
+      </div>
+      <span style={{ fontSize: '10px', padding: '4px 10px', borderRadius: '20px', backgroundColor: status === 'Selesai' ? '#E6FFFA' : '#FFFBEB', color: status === 'Selesai' ? '#234E52' : '#975A16', fontWeight: '800', border: `1px solid ${status === 'Selesai' ? '#B2F5EA' : '#FEEBC8'}` }}>{status}</span>
+    </div>
+  );
+}
+
+function NavItem({ active, onClick, icon, label }: any) {
+  return (
+    <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400' }}>
+      <span style={{ fontSize: '18px' }}>{icon}</span><span style={{ fontSize: '14px' }}>{label}</span>
+    </div>
+  );
+}
+
+function FormInput({ label, value, ...props }: any) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <label style={labelStyled}>{label}</label>
+      <input style={inputStyled} value={value ?? ''} {...props} />
+    </div>
+  );
+}
+
+function StatCard({ label, value, sub, color }: any) {
+  return (
+    <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '16px', border: '1px solid #EBEBEB' }}>
+      <p style={{ margin: 0, fontSize: '11px', fontWeight: 'bold', color: '#A0AEC0' }}>{label}</p>
+      <h2 style={{ margin: '10px 0', fontSize: '28px', color: '#2D3748' }}>{value} <span style={{ fontSize: '14px', color: '#CBD5E0' }}>{sub}</span></h2>
+      <div style={{ height: '4px', background: '#F0F2F5', borderRadius: '2px' }}><div style={{ width: '60%', height: '100%', background: color, borderRadius: '2px' }}></div></div>
     </div>
   );
 }
@@ -343,42 +599,6 @@ const inputStyled: any = { width: '100%', padding: '14px', borderRadius: '10px',
 const submitBtnBase: any = { padding: '14px', backgroundColor: '#093661', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' };
 const glassBanner: any = { background: 'linear-gradient(135deg, #4680FF 0%, #0046E5 100%)', borderRadius: '20px', padding: '45px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
 const glassCircle1: any = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
-const glassCircle2: any = { position: 'absolute', bottom: '-40px', left: '20%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };
-const tableHeaderStyle = { padding: '12px', borderBottom: '2px solid #F1F5F9', color: '#64748B', fontWeight: '600' };
-const tableCellStyle = { padding: '12px', borderBottom: '1px solid #F1F5F9', color: '#334155' };
-
-function NavItem({ active, onClick, icon, label }: any) {
-  return (
-    <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400' }}>
-      <span style={{ fontSize: '18px' }}>{icon}</span><span style={{ fontSize: '14px' }}>{label}</span>
-    </div>
-  );
-}
-
-function SubmitButton({ label, style }: any) {
-  return <button style={{ ...submitBtnBase, ...style }}>{label}</button>;
-}
-
-function FormInput({ label, value, onChange, ...props }: any) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <label style={labelStyled}>{label}</label>
-      <input 
-        style={inputStyled} 
-        value={value ?? ''} 
-        onChange={onChange} 
-        {...props} 
-      />
-    </div>
-  );
-}
-
-function StatCard({ label, value, sub, color }: any) {
-  return (
-    <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '16px', border: '1px solid #EBEBEB' }}>
-      <p style={{ margin: 0, fontSize: '11px', fontWeight: 'bold', color: '#A0AEC0' }}>{label}</p>
-      <h2 style={{ margin: '10px 0', fontSize: '28px', color: '#2D3748' }}>{value} <span style={{ fontSize: '14px', color: '#CBD5E0' }}>{sub}</span></h2>
-      <div style={{ height: '4px', background: '#F0F2F5', borderRadius: '2px' }}><div style={{ width: '60%', height: '100%', background: color, borderRadius: '2px' }}></div></div>
-    </div>
-  );
-}
+const glassCircle2: any = { position: 'absolute', bottom: '-30px', left: '10%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };
+const tableHeaderStyle = { padding: '12px 15px', color: '#4A5568', fontWeight: '600', borderBottom: '1px solid #E2E8F0' };
+const tableCellStyle = { padding: '12px 15px', borderBottom: '1px solid #EDF2F7', color: '#4A5568' };

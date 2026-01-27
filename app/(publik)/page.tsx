@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
+import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
 
 import "./desktop.css"; 
@@ -13,6 +14,7 @@ interface Banner {
 }
 
 interface News {
+  id?: number;
   img: string;
   headline: string;
   meta: string;
@@ -52,6 +54,7 @@ export default function LamanPublikRutan() {
 
   const newsDataDefault: News[] = [
     {
+      id: 0,
       img: '/assets/berita1.png',
       headline: 'GANDENG LBH BAKTI KEADILAN, RUTAN SINJAI FASILITASI TAHANAN DAPATKAN BANTUAN HUKUM',
       meta: 'Rutan Kelas IIB Sinjai | Oct 7, 2024'
@@ -63,36 +66,44 @@ export default function LamanPublikRutan() {
       const { data, error } = await supabase
         .from('daftar_berita')
         .select('*')
-        .eq('status', 'Publik')
         .order('id', { ascending: false });
 
-      if (data) {
+      if (data && data.length > 0) {
         const formatted = data.map((item: any) => ({
+          id: item.id,
           img: item.img || '/assets/berita1.png',
-          headline: item.judul,
+          headline: item.judul || item.headline,
           meta: `Rutan Kelas IIB Sinjai | ${item.tanggal}`
         }));
         setNewsFromCMS(formatted);
       }
     };
 
+    const fetchWBPCount = async () => {
+      const { count } = await supabase
+        .from('daftar_wbp')
+        .select('*', { count: 'exact', head: true });
+      if (count) setCountPenghuni(count);
+    };
+
     fetchBeritaOnline();
+    fetchWBPCount();
   }, []);
 
   const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
-  const extendedNews = [...combinedNews, ...combinedNews, ...combinedNews].slice(0, 8);
+  const extendedNews = combinedNews.length >= 4 ? [...combinedNews] : [...combinedNews, ...newsDataDefault, ...newsDataDefault, ...newsDataDefault].slice(0, 8);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
 
   const nextNews = () => {
-    if (newsIndex < extendedNews.length - 4) setNewsIndex(prev => prev + 1);
+    if (newsIndex < extendedNews.length - (isMobile ? 1 : 4)) setNewsIndex(prev => prev + 1);
     else setNewsIndex(0);
   };
 
   const prevNews = () => {
     if (newsIndex > 0) setNewsIndex(prev => prev - 1);
-    else setNewsIndex(extendedNews.length - 4);
+    else setNewsIndex(extendedNews.length - (isMobile ? 1 : 4));
   };
 
   const handleSearch = () => {
@@ -110,13 +121,6 @@ export default function LamanPublikRutan() {
     }
     return () => { if (interval) clearInterval(interval); };
   }, [isPaused, currentSlide]);
-
-  useEffect(() => {
-    if (countPenghuni < 40) {
-      const timer = setTimeout(() => setCountPenghuni(prev => prev + 1), 30);
-      return () => clearTimeout(timer);
-    }
-  }, [countPenghuni]);
 
   useEffect(() => {
     if (countKunjungan < 110) {
@@ -198,20 +202,19 @@ export default function LamanPublikRutan() {
             <div className="news-viewport" style={{ overflow: 'hidden', width: '100%' }}>
               <div className="news-track" style={{ display: 'flex', transition: 'transform 0.5s ease', transform: `translateX(-${newsIndex * (100 / (isMobile ? 1 : 4))}%)` }}>
                 {extendedNews.map((item, index) => (
-                  <div key={index} className="news-card-v2" style={{ minWidth: isMobile ? '100%' : '25%', padding: '0 10px' }}>
-                    <div className="news-thumb"><img src={item.img} alt="Berita" style={{ width: '100%' }} /></div>
-                    <div className="news-content-v2">
-                      <p className="news-date-v2">{item.meta.split('|')[1]?.trim()}</p>
-                      <h3 className="news-title-v2">{item.headline.toLowerCase()}</h3>
+                  <Link href={`/berita/${item.id}`} key={index} style={{ textDecoration: 'none', minWidth: isMobile ? '100%' : '25%', padding: '0 10px' }}>
+                    <div className="news-card-v2" style={{ cursor: 'pointer' }}>
+                      <div className="news-thumb"><img src={item.img} alt="Berita" style={{ width: '100%' }} /></div>
+                      <div className="news-content-v2">
+                        <p className="news-date-v2">{item.meta.split('|')[1]?.trim()}</p>
+                        <h3 className="news-title-v2">{item.headline.toLowerCase()}</h3>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
             <button className="slide-arrow next" onClick={nextNews}><i className="fa-solid fa-chevron-right"></i></button>
-          </div>
-          <div className="view-more-container">
-            <button className="btn-view-more">Lihat Lebih Lengkap</button>
           </div>
         </div>
       </section>
