@@ -48,6 +48,9 @@ export default function RutanSinjaiDashboard() {
           <p style={navTitle}>UTAMA</p>
           <NavItem active={activeMenu === 'dashboard'} onClick={() => setActiveMenu('dashboard')} icon="📊" label="Dashboard" />
           
+          <p style={navTitle}>LAYANAN</p>
+          <NavItem active={activeMenu === 'pengaduan'} onClick={() => setActiveMenu('pengaduan')} icon="📩" label="Pengaduan" />
+
           <p style={navTitle}>DATA WBP</p>
           <NavItem active={activeMenu === 'wbp'} onClick={() => setActiveMenu('wbp')} icon="👥" label="Data Narapidana" />
           <NavItem active={activeMenu === 'berita'} onClick={() => setActiveMenu('berita')} icon="📰" label="Update Berita" />
@@ -125,6 +128,48 @@ export default function RutanSinjaiDashboard() {
                 <h3 style={{ color: '#093661', margin: 0 }}>Selamat Datang di Panel Utama</h3>
                 <p style={{ color: '#718096' }}>Gunakan menu di sebelah kiri untuk mengelola data website. Perubahan yang Anda simpan di sini akan langsung tampil pada halaman publik website Rutan Sinjai secara real-time.</p>
               </div>
+            ) : activeMenu === 'pengaduan' ? (
+              <div style={{ padding: '30px' }}>
+                <h3 style={sectionTitle}><span>📩</span> Manajemen Pengaduan Layanan</h3>
+                <div style={formGrid}>
+                  <FormInput label="Nama Pelapor" placeholder="Masukkan nama lengkap pelapor" />
+                  <FormInput label="Email / No. HP" placeholder="Kontak yang bisa dihubungi" />
+                  <div style={{ gridColumn: 'span 2' }}>
+                    <label style={labelStyled}>Isi Pengaduan</label>
+                    <textarea style={{ ...inputStyled, height: '100px', width: '100%' }} placeholder="Tuliskan detail pengaduan di sini..."></textarea>
+                  </div>
+                  <SubmitButton label="Simpan Laporan Pengaduan" style={{ gridColumn: 'span 2' }} />
+                </div>
+
+                <div style={{ marginTop: '40px', borderTop: '1px solid #E2E8F0', paddingTop: '20px' }}>
+                  <h3 style={sectionTitle}>📋 Daftar Pengaduan Masuk</h3>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: '#F8FAFC', textAlign: 'left' }}>
+                          <th style={tableHeaderStyle}>Pelapor</th>
+                          <th style={tableHeaderStyle}>Isi Pengaduan</th>
+                          <th style={tableHeaderStyle}>Tanggal</th>
+                          <th style={tableHeaderStyle}>Status</th>
+                          <th style={tableHeaderStyle}>Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={tableCellStyle}>Fandi</td>
+                          <td style={tableCellStyle}>Kipas angin di ruang tunggu pengunjung tidak berfungsi, mohon segera diperbaiki.</td>
+                          <td style={tableCellStyle}>27 Jan 2026</td>
+                          <td style={tableCellStyle}><span style={{ color: '#FFB811', fontWeight: 'bold' }}>Proses</span></td>
+                          <td style={tableCellStyle}>
+                            <button style={{ border: 'none', background: 'none', color: '#4680FF', cursor: 'pointer', fontWeight: 'bold' }}>Detail</button>
+                            <button style={{ border: 'none', background: 'none', color: '#E74C3C', cursor: 'pointer', fontWeight: 'bold', marginLeft: '10px' }}>Hapus</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             ) : activeMenu === 'wbp' ? (
               <div style={{ padding: '30px' }}>
                 <h3 style={sectionTitle}><span>👥</span> Tambah Data Narapidana (WBP)</h3>
@@ -137,6 +182,35 @@ export default function RutanSinjaiDashboard() {
                   <FormInput label="Blok / Kamar" placeholder="Contoh: Blok A - Kamar 04" />
                   <SubmitButton label="Simpan Data Narapidana" style={{ gridColumn: 'span 2' }} />
                 </div>
+
+                <div style={{ marginTop: '40px', borderTop: '1px solid #E2E8F0', paddingTop: '20px' }}>
+                  <h3 style={sectionTitle}>📋 Daftar Narapidana</h3>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: '#F8FAFC', textAlign: 'left' }}>
+                          <th style={tableHeaderStyle}>Nama</th>
+                          <th style={tableHeaderStyle}>NIK</th>
+                          <th style={tableHeaderStyle}>Perkara</th>
+                          <th style={tableHeaderStyle}>Blok</th>
+                          <th style={tableHeaderStyle}>Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={tableCellStyle}>Syiar</td>
+                          <td style={tableCellStyle}>3939484</td>
+                          <td style={tableCellStyle}>Maling Sendal</td>
+                          <td style={tableCellStyle}>Blok B / 01</td>
+                          <td style={tableCellStyle}>
+                            <button style={{ border: 'none', background: 'none', color: '#4680FF', cursor: 'pointer', fontWeight: 'bold' }}>Edit</button>
+                            <button style={{ border: 'none', background: 'none', color: '#E74C3C', cursor: 'pointer', fontWeight: 'bold', marginLeft: '10px' }}>Hapus</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             ) : activeMenu === 'berita' ? (
               <div style={{ padding: '30px' }}>
@@ -146,6 +220,33 @@ export default function RutanSinjaiDashboard() {
                   <FormInput label="Upload Foto Berita" type="file" accept="image/*" />
                   <textarea style={{ ...inputStyled, height: '150px' }} placeholder="Isi Berita..."></textarea>
                   <SubmitButton label="Publikasikan Berita" />
+                </div>
+
+                <div style={{ marginTop: '40px', borderTop: '1px solid #E2E8F0', paddingTop: '20px' }}>
+                  <h3 style={sectionTitle}>📋 Riwayat Berita</h3>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: '#F8FAFC', textAlign: 'left' }}>
+                          <th style={tableHeaderStyle}>Judul Berita</th>
+                          <th style={tableHeaderStyle}>Tanggal</th>
+                          <th style={tableHeaderStyle}>Status</th>
+                          <th style={tableHeaderStyle}>Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={tableCellStyle}>Kegiatan Pembinaan Kemandirian WBP</td>
+                          <td style={tableCellStyle}>25 Jan 2025</td>
+                          <td style={tableCellStyle}><span style={{ color: '#2ECC71', fontWeight: 'bold' }}>Publik</span></td>
+                          <td style={tableCellStyle}>
+                            <button style={{ border: 'none', background: 'none', color: '#4680FF', cursor: 'pointer' }}>Lihat</button>
+                            <button style={{ border: 'none', background: 'none', color: '#E74C3C', cursor: 'pointer', marginLeft: '10px' }}>Hapus</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             ) : activeMenu === 'foto' ? (
@@ -202,6 +303,9 @@ const submitBtnBase: any = { padding: '14px', backgroundColor: '#093661', color:
 const glassBanner: any = { background: 'linear-gradient(135deg, #4680FF 0%, #0046E5 100%)', borderRadius: '20px', padding: '45px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
 const glassCircle1: any = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
 const glassCircle2: any = { position: 'absolute', bottom: '-40px', left: '20%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };
+
+const tableHeaderStyle = { padding: '12px', borderBottom: '2px solid #F1F5F9', color: '#64748B', fontWeight: '600' };
+const tableCellStyle = { padding: '12px', borderBottom: '1px solid #F1F5F9', color: '#334155' };
 
 function NavItem({ active, onClick, icon, label }: any) {
   const [isHovered, setIsHovered] = useState(false);
