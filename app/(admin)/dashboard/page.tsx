@@ -10,6 +10,19 @@ import FotoMenu from './FotoMenu';
 import VideoMenu from './VideoMenu';
 import ProdukMenu from './ProdukMenu'; 
 
+interface NavItemProps {
+  active: boolean;
+  onClick: () => void;
+  icon: string;
+  label: string;
+}
+
+interface StatCardProps {
+  label: string;
+  value: string;
+  sub: string;
+  color: string;
+}
 
 export default function RutanSinjaiDashboard() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
@@ -71,7 +84,7 @@ export default function RutanSinjaiDashboard() {
   };
 
   const handleSimpanWBP = async () => {
-    const { error } = await supabase.from('daftar_wbp').insert([{ nama: wbpForm.nama, nik: wbpForm.nik, kasus: wbpForm.kasus, lama_pidana: wbpForm.lama_pidana, ekspirasi: wbpForm.ekspirasi, blok_kamar: wbpForm.blok_kamar }]);
+    const { error } = await supabase.from('daftar_wbp').insert([{ nama: wbpForm.nama, nik: wbpForm.nik, kasus: wbpForm.cases, lama_pidana: wbpForm.lama_pidana, ekspirasi: wbpForm.ekspirasi, blok_kamar: wbpForm.blok_kamar }]);
     if (!error) { alert("Data WBP Berhasil Disimpan ke Cloud!"); setWbpForm({ nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '' }); fetchWBP(); }
   };
 
@@ -161,7 +174,7 @@ export default function RutanSinjaiDashboard() {
             {activeMenu === 'pengaduan' && <PengaduanMenu pengaduanForm={pengaduanForm} setPengaduanForm={setPengaduanForm} handleSimpanPengaduan={handleSimpanPengaduan} daftarPengaduan={daftarPengaduan} toggleStatusPengaduan={toggleStatusPengaduan} handleDelete={handleDelete} />}
             {activeMenu === 'wbp' && <WBPMenu wbpForm={wbpForm} setWbpForm={setWbpForm} handleSimpanWBP={handleSimpanWBP} daftarWBP={daftarWBP} handleDelete={handleDelete} />}
             {activeMenu === 'berita' && <BeritaMenu judulBerita={judulBerita} setJudulBerita={setJudulBerita} kategoriBerita={kategoriBerita} setKategoriBerita={setKategoriBerita} setFileGambar={setFileGambar} isiBerita={isiBerita} setIsiBerita={setIsiBerita} handlePublikasiBerita={handlePublikasiBerita} daftarBerita={daftarBerita} toggleStatusBerita={toggleStatusBerita} handleDelete={handleDelete} />}
-            {activeMenu === 'foto' && <FotoMenu  />}
+            {activeMenu === 'foto' && <FotoMenu />}
             {activeMenu === 'video' && <VideoMenu />}
             {activeMenu === 'produk' && <ProdukMenu daftarKarya={daftarKarya} fetchKarya={fetchKarya} handleDelete={handleDelete} />}
           </div>
@@ -171,7 +184,7 @@ export default function RutanSinjaiDashboard() {
   );
 }
 
-function NavItem({ active, onClick, icon, label }: { active: boolean, onClick: () => void, icon: string, label: string }) {
+function NavItem({ active, onClick, icon, label }: NavItemProps) {
   return (
     <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400' }}>
       <span style={{ fontSize: '18px' }}>{icon}</span><span style={{ fontSize: '14px' }}>{label}</span>
@@ -179,7 +192,7 @@ function NavItem({ active, onClick, icon, label }: { active: boolean, onClick: (
   );
 }
 
-function StatCard({ label, value, sub, color }: { label: string, value: string, sub: string, color: string }) {
+function StatCard({ label, value, sub, color }: StatCardProps) {
   return (
     <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '16px', border: '1px solid #EBEBEB' }}>
       <p style={{ margin: 0, fontSize: '11px', fontWeight: 'bold', color: '#A0AEC0' }}>{label}</p>
