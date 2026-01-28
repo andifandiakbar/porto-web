@@ -206,7 +206,7 @@ export default function RutanSinjaiDashboard() {
         <header style={{ ...topHeaderStyle, height: isMobile ? '60px' : '75px', padding: isMobile ? '0 15px' : '0 30px', flexShrink: 0 }}>
           <span onClick={() => setIsSidebarVisible(!isSidebarVisible)} style={{ cursor: 'pointer', fontSize: '22px', color: '#093661' }}>☰</span>
           <div style={{ fontSize: isMobile ? '12px' : '14px', color: '#666', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {isMobile ? 'Rutan Sinjai' : 'Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai'}
+            {isMobile ? 'Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai' : 'Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai'}
           </div>
         </header>
 
