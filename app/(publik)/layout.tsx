@@ -62,7 +62,7 @@ export default function RootLayout({ children }: LayoutProps) {
 
           <nav className="navbar">
             <div className="container nav-flex">
-              <div className="logo">
+              <div className="logo" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/'}>
                 <img src="/assets/logo.png" alt="Logo Rutan" />
                 <span>Rutan Sinjai<br /><small style={{ fontWeight: 'normal' }}>Kelas IIB</small></span>
               </div>
@@ -199,8 +199,8 @@ export default function RootLayout({ children }: LayoutProps) {
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.115810052989!2d120.25043017589574!3d-5.12858525287739!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302fbcd7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1716300000000!5m2!1sid!2sid" 
                       width="80%" 
                       height="209" 
-                     
-                     
+                      allowFullScreen={true} 
+                      loading="lazy" 
                       referrerPolicy="no-referrer-when-downgrade">
                     </iframe>
                   </div>
