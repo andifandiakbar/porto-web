@@ -100,10 +100,10 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
           <input 
             type="text" 
             placeholder="https://www.youtube.com/watch?v=..." 
-            value={linkYoutube}
+            value={linkYoutube || ''} 
             onChange={(e) => setLinkYoutube(e.target.value)}
             style={inputStyle} 
-          />
+            />
         </div>
       ) : (
         <div style={{ marginBottom: '25px' }}>

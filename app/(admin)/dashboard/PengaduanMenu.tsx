@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function PengaduanMenu({ 
   pengaduanForm, setPengaduanForm, 
@@ -7,31 +7,40 @@ export default function PengaduanMenu({
   toggleStatusPengaduan, handleDelete 
 }: any) {
   const [isHover, setIsHover] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Fungsi helper untuk menentukan warna status secara dinamis
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const getStatusStyle = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'selesai':
-        return { bg: '#F0FFF4', text: '#2F855A' }; // Hijau
+        return { bg: '#F0FFF4', text: '#2F855A' };
       case 'proses':
-        return { bg: '#EBF8FF', text: '#2B6CB0' }; // Biru
+        return { bg: '#EBF8FF', text: '#2B6CB0' };
       default:
-        return { bg: '#FFFBEB', text: '#B7791F' }; // Kuning (Pending)
+        return { bg: '#FFFBEB', text: '#B7791F' };
     }
   };
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ padding: isMobile ? '15px' : '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
       <div style={{ marginBottom: '30px' }}>
-        <h3 style={{ color: '#093661', fontSize: '20px', fontWeight: '700', margin: '0 0 10px 0', fontFamily: 'inherit' }}>
+        <h3 style={{ color: '#093661', fontSize: isMobile ? '18px' : '20px', fontWeight: '700', margin: '0 0 10px 0', fontFamily: 'inherit' }}>
           📩 Manajemen Pengaduan Layanan
         </h3>
-        <p style={{ color: '#718096', fontSize: '14px', margin: 0, fontFamily: 'inherit' }}>
+        <p style={{ color: '#718096', fontSize: isMobile ? '13px' : '14px', margin: 0, fontFamily: 'inherit' }}>
           Pantau dan kelola laporan atau keluhan masyarakat mengenai layanan satuan kerja.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '20px' }}>
         <div>
           <label style={labelStyle}>Nama Pelapor</label>
           <input 
@@ -50,7 +59,7 @@ export default function PengaduanMenu({
             onChange={(e: any) => setPengaduanForm({...pengaduanForm, kontak: e.target.value})} 
           />
         </div>
-        <div style={{ gridColumn: 'span 2' }}>
+        <div style={{ gridColumn: isMobile ? 'span 1' : 'span 2' }}>
           <label style={labelStyle}>Isi Pengaduan</label>
           <textarea 
             style={{ ...inputStyle, height: '100px', resize: 'none' }} 
@@ -66,7 +75,7 @@ export default function PengaduanMenu({
           onMouseLeave={() => setIsHover(false)}
           style={{ 
             ...buttonStyle, 
-            gridColumn: 'span 2',
+            gridColumn: isMobile ? 'span 1' : 'span 2',
             backgroundColor: isHover ? '#0d4a85' : '#093661' 
           }}
         >
@@ -101,7 +110,7 @@ export default function PengaduanMenu({
                     </td>
                     <td style={tdStyle}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                         <span style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '13px' }}>
+                         <span style={{ maxWidth: isMobile ? '100px' : '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '13px' }}>
                            {item.isi}
                          </span>
                          <button 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -9,6 +9,16 @@ export default function LoginPage() {
 
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 480);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,36 +45,39 @@ export default function LoginPage() {
       justifyContent: 'center', 
       backgroundColor: '#093661',
       margin: 0,
-      padding: 0,
+      padding: isMobile ? '20px' : '0',
       position: 'fixed',
       top: 0,
-      left: 0
+      left: 0,
+      boxSizing: 'border-box'
     }}>
       <form onSubmit={handleLogin} style={{ 
         backgroundColor: 'white', 
-        padding: '40px', 
+        padding: isMobile ? '30px 20px' : '40px', 
         borderRadius: '16px', 
-        width: '380px', 
+        width: isMobile ? '100%' : '380px', 
+        maxWidth: '400px',
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center',
+        boxSizing: 'border-box'
       }}>
         
         <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
           <img 
             src="/assets/logo.png" 
             alt="Logo" 
-            style={{ width: '200px', height: '70px', objectFit: 'contain' }} 
+            style={{ width: isMobile ? '160px' : '200px', height: '70px', objectFit: 'contain' }} 
           />
         </div>
 
         <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-          <h1 style={{ fontSize: '21px', fontWeight: '800', color: '#093661', margin: 0 }}>
+          <h1 style={{ fontSize: isMobile ? '19px' : '21px', fontWeight: '800', color: '#093661', margin: 0 }}>
             Rutan Kelas II B Sinjai
           </h1>
         </div>
 
-        <h2 style={{ color: '#093661', fontSize: '18px', marginBottom: '20px', fontWeight: 'bold', letterSpacing: '1px' }}>
+        <h2 style={{ color: '#093661', fontSize: isMobile ? '16px' : '18px', marginBottom: '20px', fontWeight: 'bold', letterSpacing: '1px', textAlign: 'center' }}>
           Login Content Management System
         </h2>
         
@@ -107,6 +120,8 @@ export default function LoginPage() {
           onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
           onMouseDown={() => setIsActive(true)}
           onMouseUp={() => setIsActive(false)}
+          onTouchStart={() => setIsActive(true)}
+          onTouchEnd={() => setIsActive(false)}
           style={{ 
             width: '100%', 
             padding: '14px', 

@@ -22,11 +22,13 @@ interface StatCardProps {
   value: string;
   sub: string;
   color: string;
+  isMobile: boolean;
 }
 
 export default function RutanSinjaiDashboard() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const [activeExit, setActiveExit] = useState(false);
   const [judulBerita, setJudulBerita] = useState('');
@@ -39,12 +41,27 @@ export default function RutanSinjaiDashboard() {
   const [daftarBerita, setDaftarBerita] = useState<any[]>([]);
   const [daftarWBP, setDaftarWBP] = useState<any[]>([]);
   const [daftarKarya, setDaftarKarya] = useState<any[]>([]);
+  const [daftarFoto, setDaftarFoto] = useState<any[]>([]);
+  const [daftarVideo, setDaftarVideo] = useState<any[]>([]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      setIsSidebarVisible(!mobile);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     fetchBerita();
     fetchWBP();
     fetchPengaduan();
     fetchKarya();
+    fetchFoto();
+    fetchVideo();
   }, []);
 
   const fetchPengaduan = async () => {
@@ -65,6 +82,16 @@ export default function RutanSinjaiDashboard() {
   const fetchKarya = async () => {
     const { data } = await supabase.from('daftar_karya').select('*').order('id', { ascending: false });
     if (data) setDaftarKarya(data);
+  };
+
+  const fetchFoto = async () => {
+    const { data } = await supabase.from('daftar_foto').select('*').order('id', { ascending: false });
+    if (data) setDaftarFoto(data);
+  };
+
+  const fetchVideo = async () => {
+    const { data } = await supabase.from('daftar_video').select('*').order('id', { ascending: false });
+    if (data) setDaftarVideo(data);
   };
 
   const handlePublikasiBerita = async () => {
@@ -100,6 +127,8 @@ export default function RutanSinjaiDashboard() {
         if (table === 'daftar_berita') fetchBerita();
         else if (table === 'daftar_wbp') fetchWBP();
         else if (table === 'daftar_karya') fetchKarya();
+        else if (table === 'daftar_foto') fetchFoto();
+        else if (table === 'daftar_video') fetchVideo();
         else fetchPengaduan();
       }
     }
@@ -118,64 +147,93 @@ export default function RutanSinjaiDashboard() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '96vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: "'Inter', sans-serif" }}>
-      <aside style={{ width: isSidebarVisible ? '210px' : '0px', backgroundColor: '#FFFFFF', borderRight: isSidebarVisible ? '1px solid #EBEBEB' : 'none', display: 'flex', flexDirection: 'column', zIndex: 1000, transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden', flexShrink: 0 }}>
-        <div style={{ padding: '10px 30px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
-          <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '90px', height: '90px', objectFit: 'contain' }} />
+    <div style={{ 
+      display: 'flex', 
+      height: '100vh', 
+      width: '100vw', 
+      backgroundColor: '#F4F7FE', 
+      overflow: 'hidden', // Mengunci scroll body browser
+      fontFamily: "'Inter', sans-serif",
+      position: 'fixed', // Memastikan kontainer utama tidak bisa bergeser
+      top: 0,
+      left: 0
+    }}>
+      {isMobile && isSidebarVisible && (
+        <div onClick={() => setIsSidebarVisible(false)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 999 }}></div>
+      )}
+
+      <aside style={{ 
+        width: isSidebarVisible ? '210px' : '0px', 
+        backgroundColor: '#FFFFFF', 
+        borderRight: isSidebarVisible ? '1px solid #EBEBEB' : 'none', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        zIndex: 1000, 
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', 
+        overflow: 'hidden', 
+        flexShrink: 0,
+        position: isMobile ? 'fixed' : 'relative',
+        height: '100vh'
+      }}>
+        <div style={{ padding: '27px 27px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
+          <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
           <div>
-            <h2 style={{ fontSize: '16px', fontWeight: '800', color: '#093661', margin: 1 }}>Rutan Kelas II B</h2>
-            <p style={{ fontSize: '15px', color: '#A0AEC0', margin: 1 }}>Sinjai</p>
+            <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#093661', margin: 3 }}>Rutan Kelas II B</h2>
+            <p style={{ fontSize: '17px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
           </div>
         </div>
-        <nav style={{ flex: 1, padding: '10px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
-          <p style={navTitle}>UTAMA</p>
-          <NavItem active={activeMenu === 'dashboard'} onClick={() => setActiveMenu('dashboard')} icon="📊" label="Dashboard" />
-          <p style={navTitle}>LAYANAN</p>
-          <NavItem active={activeMenu === 'pengaduan'} onClick={() => setActiveMenu('pengaduan')} icon="📩" label="Pengaduan" />
-          <p style={navTitle}>DATA WBP</p>
-          <NavItem active={activeMenu === 'wbp'} onClick={() => setActiveMenu('wbp')} icon="👥" label="Data Narapidana" />
-          <NavItem active={activeMenu === 'berita'} onClick={() => setActiveMenu('berita')} icon="📰" label="Update Berita" />
-          <p style={navTitle}>MEDIA & GALERI</p>
-          <NavItem active={activeMenu === 'foto'} onClick={() => setActiveMenu('foto')} icon="📸" label="Galeri Foto" />
-          <NavItem active={activeMenu === 'video'} onClick={() => setActiveMenu('video')} icon="🎥" label="Galeri Video" />
-          <NavItem active={activeMenu === 'produk'} onClick={() => setActiveMenu('produk')} icon="🎨" label="Karya WBP" />
+        <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
+          <NavItem active={activeMenu === 'dashboard'} onClick={() => { setActiveMenu('dashboard'); if(isMobile) setIsSidebarVisible(false); }} icon="📊" label="Dashboard" />
+          <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="📩" label="Pengaduan" />
+          <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="👥" label="Data Narapidana" />
+          <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="📰" label="Update Berita" />
+          <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="🎨" label="Karya WBP" />
+          <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="📸" label="Galeri Foto" />
+          <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="🎥" label="Galeri Video" />
         </nav>
-        <div style={{ padding: '20px', borderTop: '1px solid #F1F1F1', display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: '#FFF', flexShrink: 0, zIndex: 10 }}>
-          <div style={avatarCircle}>SA</div>
-          <div style={{ flex: 1 }}><div style={{ fontSize: '13px', fontWeight: 'bold', color: '#2D3748' }}>Staf Admin</div></div>
-          <button onMouseDown={() => setActiveExit(true)} onMouseUp={() => setActiveExit(false)} onClick={() => router.push('/admin')} style={{ ...exitBtn, transform: activeExit ? 'scale(0.92)' : 'scale(1)', backgroundColor: activeExit ? '#FED7D7' : '#FFF5F5' }}>Keluar</button>
+        <div style={{ padding: '30px', borderTop: '1px solid #F1F1F1', display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#FFF', flexShrink: 0 }}>
+          <div style={avatarCircle}>AD</div>
+          <div style={{ flex: 1 }}><div style={{ fontSize: '12px', fontWeight: 'bold', color: '#2D3748' }}>Staf Admin</div></div>
+          <button onMouseDown={() => setActiveExit(true)} onMouseUp={() => setActiveExit(false)} onClick={() => router.push('/admin')} style={{ ...exitBtn, transform: activeExit ? 'scale(0.92)' : 'scale(1)' }}>Keluar</button>
         </div>
       </aside>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
-        <header style={{ ...topHeaderStyle, position: 'sticky', top: 0, zIndex: 900, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100vh' }}>
+        <header style={{ ...topHeaderStyle, height: isMobile ? '60px' : '75px', padding: isMobile ? '0 15px' : '0 30px', flexShrink: 0 }}>
           <span onClick={() => setIsSidebarVisible(!isSidebarVisible)} style={{ cursor: 'pointer', fontSize: '22px', color: '#093661' }}>☰</span>
-          <div style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai</div>
+          <div style={{ fontSize: isMobile ? '12px' : '14px', color: '#666', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {isMobile ? 'Rutan Sinjai' : 'Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai'}
+          </div>
         </header>
 
-        <main style={{ flex: 1, overflowY: 'auto', padding: '30px' }}>
-          <div style={glassBanner}>
+        <main style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '15px' : '30px', backgroundColor: '#F4F7FE' }}>
+          <div style={{ ...glassBanner, padding: isMobile ? '25px' : '45px' }}>
             <div style={{ position: 'relative', zIndex: 2 }}>
-              <h2 style={{ margin: '0 0 10px 0', fontSize: '26px', fontWeight: 'bold' }}>Sistem Informasi</h2>
-              <p style={{ margin: 0, opacity: 0.9, fontSize: '14px' }}>Manajemen data warga binaan yang modern dan transparan.</p>
+              <h2 style={{ margin: '0 0 10px 0', fontSize: isMobile ? '20px' : '26px', fontWeight: 'bold' }}>Sistem Informasi</h2>
+              <p style={{ margin: 0, opacity: 0.9, fontSize: isMobile ? '12px' : '14px' }}>Manajemen data warga binaan yang modern dan transparan.</p>
             </div>
             <div style={glassCircle1}></div><div style={glassCircle2}></div>
           </div>
 
-          <div style={statsGrid}>
-            <StatCard label="TOTAL PENGHUNI" value={daftarWBP.length.toString()} sub="Orang" color="#4680FF" />
-            <StatCard label="PENGUNJUNG" value="110" sub="Bulan Ini" color="#FFB811" />
-            <StatCard label="PRODUK KARYA" value={daftarKarya.length.toString()} sub="Unit" color="#2ECC71" />
-            <StatCard label="BERITA" value={daftarBerita.length.toString()} sub="Total" color="#E74C3C" />
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', 
+            gap: isMobile ? '10px' : '20px', 
+            marginBottom: '30px' 
+          }}>
+            <StatCard isMobile={isMobile} label="TOTAL PENGHUNI" value={daftarWBP.length.toString()} sub="Orang" color="#4680FF" />
+            <StatCard isMobile={isMobile} label="PENGUNJUNG" value="110" sub="Bulan Ini" color="#FFB811" />
+            <StatCard isMobile={isMobile} label="PRODUK KARYA" value={daftarKarya.length.toString()} sub="Unit" color="#2ECC71" />
+            <StatCard isMobile={isMobile} label="BERITA" value={daftarBerita.length.toString()} sub="Total" color="#E74C3C" />
           </div>
 
-          <div style={contentCard}>
+          <div style={{ ...contentCard, padding: isMobile ? '10px' : '0' }}>
             {activeMenu === 'dashboard' && <DashboardHome setActiveMenu={setActiveMenu} daftarWBP={daftarWBP} daftarPengaduan={daftarPengaduan} daftarBerita={daftarBerita} />}
             {activeMenu === 'pengaduan' && <PengaduanMenu pengaduanForm={pengaduanForm} setPengaduanForm={setPengaduanForm} handleSimpanPengaduan={handleSimpanPengaduan} daftarPengaduan={daftarPengaduan} toggleStatusPengaduan={toggleStatusPengaduan} handleDelete={handleDelete} />}
             {activeMenu === 'wbp' && <WBPMenu wbpForm={wbpForm} setWbpForm={setWbpForm} handleSimpanWBP={handleSimpanWBP} daftarWBP={daftarWBP} handleDelete={handleDelete} />}
             {activeMenu === 'berita' && <BeritaMenu judulBerita={judulBerita} setJudulBerita={setJudulBerita} kategoriBerita={kategoriBerita} setKategoriBerita={setKategoriBerita} setFileGambar={setFileGambar} isiBerita={isiBerita} setIsiBerita={setIsiBerita} handlePublikasiBerita={handlePublikasiBerita} daftarBerita={daftarBerita} toggleStatusBerita={toggleStatusBerita} handleDelete={handleDelete} />}
-            {activeMenu === 'foto' && <FotoMenu />}
-            {activeMenu === 'video' && <VideoMenu />}
+            {activeMenu === 'foto' && <FotoMenu daftarFoto={daftarFoto} fetchFoto={fetchFoto} handleDelete={handleDelete} />}
+            {activeMenu === 'video' && <VideoMenu daftarVideo={daftarVideo} fetchVideo={fetchVideo} handleDelete={handleDelete} />}
             {activeMenu === 'produk' && <ProdukMenu daftarKarya={daftarKarya} fetchKarya={fetchKarya} handleDelete={handleDelete} />}
           </div>
         </main>
@@ -192,22 +250,20 @@ function NavItem({ active, onClick, icon, label }: NavItemProps) {
   );
 }
 
-function StatCard({ label, value, sub, color }: StatCardProps) {
+function StatCard({ label, value, sub, color, isMobile }: StatCardProps) {
   return (
-    <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '16px', border: '1px solid #EBEBEB' }}>
-      <p style={{ margin: 0, fontSize: '11px', fontWeight: 'bold', color: '#A0AEC0' }}>{label}</p>
-      <h2 style={{ margin: '10px 0', fontSize: '28px', color: '#2D3748' }}>{value} <span style={{ fontSize: '14px', color: '#CBD5E0' }}>{sub}</span></h2>
+    <div style={{ backgroundColor: 'white', padding: isMobile ? '15px' : '25px', borderRadius: '16px', border: '1px solid #EBEBEB' }}>
+      <p style={{ margin: 0, fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold', color: '#A0AEC0' }}>{label}</p>
+      <h2 style={{ margin: '8px 0', fontSize: isMobile ? '20px' : '28px', color: '#2D3748' }}>{value} <span style={{ fontSize: '12px', color: '#CBD5E0' }}>{sub}</span></h2>
       <div style={{ height: '4px', background: '#F0F2F5', borderRadius: '2px' }}><div style={{ width: '60%', height: '100%', background: color, borderRadius: '2px' }}></div></div>
     </div>
   );
 }
 
-const navTitle: React.CSSProperties = { fontSize: '10px', fontWeight: '800', color: '#CBD5E0', margin: '25px 0 10px 15px', letterSpacing: '1px' };
 const avatarCircle: React.CSSProperties = { width: '38px', height: '38px', borderRadius: '50%', backgroundColor: '#093661', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0 };
 const exitBtn: React.CSSProperties = { padding: '8px 15px', backgroundColor: '#FFF5F5', color: '#E53E3E', border: '1px solid #FED7D7', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontWeight: '600' };
-const topHeaderStyle: React.CSSProperties = { height: '75px', backgroundColor: '#FFF', borderBottom: '1px solid #EBEBEB', padding: '0 30px', display: 'flex', alignItems: 'center', gap: '20px', flexShrink: 0 };
-const statsGrid: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '30px' };
+const topHeaderStyle: React.CSSProperties = { backgroundColor: '#FFF', borderBottom: '1px solid #EBEBEB', display: 'flex', alignItems: 'center', gap: '20px', flexShrink: 0 };
 const contentCard: React.CSSProperties = { backgroundColor: 'white', borderRadius: '20px', border: '1px solid #EBEBEB', minHeight: '400px', marginBottom: '40px' };
-const glassBanner: React.CSSProperties = { background: 'linear-gradient(135deg, #4680FF 0%, #0046E5 100%)', borderRadius: '20px', padding: '45px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
+const glassBanner: React.CSSProperties = { background: 'linear-gradient(135deg, #4680FF 0%, #0046E5 100%)', borderRadius: '20px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
 const glassCircle1: React.CSSProperties = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
 const glassCircle2: React.CSSProperties = { position: 'absolute', bottom: '-30px', left: '10%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };

@@ -244,7 +244,7 @@ export default function LamanPublikRutan() {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
               <input 
                 type="text" 
-                style={{ width: '100%', padding: '9px', border: '2px solid #e0e0e0', borderRadius: '4px', outline: 'none', textAlign: 'center', fontSize: '16px' }}
+                style={{ width: '100%', padding: '10px', border: '2px solid #EEEEEE', borderRadius: '4px', outline: 'none', textAlign: 'center', fontSize: '16px' }}
                 placeholder="Masukkan nama wbp..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

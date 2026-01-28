@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function BeritaMenu({ 
   judulBerita, setJudulBerita, 
@@ -9,14 +9,24 @@ export default function BeritaMenu({
   toggleStatusBerita, handleDelete 
 }: any) {
   const [isHover, setIsHover] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
+  }, []);
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ padding: isMobile ? '15px' : '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
       <div style={{ marginBottom: '30px' }}>
-        <h3 style={{ color: '#093661', fontSize: '20px', fontWeight: '700', margin: '0 0 10px 0', fontFamily: 'inherit' }}>
+        <h3 style={{ color: '#093661', fontSize: isMobile ? '18px' : '20px', fontWeight: '700', margin: '0 0 10px 0', fontFamily: 'inherit' }}>
           📰 Posting Berita Terbaru
         </h3>
-        <p style={{ color: '#718096', fontSize: '14px', margin: 0, fontFamily: 'inherit' }}>
+        <p style={{ color: '#718096', fontSize: isMobile ? '13px' : '14px', margin: 0, fontFamily: 'inherit' }}>
           Tulis dan publikasikan artikel atau informasi terbaru mengenai kegiatan satuan kerja.
         </p>
       </div>
@@ -32,7 +42,7 @@ export default function BeritaMenu({
           />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '20px' }}>
           <div>
             <label style={labelStyle}>Kategori</label>
             <select 
@@ -88,7 +98,7 @@ export default function BeritaMenu({
           <thead>
             <tr style={{ backgroundColor: '#F8FAFC' }}>
               <th style={thStyle}>Judul Berita</th>
-              <th style={thStyle}>Tanggal</th>
+              {!isMobile && <th style={thStyle}>Tanggal</th>}
               <th style={thStyle}>Kategori</th>
               <th style={{ ...thStyle, textAlign: 'center' }}>Aksi</th>
             </tr>
@@ -97,8 +107,8 @@ export default function BeritaMenu({
             {daftarBerita.length > 0 ? (
               daftarBerita.map((news: any) => (
                 <tr key={news.id} style={{ borderBottom: '1px solid #EDF2F7' }}>
-                  <td style={{ ...tdStyle, fontWeight: '500', color: '#2D3748', maxWidth: '300px' }}>{news.judul}</td>
-                  <td style={{ ...tdStyle, color: '#718096' }}>{news.tanggal}</td>
+                  <td style={{ ...tdStyle, fontWeight: '500', color: '#2D3748', maxWidth: isMobile ? '120px' : '300px' }}>{news.judul}</td>
+                  {!isMobile && <td style={{ ...tdStyle, color: '#718096' }}>{news.tanggal}</td>}
                   <td style={tdStyle}>
                     <span 
                       onClick={() => toggleStatusBerita(news.id, news.status)} 
@@ -128,7 +138,7 @@ export default function BeritaMenu({
               ))
             ) : (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center', padding: '40px', color: '#A0AEC0', fontSize: '14px' }}>
+                <td colSpan={isMobile ? 3 : 4} style={{ textAlign: 'center', padding: '40px', color: '#A0AEC0', fontSize: '14px' }}>
                   Belum ada berita yang dipublikasikan.
                 </td>
               </tr>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
 
 interface FotoMenuProps {
@@ -13,6 +13,16 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
   const [fileFoto, setFileFoto] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [isHover, setIsHover] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSimpan = async () => {
     if (!keterangan || !fileFoto) {
@@ -56,13 +66,13 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
   };
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#FFFFFF' }}>
+    <div style={{ padding: isMobile ? '15px' : '30px', backgroundColor: '#FFFFFF' }}>
       <div style={{ marginBottom: '30px' }}>
-        <h3 style={{ color: '#093661', fontSize: '20px', fontWeight: '700', margin: '0 0 10px 0' }}>📸 Galeri Foto</h3>
-        <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>Kelola dan publikasikan dokumentasi kegiatan ke website publik.</p>
+        <h3 style={{ color: '#093661', fontSize: isMobile ? '18px' : '20px', fontWeight: '700', margin: '0 0 10px 0' }}>📸 Galeri Foto</h3>
+        <p style={{ color: '#718096', fontSize: isMobile ? '13px' : '14px', margin: 0 }}>Kelola dan publikasikan dokumentasi kegiatan ke website publik.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '25px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '20px', marginBottom: '25px' }}>
         <div>
           <label style={labelStyle}>Keterangan Foto</label>
           <input 
@@ -113,9 +123,9 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
               daftarFoto.map((foto: any) => (
                 <tr key={foto.id} style={{ borderBottom: '1px solid #EDF2F7' }}>
                   <td style={tdStyle}>
-                    <img src={foto.url} alt="galeri" style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} />
+                    <img src={foto.url} alt="galeri" style={{ width: isMobile ? '60px' : '80px', height: isMobile ? '40px' : '50px', objectFit: 'cover', borderRadius: '6px' }} />
                   </td>
-                  <td style={{ ...tdStyle, color: '#4A5568' }}>{foto.keterangan}</td>
+                  <td style={{ ...tdStyle, color: '#4A5568', fontSize: isMobile ? '12px' : '14px' }}>{foto.keterangan}</td>
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
                     <button 
                       onClick={() => handleDelete(foto.id, 'daftar_foto')} 

@@ -187,7 +187,7 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
                   </td>
                   <td style={{ ...tdStyle, fontWeight: '600', color: '#2D3748' }}>{item.nama}</td>
                   <td style={tdStyle}>
-                    <span style={{ backgroundColor: '#F6E05E', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', color: '#000' }}>
+                    <span style={{ backgroundColor: '#FFF7D6', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', color: '#000' }}>
                       {item.kategori}
                     </span>
                   </td>
