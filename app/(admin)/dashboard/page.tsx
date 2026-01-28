@@ -152,9 +152,9 @@ export default function RutanSinjaiDashboard() {
       height: '100vh', 
       width: '100vw', 
       backgroundColor: '#F4F7FE', 
-      overflow: 'hidden', // Mengunci scroll body browser
+      overflow: 'hidden', 
       fontFamily: "'Inter', sans-serif",
-      position: 'fixed', // Memastikan kontainer utama tidak bisa bergeser
+      position: 'fixed', 
       top: 0,
       left: 0
     }}>
@@ -169,32 +169,36 @@ export default function RutanSinjaiDashboard() {
         display: 'flex', 
         flexDirection: 'column', 
         zIndex: 1000, 
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', 
+        transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)', 
         overflow: 'hidden', 
         flexShrink: 0,
         position: isMobile ? 'fixed' : 'relative',
         height: '100vh'
       }}>
-        <div style={{ padding: '27px 27px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
-          <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
-          <div>
-            <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#093661', margin: 3 }}>Rutan Kelas II B</h2>
-            <p style={{ fontSize: '17px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
+        <div style={{ width: '210px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '27px 27px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
+            <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+            <div>
+              <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#093661', margin: 3 }}>Rutan Kelas II B</h2>
+              <p style={{ fontSize: '17px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
+            </div>
           </div>
-        </div>
-        <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
-          <NavItem active={activeMenu === 'dashboard'} onClick={() => { setActiveMenu('dashboard'); if(isMobile) setIsSidebarVisible(false); }} icon="📊" label="Dashboard" />
-          <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="📩" label="Pengaduan" />
-          <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="👥" label="Data Narapidana" />
-          <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="📰" label="Update Berita" />
-          <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="🎨" label="Karya WBP" />
-          <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="📸" label="Galeri Foto" />
-          <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="🎥" label="Galeri Video" />
-        </nav>
-        <div style={{ padding: '30px', borderTop: '1px solid #F1F1F1', display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#FFF', flexShrink: 0 }}>
-          <div style={avatarCircle}>AD</div>
-          <div style={{ flex: 1 }}><div style={{ fontSize: '12px', fontWeight: 'bold', color: '#2D3748' }}>Staf Admin</div></div>
-          <button onMouseDown={() => setActiveExit(true)} onMouseUp={() => setActiveExit(false)} onClick={() => router.push('/admin')} style={{ ...exitBtn, transform: activeExit ? 'scale(0.92)' : 'scale(1)' }}>Keluar</button>
+          <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
+            <NavItem active={activeMenu === 'dashboard'} onClick={() => { setActiveMenu('dashboard'); if(isMobile) setIsSidebarVisible(false); }} icon="📊" label="Dashboard" />
+            <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="📩" label="Pengaduan" />
+            <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="👥" label="Data Narapidana" />
+            <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="📰" label="Update Berita" />
+            <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="🎨" label="Karya WBP" />
+            <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="📸" label="Galeri Foto" />
+            <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="🎥" label="Galeri Video" />
+          </nav>
+          <div style={{ padding: '20px 15px', borderTop: '1px solid #F1F1F1', display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#FFF', flexShrink: 0 }}>
+            <div style={avatarCircle}>AD</div>
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#2D3748', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Staf Admin</div>
+            </div>
+            <button onMouseDown={() => setActiveExit(true)} onMouseUp={() => setActiveExit(false)} onClick={() => router.push('/admin')} style={{ ...exitBtn, transform: activeExit ? 'scale(0.92)' : 'scale(1)' }}>Keluar</button>
+          </div>
         </div>
       </aside>
 
@@ -244,7 +248,7 @@ export default function RutanSinjaiDashboard() {
 
 function NavItem({ active, onClick, icon, label }: NavItemProps) {
   return (
-    <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400' }}>
+    <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400', whiteSpace: 'nowrap' }}>
       <span style={{ fontSize: '18px' }}>{icon}</span><span style={{ fontSize: '14px' }}>{label}</span>
     </div>
   );
