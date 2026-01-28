@@ -84,7 +84,7 @@ export default function RutanSinjaiDashboard() {
   };
 
   const handleSimpanWBP = async () => {
-    const { error } = await supabase.from('daftar_wbp').insert([{ nama: wbpForm.nama, nik: wbpForm.nik, kasus: wbpForm.cases, lama_pidana: wbpForm.lama_pidana, ekspirasi: wbpForm.ekspirasi, blok_kamar: wbpForm.blok_kamar }]);
+    const { error } = await supabase.from('daftar_wbp').insert([{ nama: wbpForm.nama, nik: wbpForm.nik, kasus: wbpForm.kasus, lama_pidana: wbpForm.lama_pidana, ekspirasi: wbpForm.ekspirasi, blok_kamar: wbpForm.blok_kamar }]);
     if (!error) { alert("Data WBP Berhasil Disimpan ke Cloud!"); setWbpForm({ nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '' }); fetchWBP(); }
   };
 
