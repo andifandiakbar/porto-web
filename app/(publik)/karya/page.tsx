@@ -76,7 +76,7 @@ export default function KaryaBinaanPage() {
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
             <div style={{ width: '40px', height: '40px', border: '4px solid #f3f3f3', borderTop: `4px solid ${navy}`, borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '15px' }}></div>
-            <p style={{ color: '#093b77', fontWeight: '600' }}>Memuat Hasil Karya...</p>
+            <p style={{ color: '#093b77', fontWeight: '600' }}>Memuat halaman...</p>
           </div>
         ) : (
           <div className="grid-karya">
