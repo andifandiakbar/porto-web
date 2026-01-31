@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Setting Warna (Tema Baru) */
+@theme {
+  --color-background: #09090b;
+  --color-surface: #18181b;
+  --color-primary: #fafafa;
+  --color-secondary: #a1a1aa;
+  --color-accent: #3b82f6;
+}
+
+
+/* Terapkan ke Body */
+:root {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+html {
+  scroll-behavior: smooth;
+}
+
