@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 import "./desktop.css"; 
 import "./mobile.css";
@@ -137,7 +137,7 @@ export default function LamanPublikRutan() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);   
 
-  const fadeInVariant = {
+  const fadeInVariant: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
@@ -330,15 +330,6 @@ export default function LamanPublikRutan() {
           </motion.div>
         </div>
       </section>
-
-      {/* Jika Anda memiliki topbar atau footer di file ini, pastikan linknya seperti berikut: */}
-      {/* <a href="https://www.facebook.com/share/1E2nTFHBkA/" target="_blank" rel="noopener noreferrer">
-          <i className="fa-brands fa-facebook"></i>
-        </a>
-        <a href="https://youtube.com/@rutansinjai3762?si=iec3-i3r6VG8yG3D" target="_blank" rel="noopener noreferrer">
-          <i className="fa-brands fa-youtube"></i>
-        </a>
-      */}
     </main>
   );
 }

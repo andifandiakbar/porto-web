@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabase';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 export default function KaryaBinaanPage() {
   const [daftarKarya, setDaftarKarya] = useState<any[]>([]);
@@ -31,7 +31,7 @@ export default function KaryaBinaanPage() {
   const gold = '#f1c40f';
   const blueActive = '#0070f3';
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -39,7 +39,7 @@ export default function KaryaBinaanPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { 
       opacity: 1, 
