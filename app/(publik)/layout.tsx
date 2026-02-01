@@ -64,7 +64,13 @@ export default function RootLayout({ children }: LayoutProps) {
           <nav className="navbar">
             <div className="container nav-flex">
               <div className="logo" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/'}>
-                <img src="/assets/logo.png" alt="Logo Rutan" width="50" height="50" style={{ display: 'block' }} />
+                <img 
+                  src="/assets/logo.png" 
+                  alt="Logo Rutan" 
+                  width="50" 
+                  height="50" 
+                  style={{ objectFit: 'contain', flexShrink: 0 }} 
+                />
                 <span>Rutan Sinjai<br /><small style={{ fontWeight: 'normal' }}>Kelas IIB</small></span>
               </div>
 
@@ -160,7 +166,13 @@ export default function RootLayout({ children }: LayoutProps) {
               <div className="footer-grid">
                 <div className="footer-col">
                   <div className="footer-logo">
-                    <img src="/assets/logo.png" alt="logo" width="80" height="80" />
+                    <img 
+                      src="/assets/logo.png" 
+                      alt="logo" 
+                      width="80" 
+                      height="80" 
+                      style={{ objectFit: 'contain' }} 
+                    />
                   </div>
                   <div className="footer-info">
                     <p>Kementerian Imigrasi Dan</p>
