@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabase';
+import { motion } from 'framer-motion';
 
 export default function KaryaBinaanPage() {
   const [daftarKarya, setDaftarKarya] = useState<any[]>([]);
@@ -29,6 +30,23 @@ export default function KaryaBinaanPage() {
   const navy = '#0b2d57';
   const gold = '#f1c40f';
   const blueActive = '#0070f3';
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: "easeOut" } 
+    }
+  };
 
   return (
     <div style={{ padding: '60px 0', backgroundColor: '#ffffff', minHeight: '100vh', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -65,13 +83,18 @@ export default function KaryaBinaanPage() {
 
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px' }}>
         
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center', marginBottom: '60px' }}
+        >
           <h1 style={{ color: '#093b77', fontSize: '28px', fontWeight: '700', marginBottom: '7px' }}>
             Hasil Karya Warga Binaan
           </h1>
           <p style={{ color: '#64748b', margin: '0' }}>Mendukung kreativitas dan kemandirian Rutan Sinjai</p>
           <div style={{ width: '50px', height: '4px', background: '#ddb309', margin: '15px auto 0', borderRadius: '2px' }}></div>
-        </div>
+        </motion.div>
 
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
@@ -79,15 +102,26 @@ export default function KaryaBinaanPage() {
             <p style={{ color: '#093b77', fontWeight: '600' }}>Memuat halaman...</p>
           </div>
         ) : (
-          <div className="grid-karya">
+          <motion.div 
+            className="grid-karya"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {daftarKarya.map((item) => (
-              <div key={item.id} style={{ 
-                background: navy, 
-                borderRadius: '15px', 
-                overflow: 'hidden', 
-                display: 'flex', 
-                flexDirection: 'column'
-              }}>
+              <motion.div 
+                key={item.id} 
+                variants={itemVariants}
+                style={{ 
+                  background: navy, 
+                  borderRadius: '15px', 
+                  overflow: 'hidden', 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
+                }}
+              >
                 <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px', overflow: 'hidden' }}>
                   <img 
                     src={item.img || 'https://via.placeholder.com/300'} 
@@ -111,12 +145,14 @@ export default function KaryaBinaanPage() {
                     <span className="card-text-price" style={{ fontWeight: '800', color: gold, fontSize: '1.2rem' }}>
                       {item.harga.includes('Rp') ? item.harga : `Rp ${item.harga}`}
                     </span>
-                    <button 
+                    <motion.button 
                       className="btn-beli"
                       onClick={() => window.open(`https://wa.me/6281356640175?text=Halo, saya ingin memesan: ${item.nama}`, '_blank')}
                       onMouseDown={() => setPressedId(item.id)}
                       onMouseUp={() => setPressedId(null)}
                       onMouseLeave={() => setPressedId(null)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       style={{ 
                         background: pressedId === item.id ? blueActive : gold, 
                         color: pressedId === item.id ? '#ffffff' : navy, 
@@ -125,23 +161,26 @@ export default function KaryaBinaanPage() {
                         borderRadius: '6px', 
                         fontWeight: '700', 
                         cursor: 'pointer',
-                        transition: 'background 0.1s ease, transform 0.1s ease',
-                        transform: pressedId === item.id ? 'scale(0.95)' : 'scale(1)'
+                        transition: 'background 0.1s ease'
                       }}
                     >
                       Beli
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
 
         {!loading && daftarKarya.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '50px', color: '#64748b' }}>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{ textAlign: 'center', padding: '50px', color: '#64748b' }}
+          >
             Belum ada produk karya yang tersedia.
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

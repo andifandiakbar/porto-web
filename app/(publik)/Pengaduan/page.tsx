@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { motion } from 'framer-motion';
 
 const supabase = createClient(
   'https://xnwqcxaehvaqxzodqidc.supabase.co', 
@@ -56,7 +57,13 @@ export default function PengaduanPage() {
   return (
     <section style={{ padding: '60px 0', backgroundColor: '#f9f9f9', minHeight: '80vh', fontFamily: 'sans-serif' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 20px' }}>
-        <div style={{ background: '#fff', padding: isMobile ? '25px' : '40px', borderRadius: '12px', border: '1px solid #e0e0e0' }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          style={{ background: '#fff', padding: isMobile ? '25px' : '40px', borderRadius: '12px', border: '1px solid #e0e0e0' }}
+        >
           <h2 style={{ textAlign: 'center', color: '#0b2d57', marginBottom: '30px', fontWeight: 'bold' }}>Layanan Pengaduan Publik</h2>
           
           <form onSubmit={handleSubmit}>
@@ -80,7 +87,7 @@ export default function PengaduanPage() {
               {loading ? 'Sedang Mengirim...' : 'Kirim Laporan Pengaduan'}
             </button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

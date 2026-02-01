@@ -49,8 +49,8 @@ export default function RootLayout({ children }: LayoutProps) {
               <div className="topbar-social">
                 <a href="https://www.instagram.com/rutansinjai" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a>
                 <a href="https://www.tiktok.com/@rutansinjai" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-tiktok"></i></a>
-                <a href="#"><i className="fa-brands fa-facebook"></i></a>
-                <a href="#"><i className="fa-brands fa-youtube"></i></a>
+                <a href="https://www.facebook.com/share/1E2nTFHBkA/" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook"></i></a>
+                <a href="https://youtube.com/@rutansinjai3762?si=iec3-i3r6VG8yG3D" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube"></i></a>
               </div>
               <div className="topbar-info">
                 <a href="tel:07247333024" className="info-item"><i className="fa-solid fa-phone"></i> 048222188</a>
@@ -199,6 +199,7 @@ export default function RootLayout({ children }: LayoutProps) {
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.115810052989!2d120.25043017589574!3d-5.12858525287739!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302fbcd7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1716300000000!5m2!1sid!2sid" 
                       width="80%" 
                       height="209" 
+                      style={{ border: 0 }}
                       allowFullScreen={true} 
                       loading="lazy" 
                       referrerPolicy="no-referrer-when-downgrade">

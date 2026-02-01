@@ -1,8 +1,28 @@
 "use client";
 
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function SyaratKetentuan() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.6, ease: "easeOut" } 
+    }
+  };
+
   return (
     <section className="content-layanan" style={{
       padding: '60px 20px',
@@ -12,7 +32,14 @@ export default function SyaratKetentuan() {
     }}>
       <div className="container-minimalist" style={{ maxWidth: '850px', margin: '0 auto' }}>
         
-        <div className="section-title" style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <motion.div 
+          className="section-title" 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center', marginBottom: '40px' }}
+        >
           <h2 style={{ 
             color: '#093b77', 
             fontSize: '28px', 
@@ -28,15 +55,26 @@ export default function SyaratKetentuan() {
             margin: '0 auto',
             borderRadius: '10px'
           }}></div>
-        </div>
+        </motion.div>
 
-        <div className="ketentuan-stack" style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
+        <motion.div 
+          className="ketentuan-stack" 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}
+        >
           
-          <div className="k-card" style={cardStyle}>
+          <motion.div 
+            className="k-card" 
+            variants={itemVariants}
+            style={cardStyle}
+          >
             <div className="k-icon-wrapper" style={iconWrapperStyle}>
               <i className="fa-solid fa-id-card"></i>
             </div>
@@ -44,9 +82,13 @@ export default function SyaratKetentuan() {
               <h4 style={titleStyle}>Identitas Resmi</h4>
               <p style={descStyle}>Wajib Membawa Identitas Resmi (KTP, KK, SIM & KARTU PELAJAR)</p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="k-card" style={cardStyle}>
+          <motion.div 
+            className="k-card" 
+            variants={itemVariants}
+            style={cardStyle}
+          >
             <div className="k-icon-wrapper" style={iconWrapperStyle}>
               <i className="fa-solid fa-file-signature"></i>
             </div>
@@ -54,9 +96,13 @@ export default function SyaratKetentuan() {
               <h4 style={titleStyle}>Izin Pihak Penahan</h4>
               <p style={descStyle}>Wajib Membawa Surat Izin Dari Pihak Penahan (Bagi Tahanan)</p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="k-card" style={cardStyle}>
+          <motion.div 
+            className="k-card" 
+            variants={itemVariants}
+            style={cardStyle}
+          >
             <div className="k-icon-wrapper" style={iconWrapperStyle}>
               <i className="fa-solid fa-shirt"></i>
             </div>
@@ -64,9 +110,13 @@ export default function SyaratKetentuan() {
               <h4 style={titleStyle}>Etika Berpakaian</h4>
               <p style={descStyle}>Dilarang Menggunakan celana Pendek</p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="k-card" style={cardStyle}>
+          <motion.div 
+            className="k-card" 
+            variants={itemVariants}
+            style={cardStyle}
+          >
             <div className="k-icon-wrapper" style={iconWrapperStyle}>
               <i className="fa-solid fa-calendar-xmark"></i>
             </div>
@@ -74,9 +124,9 @@ export default function SyaratKetentuan() {
               <h4 style={titleStyle}>Hari Libur</h4>
               <p style={descStyle}>Hari Minggu dan Libur Nasional Kunjungan Ditiadakan</p>
             </div>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -90,7 +140,8 @@ const cardStyle = {
   alignItems: 'center',
   gap: '20px',
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-  border: '1px solid #f1f5f9'
+  border: '1px solid #f1f5f9',
+  cursor: 'default'
 };
 
 const iconWrapperStyle = {
@@ -117,5 +168,5 @@ const descStyle = {
   margin: 0,
   color: '#64748b',
   fontSize: '14px',
-  lineheight: '1.6'
+  lineHeight: '1.6'
 };

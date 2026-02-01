@@ -1,12 +1,20 @@
 "use client";
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function LayananIntegrasi() {
   return (
     <section className="content-layanan" style={{ padding: '40px 0', backgroundColor: '#f4f7f6', minHeight: '100vh' }}>
       <div className="container">
         
-        <div className="box-container" style={{ background: 'white', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0,0,0,0.1)', overflow: 'hidden', marginBottom: '50px' }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="box-container" 
+          style={{ background: 'white', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0,0,0,0.1)', overflow: 'hidden', marginBottom: '50px' }}
+        >
           
           <div className="header-blue" style={{ background: '#093b77', color: 'white', padding: '20px 30px', display: 'flex', alignItems: 'center', gap: '15px' }}>
             <i className="fa-solid fa-location-dot" style={{ fontSize: '24px' }}></i>
@@ -68,7 +76,7 @@ export default function LayananIntegrasi() {
               <li>Telah membayar lunas denda dan uang pengganti sesuai dengan putusan pengadilan untuk tindak pidana Korupsi</li>
             </ul>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

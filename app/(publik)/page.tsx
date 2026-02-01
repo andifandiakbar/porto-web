@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
+import { motion } from 'framer-motion';
 
 import "./desktop.css"; 
 import "./mobile.css";
@@ -135,6 +136,11 @@ export default function LamanPublikRutan() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);   
+
+  const fadeInVariant = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
   
   return (
     <main className="main-wrapper" style={{ fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
@@ -149,9 +155,15 @@ export default function LamanPublikRutan() {
             <div key={i} className="slide">
               <img src={item.img} alt={`Banner ${i + 1}`} />
               {item.showText && (
-                <div className="headline-overlay">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1 }}
+                  className="headline-overlay" 
+                  style={{ background: 'transparent' }}
+                >
                   <h1 className="headline-text" style={{ fontSize: isMobile ? '20px' : '38px' }}>{item.headline}</h1>
-                </div>
+                </motion.div>
               )}
             </div>
           ))}
@@ -161,41 +173,58 @@ export default function LamanPublikRutan() {
         </button>
       </section>
 
-      <section className="services-section">
+      <motion.section 
+        className="services-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
+      >
         <div className="services-wrapper">
           <div className="services-grid">
-            <div className="card">
+            <motion.div variants={fadeInVariant} className="card">
               <div className="icon"><i className="fa-solid fa-calendar-days"></i></div>
               <h3>Jadwal Kunjungan</h3>
               <p>Lihat jam operasional kunjungan WBP</p>
               <a href="/JadwalKunjungan" className="btn">Lihat Jadwal</a>
-            </div>
-            <div className="card">
+            </motion.div>
+            <motion.div variants={fadeInVariant} className="card">
               <div className="icon"><i className="fa-solid fa-clipboard-list"></i></div>
               <h3>Sistem Antrian</h3>
               <p>Pendaftaran antrian kunjungan online</p>
               <a href="https://docs.google.com/forms/..." className="btn">Daftar Sekarang</a>
-            </div>
-            <div className="card">
+            </motion.div>
+            <motion.div variants={fadeInVariant} className="card">
               <div className="icon"><i className="fa-solid fa-file-lines"></i></div>
               <h3>Syarat & Ketentuan</h3>
               <p>Prosedur dan ketentuan kunjungan</p>
               <a href="/SyaratKetentuan" className="btn">Baca Detail</a>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       <div className="announcement-bar">
         <div className="announcement-label">Berita Terkini </div>
-        <div className="announcement-content">
-          <div className="running-text">
+        <div className="announcement-content" style={{ overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <motion.div 
+            className="running-text"
+            animate={{ x: ["100%", "-100%"] }}
+            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+            style={{ whiteSpace: 'nowrap', position: 'relative', width: 'max-content' }}
+          >
             Selamat Datang di Website Resmi Rutan Kelas II B Sinjai - Pantau terus jadwal kunjungan dan informasi terbaru di sini.
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      <section className="latest-news-section">
+      <motion.section 
+        className="latest-news-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInVariant}
+      >
         <div className="container">
           <div className="news-slider-wrapper">
             <button className="slide-arrow prev" onClick={prevNews}><i className="fa-solid fa-chevron-left"></i></button>
@@ -204,10 +233,22 @@ export default function LamanPublikRutan() {
                 {extendedNews.map((item, index) => (
                   <Link href={`/berita/${item.id}`} key={index} style={{ textDecoration: 'none', minWidth: isMobile ? '100%' : '25%', padding: '0 10px' }}>
                     <div className="news-card-v2" style={{ cursor: 'pointer' }}>
-                      <div className="news-thumb"><img src={item.img} alt="Berita" style={{ width: '100%' }} /></div>
+                      <motion.div 
+                        className="news-thumb" 
+                        whileTap={{ opacity: 0.7 }}
+                        transition={{ duration: 0 }}
+                      >
+                        <img src={item.img} alt="Berita" style={{ width: '100%' }} />
+                      </motion.div>
                       <div className="news-content-v2">
                         <p className="news-date-v2">{item.meta.split('|')[1]?.trim()}</p>
-                        <h3 className="news-title-v2">{item.headline.toLowerCase()}</h3>
+                        <motion.h3 
+                          className="news-title-v2"
+                          whileTap={{ color: "#0070f3" }}
+                          transition={{ duration: 0 }}
+                        >
+                          {item.headline.toLowerCase()}
+                        </motion.h3>
                       </div>
                     </div>
                   </Link>
@@ -217,30 +258,54 @@ export default function LamanPublikRutan() {
             <button className="slide-arrow next" onClick={nextNews}><i className="fa-solid fa-chevron-right"></i></button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="wbp-info-section" style={{ width: '100%', padding: '40px 0' }}>
-        <div className="container-wbp" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div className="wbp-header-text">
+      <section className="wbp-info-section" style={{ width: '100%', padding: isMobile ? '20px 0 40px 0' : '40px 0' }}>
+        <div className="container-wbp" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px', marginTop: isMobile ? '-10px' : '0' }}>
+          <motion.div 
+            className="wbp-header-text"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInVariant}
+          >
             <h2 style={{ color: '#093661', fontWeight: 'bold' }}>RUTAN KELAS IIB SINJAI</h2>
             <p style={{ color: '#555' }}>SISTEM INFORMASI DATA WARGA BINAAN</p>
-          </div>
+          </motion.div>
           
-          <div className="wbp-stats-grid">
-            <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
+          <motion.div 
+            className="wbp-stats-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ visible: { transition: { staggerChildren: 0.3 } } }}
+          >
+            <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
               <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
               <div className="stat-label" style={{ color: '#fff' }}>TOTAL PENGHUNI SAAT INI</div>
-            </div>
-            <div className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
+            </motion.div>
+            <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
               <div className="stat-number" style={{ color: '#ffc107' }}>{countKunjungan}</div>
               <div className="stat-label" style={{ color: '#fff' }}>KUNJUNGAN BULAN INI</div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
-          <div className="wbp-search-container" style={{ backgroundColor: '#FAFBFF', padding: '40px', borderRadius: '12px', width: '100%', boxSizing: 'border-box' }}>
-            <div className="search-header-btn" style={{ backgroundColor: '#093661', color: 'white', padding: '18px', borderRadius: '8px', fontSize: isMobile ? '18px' : '24px', fontWeight: '600', marginBottom: '25px', width: '100%', textAlign: 'center', boxSizing: 'border-box' }}>
+          <motion.div 
+            className="wbp-search-container" 
+            style={{ backgroundColor: '#FAFBFF', padding: '40px', borderRadius: '12px', width: '100%', boxSizing: 'border-box' }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInVariant}
+          >
+            <motion.div 
+              className="search-header-btn" 
+              style={{ backgroundColor: '#093661', color: 'white', padding: '18px', borderRadius: '8px', fontSize: isMobile ? '18px' : '24px', fontWeight: '600', marginBottom: '25px', width: '100%', textAlign: 'center', boxSizing: 'border-box', cursor: 'pointer' }}
+              whileTap={{ backgroundColor: '#0d4a85' }}
+              transition={{ duration: 0 }}
+            >
               Silahkan Cari Nama WBP yang akan dikunjungi
-            </div>
+            </motion.div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
               <input 
                 type="text" 
@@ -251,30 +316,29 @@ export default function LamanPublikRutan() {
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
               <div style={{ marginTop: '15px' }}>
-                <button 
+                <motion.button 
                   type="button" 
-                  style={{ backgroundColor: '#238b59', color: 'white', border: 'none', padding: '10px 60px', fontSize: '18px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', outline: 'none', boxShadow: '0 4px 6px rgba(35, 139, 89, 0.2)' }}
-                  onMouseDown={(e) => {
-                    e.currentTarget.style.transform = 'scale(0.95)';
-                    e.currentTarget.style.backgroundColor = '#1a6a44';
-                  }}
-                  onMouseUp={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.backgroundColor = '#238b59';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.backgroundColor = '#238b59';
-                  }}
+                  style={{ backgroundColor: '#093661', color: 'white', border: 'none', padding: '10px 60px', fontSize: '18px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', outline: 'none', boxShadow: '0 4px 6px rgba(9, 54, 97, 0.2)' }}
+                  whileTap={{ backgroundColor: '#0d4a85' }}
+                  transition={{ duration: 0 }}
                   onClick={handleSearch} 
                 >
                   Cari
-                </button>
+                </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* Jika Anda memiliki topbar atau footer di file ini, pastikan linknya seperti berikut: */}
+      {/* <a href="https://www.facebook.com/share/1E2nTFHBkA/" target="_blank" rel="noopener noreferrer">
+          <i className="fa-brands fa-facebook"></i>
+        </a>
+        <a href="https://youtube.com/@rutansinjai3762?si=iec3-i3r6VG8yG3D" target="_blank" rel="noopener noreferrer">
+          <i className="fa-brands fa-youtube"></i>
+        </a>
+      */}
     </main>
   );
 }
