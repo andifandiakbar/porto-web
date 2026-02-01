@@ -68,9 +68,6 @@ export default function RootLayout({ children }: LayoutProps) {
                   src="/assets/logo.png" 
                   alt="Logo Rutan" 
                   style={{ 
-                    width: 'auto', 
-                    height: '50px', 
-                    aspectRatio: 'auto',
                     objectFit: 'contain',
                     flexShrink: 0
                   }} 
@@ -174,9 +171,6 @@ export default function RootLayout({ children }: LayoutProps) {
                       src="/assets/logo.png" 
                       alt="logo" 
                       style={{ 
-                        width: 'auto', 
-                        height: '80px', 
-                        aspectRatio: 'auto',
                         objectFit: 'contain'
                       }} 
                     />
