@@ -67,9 +67,13 @@ export default function RootLayout({ children }: LayoutProps) {
                 <img 
                   src="/assets/logo.png" 
                   alt="Logo Rutan" 
-                  width="50" 
-                  height="50" 
-                  style={{ objectFit: 'contain', flexShrink: 0 }} 
+                  style={{ 
+                    width: 'auto', 
+                    height: '50px', 
+                    aspectRatio: 'auto',
+                    objectFit: 'contain',
+                    flexShrink: 0
+                  }} 
                 />
                 <span>Rutan Sinjai<br /><small style={{ fontWeight: 'normal' }}>Kelas IIB</small></span>
               </div>
@@ -169,9 +173,12 @@ export default function RootLayout({ children }: LayoutProps) {
                     <img 
                       src="/assets/logo.png" 
                       alt="logo" 
-                      width="80" 
-                      height="80" 
-                      style={{ objectFit: 'contain' }} 
+                      style={{ 
+                        width: 'auto', 
+                        height: '80px', 
+                        aspectRatio: 'auto',
+                        objectFit: 'contain'
+                      }} 
                     />
                   </div>
                   <div className="footer-info">
