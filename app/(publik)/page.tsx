@@ -85,7 +85,7 @@ export default function LamanPublikRutan() {
   }, []);
 
   const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
-  const extendedNews = combinedNews.length >= 3 ? [...combinedNews] : [...combinedNews, ...newsDataDefault, ...newsDataDefault].slice(0, 6);
+  const extendedNews = combinedNews;
 
   const nextSlide = () => setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
@@ -113,10 +113,12 @@ export default function LamanPublikRutan() {
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (!isPaused) {
-      interval = setInterval(() => nextSlide(), 3000);
+      interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+      }, 3000);
     }
     return () => { if (interval) clearInterval(interval); };
-  }, [isPaused, currentSlide]);
+  }, [isPaused]);
 
   useEffect(() => {
     if (countPenghuni < targetPenghuni) {
@@ -192,7 +194,7 @@ export default function LamanPublikRutan() {
               <div className="icon"><i className="fa-solid fa-calendar-days"></i></div>
               <h3>Jadwal Kunjungan</h3>
               <p>Lihat jam operasional kunjungan WBP</p>
-              <a href="/JadwalKunjungan" className="btn">Lihat Jadwal</a>
+              <Link href="/JadwalKunjungan" className="btn">Lihat Jadwal</Link>
             </motion.div>
             <motion.div variants={fadeInVariant} className="card">
               <div className="icon"><i className="fa-solid fa-clipboard-list"></i></div>
@@ -204,7 +206,7 @@ export default function LamanPublikRutan() {
               <div className="icon"><i className="fa-solid fa-file-lines"></i></div>
               <h3>Syarat & Ketentuan</h3>
               <p>Prosedur dan ketentuan kunjungan</p>
-              <a href="/SyaratKetentuan" className="btn">Baca Detail</a>
+              <Link href="/SyaratKetentuan" className="btn">Baca Detail</Link>
             </motion.div>
           </div>
         </div>
@@ -241,7 +243,7 @@ export default function LamanPublikRutan() {
           <div className="news-slider-wrapper">
             <button className="slide-arrow prev" onClick={prevNews}><i className="fa-solid fa-chevron-left"></i></button>
             <div className="news-viewport">
-              <div className="news-track" style={{ transform: `translateX(-${newsIndex * (100 / (isMobile ? 1 : 3))}%)` }}>
+              <div className="news-grid-4">
                 {extendedNews.map((item, index) => (
                   <Link href={`/berita/${item.id}`} key={index} className="news-item-link">
                     <div className="news-card-v2">
@@ -252,7 +254,7 @@ export default function LamanPublikRutan() {
                         <span className="badge-berita">Berita Utama</span>
                         <h3 className="news-title-v2">{item.headline}</h3>
                         <p className="news-date-v2">
-                          By Humas Rutan Sinjai  |  {item.meta.split('|')[1]?.trim()}
+                          By Humas Rutan Sinjai  |  {item.meta.includes('|') ? item.meta.split('|')[1]?.trim() : item.meta}
                         </p>
                       </div>
                     </div>
