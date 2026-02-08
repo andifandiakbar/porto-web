@@ -22,21 +22,14 @@ interface News {
   status?: string; 
 }
 
-interface WBP {
-  id: number;
-  nama: string;
-  nik: string;
-  kasus: string;
-  status: string;
-  blok_kamar: string;
-}
-
 export default function LamanPublikRutan() {
   const router = useRouter(); 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [countPenghuni, setCountPenghuni] = useState<number>(1);
-  const [countKunjungan, setCountKunjungan] = useState<number>(1);
+  const [countPenghuni, setCountPenghuni] = useState<number>(0);
+  const [targetPenghuni, setTargetPenghuni] = useState<number>(1);
+  const [countKunjungan, setCountKunjungan] = useState<number>(0);
+  const [targetKunjungan, setTargetKunjungan] = useState<number>(110);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [newsIndex, setNewsIndex] = useState<number>(0); 
 
@@ -84,7 +77,7 @@ export default function LamanPublikRutan() {
       const { count } = await supabase
         .from('daftar_wbp')
         .select('*', { count: 'exact', head: true });
-      if (count) setCountPenghuni(count);
+      if (count) setTargetPenghuni(count);
     };
 
     fetchBeritaOnline();
@@ -92,19 +85,21 @@ export default function LamanPublikRutan() {
   }, []);
 
   const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
-  const extendedNews = combinedNews.length >= 4 ? [...combinedNews] : [...combinedNews, ...newsDataDefault, ...newsDataDefault, ...newsDataDefault].slice(0, 8);
+  const extendedNews = combinedNews.length >= 3 ? [...combinedNews] : [...combinedNews, ...newsDataDefault, ...newsDataDefault].slice(0, 6);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
 
   const nextNews = () => {
-    if (newsIndex < extendedNews.length - (isMobile ? 1 : 4)) setNewsIndex(prev => prev + 1);
+    const itemsToShow = isMobile ? 1 : 3;
+    if (newsIndex < extendedNews.length - itemsToShow) setNewsIndex(prev => prev + 1);
     else setNewsIndex(0);
   };
 
   const prevNews = () => {
+    const itemsToShow = isMobile ? 1 : 3;
     if (newsIndex > 0) setNewsIndex(prev => prev - 1);
-    else setNewsIndex(extendedNews.length - (isMobile ? 1 : 4));
+    else setNewsIndex(extendedNews.length - itemsToShow);
   };
 
   const handleSearch = () => {
@@ -124,11 +119,22 @@ export default function LamanPublikRutan() {
   }, [isPaused, currentSlide]);
 
   useEffect(() => {
-    if (countKunjungan < 110) {
-      const timer = setTimeout(() => setCountKunjungan(prev => prev + 1), 10);
+    if (countPenghuni < targetPenghuni) {
+      const timer = setTimeout(() => {
+        setCountPenghuni(prev => prev + 1);
+      }, 30);
       return () => clearTimeout(timer);
     }
-  }, [countKunjungan]);
+  }, [countPenghuni, targetPenghuni]);
+
+  useEffect(() => {
+    if (countKunjungan < targetKunjungan) {
+      const timer = setTimeout(() => {
+        setCountKunjungan(prev => prev + 1);
+      }, 15);
+      return () => clearTimeout(timer);
+    }
+  }, [countKunjungan, targetKunjungan]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -178,7 +184,7 @@ export default function LamanPublikRutan() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
+        variants={{ visible: { transition: { staggerChildren: 0 } } }}
       >
         <div className="services-wrapper">
           <div className="services-grid">
@@ -204,7 +210,13 @@ export default function LamanPublikRutan() {
         </div>
       </motion.section>
 
-      <div className="announcement-bar">
+      <motion.div 
+        className="announcement-bar"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInVariant}
+      >
         <div className="announcement-label">Berita Terkini </div>
         <div className="announcement-content" style={{ overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
           <motion.div 
@@ -216,7 +228,7 @@ export default function LamanPublikRutan() {
             Selamat Datang di Website Resmi Rutan Kelas II B Sinjai - Pantau terus jadwal kunjungan dan informasi terbaru di sini.
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       <motion.section 
         className="latest-news-section"
@@ -228,27 +240,20 @@ export default function LamanPublikRutan() {
         <div className="container">
           <div className="news-slider-wrapper">
             <button className="slide-arrow prev" onClick={prevNews}><i className="fa-solid fa-chevron-left"></i></button>
-            <div className="news-viewport" style={{ overflow: 'hidden', width: '100%' }}>
-              <div className="news-track" style={{ display: 'flex', transition: 'transform 0.5s ease', transform: `translateX(-${newsIndex * (100 / (isMobile ? 1 : 4))}%)` }}>
+            <div className="news-viewport">
+              <div className="news-track" style={{ transform: `translateX(-${newsIndex * (100 / (isMobile ? 1 : 3))}%)` }}>
                 {extendedNews.map((item, index) => (
-                  <Link href={`/berita/${item.id}`} key={index} style={{ textDecoration: 'none', minWidth: isMobile ? '100%' : '25%', padding: '0 10px' }}>
-                    <div className="news-card-v2" style={{ cursor: 'pointer' }}>
-                      <motion.div 
-                        className="news-thumb" 
-                        whileTap={{ opacity: 0.7 }}
-                        transition={{ duration: 0 }}
-                      >
-                        <img src={item.img} alt="Berita" style={{ width: '100%' }} />
-                      </motion.div>
+                  <Link href={`/berita/${item.id}`} key={index} className="news-item-link">
+                    <div className="news-card-v2">
+                      <div className="news-thumb">
+                        <img src={item.img} alt="Berita" />
+                      </div>
                       <div className="news-content-v2">
-                        <p className="news-date-v2">{item.meta.split('|')[1]?.trim()}</p>
-                        <motion.h3 
-                          className="news-title-v2"
-                          whileTap={{ color: "#0070f3" }}
-                          transition={{ duration: 0 }}
-                        >
-                          {item.headline.toLowerCase()}
-                        </motion.h3>
+                        <span className="badge-berita">Berita Utama</span>
+                        <h3 className="news-title-v2">{item.headline}</h3>
+                        <p className="news-date-v2">
+                          By Humas Rutan Sinjai  |  {item.meta.split('|')[1]?.trim()}
+                        </p>
                       </div>
                     </div>
                   </Link>
@@ -278,7 +283,7 @@ export default function LamanPublikRutan() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={{ visible: { transition: { staggerChildren: 0.3 } } }}
+            variants={{ visible: { transition: { staggerChildren: 0 } } }}
           >
             <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
               <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
@@ -298,14 +303,12 @@ export default function LamanPublikRutan() {
             viewport={{ once: true, amount: 0.3 }}
             variants={fadeInVariant}
           >
-            <motion.div 
+            <div 
               className="search-header-btn" 
-              style={{ backgroundColor: '#093661', color: 'white', padding: '18px', borderRadius: '8px', fontSize: isMobile ? '18px' : '24px', fontWeight: '600', marginBottom: '25px', width: '100%', textAlign: 'center', boxSizing: 'border-box', cursor: 'pointer' }}
-              whileTap={{ backgroundColor: '#0d4a85' }}
-              transition={{ duration: 0 }}
+              style={{ backgroundColor: '#093661', color: 'white', padding: '18px', borderRadius: '8px', fontSize: isMobile ? '18px' : '24px', fontWeight: '600', marginBottom: '25px', width: '100%', textAlign: 'center', boxSizing: 'border-box' }}
             >
               Silahkan Cari Nama WBP yang akan dikunjungi
-            </motion.div>
+            </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
               <input 
                 type="text" 
@@ -319,8 +322,9 @@ export default function LamanPublikRutan() {
                 <motion.button 
                   type="button" 
                   style={{ backgroundColor: '#093661', color: 'white', border: 'none', padding: '10px 60px', fontSize: '18px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', outline: 'none', boxShadow: '0 4px 6px rgba(9, 54, 97, 0.2)' }}
-                  whileTap={{ backgroundColor: '#0d4a85' }}
-                  transition={{ duration: 0 }}
+                  whileHover={{ backgroundColor: '#f1c407', color: '#093661' }}
+                  whileTap={{ backgroundColor: '#d4ac0d' }}
+                  transition={{ duration: 0.2 }}
                   onClick={handleSearch} 
                 >
                   Cari

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
+import { motion, Variants } from 'framer-motion';
 
 const supabase = createClient(
   'https://xnwqcxaehvaqxzodqidc.supabase.co', 
@@ -82,6 +83,11 @@ export default function DetailBerita() {
     setBeritaDisplay(hasilCari);
   };
 
+  const fadeInVariant: Variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
+
   if (loading) return (
     <div style={{ backgroundColor: '#f9fbff', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div className="loader"></div>
@@ -133,7 +139,13 @@ export default function DetailBerita() {
       `}} />
 
       <div className="container-utama">
-        <div className="area-berita">
+        <motion.div 
+          className="area-berita"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInVariant}
+        >
           <img 
             src={berita.img || '/assets/berita1.png'} 
             style={{ width: '100%', maxHeight: '500px', borderRadius: '12px', marginBottom: '25px', objectFit: 'cover' }} 
@@ -167,9 +179,15 @@ export default function DetailBerita() {
               <button className="btn-submit">Kirim</button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="sidebar">
+        <motion.div 
+          className="sidebar"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInVariant}
+        >
           <div className="sidebar-box">
             <div className="sidebar-title">Search</div>
             <div style={{ position: 'relative', marginBottom: '30px', marginTop: '15px' }}>
@@ -211,7 +229,7 @@ export default function DetailBerita() {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

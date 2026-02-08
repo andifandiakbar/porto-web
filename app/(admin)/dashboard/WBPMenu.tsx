@@ -1,117 +1,137 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWBP, handleDelete }: any) {
+export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWBP, handleDelete, handleUpdate }: any) {
   const [isHover, setIsHover] = useState(false);
+  const [viewFilter, setViewFilter] = useState('Narapidana');
+  const [editId, setEditId] = useState<number | null>(null);
+  const [tempData, setTempData] = useState<any>({});
+
+  useEffect(() => {
+    if (wbpForm.status_wbp) {
+      setViewFilter(wbpForm.status_wbp);
+    }
+  }, [wbpForm.status_wbp]);
+
+  const filteredData = daftarWBP.filter((item: any) => {
+    if (viewFilter === 'Narapidana') return !item.status_wbp || item.status_wbp === 'Narapidana';
+    return item.status_wbp === 'Tahanan';
+  });
+
+  const startEdit = (item: any) => {
+    setEditId(item.id);
+    setTempData({ ...item });
+  };
+
+  const saveEdit = async () => {
+    await handleUpdate(tempData);
+    setEditId(null);
+  };
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
+    <div style={containerStyle}>
       <div style={{ marginBottom: '30px' }}>
-        <h3 style={{ color: '#093661', fontSize: '20px', fontWeight: '700', margin: '0 0 10px 0', fontFamily: 'inherit' }}>
-          👥 Data Narapidana (WBP)
-        </h3>
-        <p style={{ color: '#718096', fontSize: '14px', margin: 0, fontFamily: 'inherit' }}>
-          Input dan kelola data warga binaan pemasyarakatan secara terpusat.
-        </p>
+        <h3 style={headerTitleStyle}>👥 Manajemen Data WBP</h3>
+        <p style={headerSubStyle}>Sistem administrasi data narapidana dan tahanan.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '25px' }}>
-        <FormInput 
-          label="Nama Lengkap" 
-          placeholder="Nama sesuai KTP" 
-          value={wbpForm.nama} 
-          onChange={(e: any) => setWbpForm({...wbpForm, nama: e.target.value})} 
-        />
-        <FormInput 
-          label="NIK" 
-          placeholder="16 digit NIK" 
-          value={wbpForm.nik} 
-          onChange={(e: any) => setWbpForm({...wbpForm, nik: e.target.value})} 
-        />
-        <FormInput 
-          label="Kasus" 
-          placeholder="Contoh: Narkotika" 
-          value={wbpForm.kasus} 
-          onChange={(e: any) => setWbpForm({...wbpForm, kasus: e.target.value})} 
-        />
-        <FormInput 
-          label="Lama Pidana" 
-          placeholder="Contoh: 5 Tahun" 
-          value={wbpForm.lama_pidana} 
-          onChange={(e: any) => setWbpForm({...wbpForm, lama_pidana: e.target.value})} 
-        />
-        <FormInput 
-          label="Ekspirasi" 
-          type="date" 
-          value={wbpForm.ekspirasi} 
-          onChange={(e: any) => setWbpForm({...wbpForm, ekspirasi: e.target.value})} 
-        />
-        <FormInput 
-          label="Blok / Kamar" 
-          placeholder="Contoh: A-04" 
-          value={wbpForm.blok_kamar} 
-          onChange={(e: any) => setWbpForm({...wbpForm, blok_kamar: e.target.value})} 
-        />
+      <div style={formContainerStyle}>
+        <div style={{ gridColumn: 'span 2' }}>
+          <label style={labelStyle}>Kategori WBP</label>
+          <select 
+            style={selectStyle}
+            value={wbpForm.status_wbp || 'Narapidana'} 
+            onChange={(e) => setWbpForm({...wbpForm, status_wbp: e.target.value})}
+          >
+            <option value="Narapidana">Narapidana</option>
+            <option value="Tahanan">Tahanan</option>
+          </select>
+        </div>
+
+        <FormInput label="Nama Lengkap" placeholder="Nama WBP" value={wbpForm.nama} onChange={(e: any) => setWbpForm({...wbpForm, nama: e.target.value})} />
+        <FormInput label="No. REG" placeholder="Contoh: AIV.38/2025" value={wbpForm.nik} onChange={(e: any) => setWbpForm({...wbpForm, nik: e.target.value})} />
+        <FormInput label="Perkara" placeholder="Contoh: UU No. 35 Tahun 2009" value={wbpForm.kasus} onChange={(e: any) => setWbpForm({...wbpForm, kasus: e.target.value})} />
+        <FormInput label="Putusan" placeholder="... THN ... BLN ... HR" value={wbpForm.lama_pidana} onChange={(e: any) => setWbpForm({...wbpForm, lama_pidana: e.target.value})} />
+        <FormInput label="Ekspirasi" type="date" value={wbpForm.ekspirasi} onChange={(e: any) => setWbpForm({...wbpForm, ekspirasi: e.target.value})} />
         
         <button 
           onClick={handleSimpanWBP} 
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
-          style={{ 
-            ...submitBtnBase, 
-            gridColumn: 'span 2',
-            backgroundColor: isHover ? '#0d4a85' : '#093661'
-          }}
+          style={{ ...submitButtonStyle, backgroundColor: isHover ? '#0d4a85' : '#093661' }}
         >
-          Simpan Data Narapidana
+          Simpan Data {wbpForm.status_wbp || 'Narapidana'}
         </button>
       </div>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '40px 0 30px 0' }} />
+      <div style={dividerStyle} />
 
-      <h4 style={{ color: '#2D3748', fontSize: '16px', fontWeight: '600', marginBottom: '15px', fontFamily: 'inherit' }}>
-        Riwayat Data Terdaftar
-      </h4>
-      <div style={{ overflowX: 'auto', border: '1px solid #E2E8F0', borderRadius: '12px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white' }}>
+      <div style={tableHeaderActionStyle}>
+        <h4 style={tableTitleStyle}>Daftar Terdaftar: <span style={{color: '#093661'}}>{viewFilter}</span></h4>
+        <select style={filterSelectStyle} value={viewFilter} onChange={(e) => setViewFilter(e.target.value)}>
+          <option value="Narapidana">Filter: Narapidana</option>
+          <option value="Tahanan">Filter: Tahanan</option>
+        </select>
+      </div>
+
+      <div style={tableWrapperStyle}>
+        <table style={tableStyle}>
           <thead>
             <tr style={{ backgroundColor: '#F8FAFC' }}>
-              <th style={thStyle}>Nama</th>
-              <th style={thStyle}>Kasus</th>
-              <th style={thStyle}>Lama Pidana</th>
-              <th style={thStyle}>Blok</th>
+              <th style={thStyle}>Biodata</th>
+              <th style={thStyle}>Perkara</th>
+              <th style={thStyle}>Putusan</th>
+              <th style={thStyle}>Ekspirasi</th>
               <th style={{ ...thStyle, textAlign: 'center' }}>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {daftarWBP.length > 0 ? (
-              daftarWBP.map((item: any) => (
-                <tr key={item.id} style={{ borderBottom: '1px solid #EDF2F7' }}>
-                  <td style={{ ...tdStyle, fontWeight: '600', color: '#2D3748' }}>{item.nama}</td>
-                  <td style={tdStyle}>{item.kasus}</td>
-                  <td style={tdStyle}>{item.lama_pidana}</td>
-                  <td style={tdStyle}>
-                    <span style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', backgroundColor: '#EBF8FF', color: '#2B6CB0' }}>
-                      {item.blok_kamar}
-                    </span>
-                  </td>
-                  <td style={{ ...tdStyle, textAlign: 'center' }}>
-                    <button 
-                      onClick={() => handleDelete(item.id, 'daftar_wbp')} 
-                      style={deleteBtnStyle}
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: '#A0AEC0', fontSize: '14px', fontFamily: 'inherit' }}>
-                  Belum ada data narapidana terdaftar.
+            {filteredData.map((item: any) => (
+              <tr key={item.id} style={trStyle}>
+                <td style={tdStyle}>
+                  {editId === item.id ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <input style={editInputStyle} value={tempData.nama} onChange={(e) => setTempData({...tempData, nama: e.target.value})} />
+                        <input style={editInputStyle} value={tempData.nik} onChange={(e) => setTempData({...tempData, nik: e.target.value})} />
+                    </div>
+                  ) : (
+                    <div>
+                      <div style={{ fontWeight: '700', color: '#2D3748' }}>{item.nama}</div>
+                      <div style={{ fontSize: '11px', color: '#093661', fontWeight: 'bold' }}>{item.nik}</div>
+                    </div>
+                  )}
+                </td>
+                <td style={tdStyle}>
+                  {editId === item.id ? (
+                    <input style={editInputStyle} value={tempData.kasus} onChange={(e) => setTempData({...tempData, kasus: e.target.value})} />
+                  ) : (
+                    <div style={{ fontSize: '13px' }}>{item.kasus}</div>
+                  )}
+                </td>
+                <td style={tdStyle}>
+                  {editId === item.id ? (
+                    <input style={editInputStyle} value={tempData.lama_pidana} onChange={(e) => setTempData({...tempData, lama_pidana: e.target.value})} />
+                  ) : (
+                    <div style={{ fontSize: '13px', fontWeight: '500' }}>{item.lama_pidana}</div>
+                  )}
+                </td>
+                <td style={tdStyle}>
+                  {editId === item.id ? (
+                    <input type="date" style={editInputStyle} value={tempData.ekspirasi} onChange={(e) => setTempData({...tempData, ekspirasi: e.target.value})} />
+                  ) : (
+                    <span style={badgeStyle}>{item.ekspirasi || '-'}</span>
+                  )}
+                </td>
+                <td style={{ ...tdStyle, textAlign: 'center' }}>
+                  {editId === item.id ? (
+                    <button onClick={saveEdit} style={btnSaveInline}>Simpan</button>
+                  ) : (
+                    <button onClick={() => startEdit(item)} style={btnEditInline}>Edit</button>
+                  )}
+                  <button onClick={() => handleDelete(item.id, 'daftar_wbp')} style={btnDeleteInline}>Hapus</button>
                 </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
@@ -119,18 +139,34 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
   );
 }
 
-function FormInput({ label, value, ...props }: any) {
+function FormInput({ label, ...props }: any) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <label style={labelStyle}>{label}</label>
-      <input style={inputStyle} value={value ?? ''} {...props} />
+      <input style={inputStyle} {...props} />
     </div>
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#4A5568', fontFamily: 'inherit' };
-const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '14px', boxSizing: 'border-box' as 'border-box', fontFamily: 'inherit' };
-const submitBtnBase: any = { padding: '14px', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px', transition: '0.2s', fontFamily: 'inherit' };
-const thStyle = { padding: '15px', textAlign: 'left' as 'left', fontSize: '12px', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '0.5px', fontFamily: 'inherit' };
-const tdStyle = { padding: '15px', fontSize: '14px', color: '#4A5568', fontFamily: 'inherit' };
-const deleteBtnStyle = { color: '#E53E3E', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '13px', fontFamily: 'inherit' };
+const containerStyle = { padding: '30px', backgroundColor: '#FFFFFF', borderRadius: '20px' };
+const headerTitleStyle = { color: '#093661', fontSize: '22px', fontWeight: '800', margin: '0 0 5px 0' };
+const headerSubStyle = { color: '#718096', fontSize: '14px', margin: 0 };
+const formContainerStyle = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', padding: '25px', backgroundColor: '#F8FAFC', borderRadius: '15px', marginTop: '20px' };
+const labelStyle = { display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '700', color: '#4A5568' };
+const inputStyle = { padding: '12px 15px', borderRadius: '10px', border: '1px solid #E2E8F0', fontSize: '14px', outline: 'none' };
+const selectStyle = { ...inputStyle, width: '100%', cursor: 'pointer' };
+const submitButtonStyle: any = { gridColumn: 'span 2', padding: '14px', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', fontSize: '15px', transition: '0.3s', marginTop: '10px' };
+const dividerStyle = { height: '1px', backgroundColor: '#EDF2F7', margin: '40px 0' };
+const tableHeaderActionStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' };
+const tableTitleStyle = { fontSize: '17px', fontWeight: '700', color: '#4A5568', margin: 0 };
+const filterSelectStyle = { padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '13px' };
+const tableWrapperStyle = { border: '1px solid #E2E8F0', borderRadius: '12px', overflow: 'hidden' };
+const tableStyle = { width: '100%', borderCollapse: 'collapse' as 'collapse' };
+const thStyle = { padding: '15px 20px', textAlign: 'left' as 'left', fontSize: '12px', fontWeight: '700', color: '#718096', textTransform: 'uppercase' as 'uppercase' };
+const tdStyle = { padding: '16px 20px', fontSize: '14px' };
+const trStyle = { borderBottom: '1px solid #F1F5F9' };
+const editInputStyle = { width: '100%', padding: '6px 10px', borderRadius: '6px', border: '1px solid #4680FF' };
+const badgeStyle = { padding: '4px 8px', borderRadius: '6px', backgroundColor: '#FFF5F5', color: '#C53030', fontSize: '12px', fontWeight: '700' };
+const btnEditInline = { color: '#3182CE', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '600', marginRight: '15px' };
+const btnSaveInline = { color: '#38A169', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '700', marginRight: '15px' };
+const btnDeleteInline = { color: '#E53E3E', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '600' };

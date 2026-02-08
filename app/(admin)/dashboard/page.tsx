@@ -10,20 +10,8 @@ import FotoMenu from './FotoMenu';
 import VideoMenu from './VideoMenu';
 import ProdukMenu from './ProdukMenu'; 
 
-interface NavItemProps {
-  active: boolean;
-  onClick: () => void;
-  icon: string;
-  label: string;
-}
-
-interface StatCardProps {
-  label: string;
-  value: string;
-  sub: string;
-  color: string;
-  isMobile: boolean;
-}
+interface NavItemProps { active: boolean; onClick: () => void; icon: string; label: string; }
+interface StatCardProps { label: string; value: string; sub: string; color: string; isMobile: boolean; }
 
 export default function RutanSinjaiDashboard() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
@@ -36,7 +24,11 @@ export default function RutanSinjaiDashboard() {
   const [kategoriBerita, setKategoriBerita] = useState('Informasi'); 
   const [fileGambar, setFileGambar] = useState<File | null>(null);
   const [pengaduanForm, setPengaduanForm] = useState({ pelapor: '', kontak: '', isi: '' });
-  const [wbpForm, setWbpForm] = useState({ nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '' });
+  
+  const [wbpForm, setWbpForm] = useState({ 
+    nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana' 
+  });
+
   const [daftarPengaduan, setDaftarPengaduan] = useState<any[]>([]);
   const [daftarBerita, setDaftarBerita] = useState<any[]>([]);
   const [daftarWBP, setDaftarWBP] = useState<any[]>([]);
@@ -102,26 +94,67 @@ export default function RutanSinjaiDashboard() {
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `berita/${fileName}`;
       const { error: uploadError } = await supabase.storage.from('images').upload(filePath, fileGambar);
-      if (uploadError) { alert("Gagal upload gambar, pastikan bucket 'images' sudah publik"); return; }
+      if (uploadError) { alert("Gagal upload gambar"); return; }
       const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
       publicUrl = urlData.publicUrl;
     }
     const { error } = await supabase.from('daftar_berita').insert([{ judul: judulBerita, isi: isiBerita, konten: isiBerita, tanggal: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }), status: kategoriBerita, img: publicUrl }]);
-    if (!error) { alert("Berita sudah Online!"); setJudulBerita(''); setIsiBerita(''); setKategoriBerita('Informasi'); setFileGambar(null); fetchBerita(); }
+    if (!error) { alert("Berita Online!"); setJudulBerita(''); setIsiBerita(''); setKategoriBerita('Informasi'); setFileGambar(null); fetchBerita(); }
   };
 
   const handleSimpanWBP = async () => {
-    const { error } = await supabase.from('daftar_wbp').insert([{ nama: wbpForm.nama, nik: wbpForm.nik, kasus: wbpForm.kasus, lama_pidana: wbpForm.lama_pidana, ekspirasi: wbpForm.ekspirasi, blok_kamar: wbpForm.blok_kamar }]);
-    if (!error) { alert("Data WBP Berhasil Disimpan ke Cloud!"); setWbpForm({ nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '' }); fetchWBP(); }
+    if(!wbpForm.nama) { alert("Nama wajib diisi"); return; }
+    const payload = { 
+        nama: wbpForm.nama, 
+        nik: wbpForm.nik, 
+        kasus: wbpForm.kasus, 
+        lama_pidana: wbpForm.lama_pidana, 
+        ekspirasi: wbpForm.ekspirasi || null, 
+        blok_kamar: wbpForm.blok_kamar,
+        status_wbp: wbpForm.status_wbp 
+    };
+    const { error } = await supabase.from('daftar_wbp').insert([payload]);
+    if (!error) { 
+      alert(`Berhasil menyimpan data ${wbpForm.status_wbp}`); 
+      setWbpForm({ 
+        nama: '', nik: '', kasus: '', lama_pidana: '', 
+        ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana' 
+      }); 
+      fetchWBP(); 
+    } else {
+      alert("Error: " + error.message);
+    }
+  };
+
+  const handleUpdateWBP = async (data: any) => {
+    const { error } = await supabase
+      .from('daftar_wbp')
+      .update({
+        nama: data.nama,
+        nik: data.nik,
+        kasus: data.kasus,
+        lama_pidana: data.lama_pidana,
+        ekspirasi: data.ekspirasi,
+        blok_kamar: data.blok_kamar,
+        status_wbp: data.status_wbp
+      })
+      .eq('id', data.id);
+
+    if (!error) {
+      alert("Data berhasil diperbarui!");
+      fetchWBP();
+    } else {
+      alert("Gagal memperbarui: " + error.message);
+    }
   };
 
   const handleSimpanPengaduan = async () => {
     const { error } = await supabase.from('daftar_pengaduan').insert([{ pelapor: pengaduanForm.pelapor, kontak: pengaduanForm.kontak, isi: pengaduanForm.isi, status: 'Pending' }]);
-    if (!error) { alert("Pengaduan Berhasil Disimpan!"); setPengaduanForm({ pelapor: '', kontak: '', isi: '' }); fetchPengaduan(); }
+    if (!error) { alert("Pengaduan Disimpan!"); setPengaduanForm({ pelapor: '', kontak: '', isi: '' }); fetchPengaduan(); }
   };
 
   const handleDelete = async (id: number, table: string) => {
-    if (confirm("Hapus data ini secara permanen?")) {
+    if (confirm("Hapus data ini?")) {
       const { error } = await supabase.from(table).delete().eq('id', id);
       if (!error) {
         if (table === 'daftar_berita') fetchBerita();
@@ -147,34 +180,12 @@ export default function RutanSinjaiDashboard() {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      height: '100vh', 
-      width: '100vw', 
-      backgroundColor: '#F4F7FE', 
-      overflow: 'hidden', 
-      fontFamily: "'Inter', sans-serif",
-      position: 'fixed', 
-      top: 0,
-      left: 0
-    }}>
+    <div style={{ display: 'flex', height: '100vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: "'Inter', sans-serif", position: 'fixed', top: 0, left: 0 }}>
       {isMobile && isSidebarVisible && (
         <div onClick={() => setIsSidebarVisible(false)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 999 }}></div>
       )}
 
-      <aside style={{ 
-        width: isSidebarVisible ? '210px' : '0px', 
-        backgroundColor: '#FFFFFF', 
-        borderRight: isSidebarVisible ? '1px solid #EBEBEB' : 'none', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        zIndex: 1000, 
-        transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)', 
-        overflow: 'hidden', 
-        flexShrink: 0,
-        position: isMobile ? 'fixed' : 'relative',
-        height: '100vh'
-      }}>
+      <aside style={{ width: isSidebarVisible ? '210px' : '0px', backgroundColor: '#FFFFFF', borderRight: isSidebarVisible ? '1px solid #EBEBEB' : 'none', display: 'flex', flexDirection: 'column', zIndex: 1000, transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden', flexShrink: 0, position: isMobile ? 'fixed' : 'relative', height: '100vh' }}>
         <div style={{ width: '210px', height: '100%', display: 'flex', flexDirection: 'column' }}>
           <div style={{ padding: '27px 27px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
             <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
@@ -186,7 +197,7 @@ export default function RutanSinjaiDashboard() {
           <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
             <NavItem active={activeMenu === 'dashboard'} onClick={() => { setActiveMenu('dashboard'); if(isMobile) setIsSidebarVisible(false); }} icon="📊" label="Dashboard" />
             <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="📩" label="Pengaduan" />
-            <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="👥" label="Data Narapidana" />
+            <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="👥" label="Data WBP" />
             <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="📰" label="Update Berita" />
             <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="🎨" label="Karya WBP" />
             <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="📸" label="Galeri Foto" />
@@ -206,7 +217,7 @@ export default function RutanSinjaiDashboard() {
         <header style={{ ...topHeaderStyle, height: isMobile ? '60px' : '75px', padding: isMobile ? '0 15px' : '0 30px', flexShrink: 0 }}>
           <span onClick={() => setIsSidebarVisible(!isSidebarVisible)} style={{ cursor: 'pointer', fontSize: '22px', color: '#093661' }}>☰</span>
           <div style={{ fontSize: isMobile ? '12px' : '14px', color: '#666', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {isMobile ? 'Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai' : 'Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai'}
+            Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai
           </div>
         </header>
 
@@ -219,22 +230,17 @@ export default function RutanSinjaiDashboard() {
             <div style={glassCircle1}></div><div style={glassCircle2}></div>
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', 
-            gap: isMobile ? '10px' : '20px', 
-            marginBottom: '30px' 
-          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? '10px' : '20px', marginBottom: '30px' }}>
             <StatCard isMobile={isMobile} label="TOTAL PENGHUNI" value={daftarWBP.length.toString()} sub="Orang" color="#4680FF" />
             <StatCard isMobile={isMobile} label="PENGUNJUNG" value="110" sub="Bulan Ini" color="#FFB811" />
             <StatCard isMobile={isMobile} label="PRODUK KARYA" value={daftarKarya.length.toString()} sub="Unit" color="#2ECC71" />
             <StatCard isMobile={isMobile} label="BERITA" value={daftarBerita.length.toString()} sub="Total" color="#E74C3C" />
           </div>
 
-          <div style={{ ...contentCard, padding: isMobile ? '10px' : '0' }}>
+          <div style={contentCard}>
             {activeMenu === 'dashboard' && <DashboardHome setActiveMenu={setActiveMenu} daftarWBP={daftarWBP} daftarPengaduan={daftarPengaduan} daftarBerita={daftarBerita} />}
             {activeMenu === 'pengaduan' && <PengaduanMenu pengaduanForm={pengaduanForm} setPengaduanForm={setPengaduanForm} handleSimpanPengaduan={handleSimpanPengaduan} daftarPengaduan={daftarPengaduan} toggleStatusPengaduan={toggleStatusPengaduan} handleDelete={handleDelete} />}
-            {activeMenu === 'wbp' && <WBPMenu wbpForm={wbpForm} setWbpForm={setWbpForm} handleSimpanWBP={handleSimpanWBP} daftarWBP={daftarWBP} handleDelete={handleDelete} />}
+            {activeMenu === 'wbp' && <WBPMenu wbpForm={wbpForm} setWbpForm={setWbpForm} handleSimpanWBP={handleSimpanWBP} daftarWBP={daftarWBP} handleDelete={handleDelete} handleUpdate={handleUpdateWBP} />}
             {activeMenu === 'berita' && <BeritaMenu judulBerita={judulBerita} setJudulBerita={setJudulBerita} kategoriBerita={kategoriBerita} setKategoriBerita={setKategoriBerita} setFileGambar={setFileGambar} isiBerita={isiBerita} setIsiBerita={setIsiBerita} handlePublikasiBerita={handlePublikasiBerita} daftarBerita={daftarBerita} toggleStatusBerita={toggleStatusBerita} handleDelete={handleDelete} />}
             {activeMenu === 'foto' && <FotoMenu daftarFoto={daftarFoto} fetchFoto={fetchFoto} handleDelete={handleDelete} />}
             {activeMenu === 'video' && <VideoMenu daftarVideo={daftarVideo} fetchVideo={fetchVideo} handleDelete={handleDelete} />}
