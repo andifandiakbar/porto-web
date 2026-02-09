@@ -180,11 +180,14 @@ body {
   display: flex;
   width: 100%;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .slide {
   min-width: 100%;
+  width: 100%;
   position: relative;
+  flex-shrink: 0;
 }
 
 .slide img {
@@ -200,11 +203,11 @@ body {
   z-index: 10;
   background: transparent;
   border: none;
-  width: 10px;
-  height: 10px;
+  width: 40px;
+  height: 40px;
   color: rgba(255, 255, 255, 0.637);
   cursor: pointer;
-  transition: 0.1s ease;
+  transition: 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,7 +216,7 @@ body {
 }
 
 .nav-arrow:hover {
-  color: #e6b800;
+  color: #f1c40f;
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -268,6 +271,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.096);
   border: 1px solid #f0f0f0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .icon {
@@ -318,15 +322,15 @@ body {
 }
 
 .announcement-bar {
-  width: 65%;
-  max-width: 1300px;
-  margin: 15px auto 0;
+  width: 100%;
+  max-width: 1088px;
+  margin: 15px auto 0px;
   background-color: #e9f0f8;
   display: flex;
   align-items: center;
-  border-radius: 0px;
   overflow: hidden;
-  height: 30px;
+  height: 35px;
+  transition: opacity 0.8s ease;
 }
 
 .announcement-label {
@@ -355,30 +359,31 @@ body {
 }
 
 .latest-news-section {
-  padding: 60px 0;
+  padding: 40px 0 60px 0;
   background-color: #ffffff;
 }
 
 .news-slider-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  max-width: 1300px;
+  position: relative;
+  width: 85%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .news-viewport {
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
 }
 
 .news-track {
   display: flex;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .news-item-link {
   min-width: 33.333%; 
+  flex-shrink: 0;
   padding: 0 10px;
   text-decoration: none;
   display: block;
@@ -459,30 +464,40 @@ body {
 }
 
 .slide-arrow {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: white;
-  border: 1px solid #ddd;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 20px;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  z-index: 10;
-  flex-shrink: 0;
+  z-index: 1000;
+  color: #f1c40f;
+  font-size: 30px;
+}
+
+.slide-arrow:first-of-type {
+  left: -10px;
+}
+
+.slide-arrow:last-of-type {
+  right: -10px;
 }
 
 .slide-arrow:hover {
-  background: #0b2d57;
-  color: white;
+  color: #063166;
+  transform: translateY(-50%) scale(1.2);
 }
 
 .wbp-info-section {
   padding: 30px 0;
   background-color: #ffffff;
   text-align: center;
+  margin-top: -30px;
 }
 
 .container-wbp {
@@ -508,7 +523,7 @@ body {
 .wbp-stats-grid {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 25px;
   margin-bottom: 45px;
 }
 
@@ -519,10 +534,11 @@ body {
   border-radius: 15px;
   width: 220px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: transform 0.6s ease;
 }
 
 .stat-number {
-  font-size: 60px;
+  font-size: 70px;
   font-weight: 700;
   color: #f1c40f;
   line-height: 1;
@@ -530,7 +546,7 @@ body {
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 550;
   letter-spacing: 1px;
 }

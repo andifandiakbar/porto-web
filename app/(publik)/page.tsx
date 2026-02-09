@@ -27,7 +27,7 @@ export default function LamanPublikRutan() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [countPenghuni, setCountPenghuni] = useState<number>(0);
-  const [targetPenghuni, setTargetPenghuni] = useState<number>(1);
+  const [targetPenghuni, setTargetPenghuni] = useState<number>(0);
   const [countKunjungan, setCountKunjungan] = useState<number>(0);
   const [targetKunjungan, setTargetKunjungan] = useState<number>(110);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -87,19 +87,30 @@ export default function LamanPublikRutan() {
   const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
   const extendedNews = combinedNews;
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
-  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
+  const nextSlide = () => {
+    setIsPaused(true);
+    setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+    setTimeout(() => setIsPaused(false), 5000);
+  };
+
+  const prevSlide = () => {
+    setIsPaused(true);
+    setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
+    setTimeout(() => setIsPaused(false), 5000);
+  };
 
   const nextNews = () => {
     const itemsToShow = isMobile ? 1 : 3;
-    if (newsIndex < extendedNews.length - itemsToShow) setNewsIndex(prev => prev + 1);
+    const maxIndex = Math.max(0, extendedNews.length - itemsToShow);
+    if (newsIndex < maxIndex) setNewsIndex(prev => prev + 1);
     else setNewsIndex(0);
   };
 
   const prevNews = () => {
     const itemsToShow = isMobile ? 1 : 3;
+    const maxIndex = Math.max(0, extendedNews.length - itemsToShow);
     if (newsIndex > 0) setNewsIndex(prev => prev - 1);
-    else setNewsIndex(extendedNews.length - itemsToShow);
+    else setNewsIndex(maxIndex);
   };
 
   const handleSearch = () => {
@@ -115,10 +126,10 @@ export default function LamanPublikRutan() {
     if (!isPaused) {
       interval = setInterval(() => {
         setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
-      }, 3000);
+      }, 5000);
     }
     return () => { if (interval) clearInterval(interval); };
-  }, [isPaused]);
+  }, [isPaused, banners.length]);
 
   useEffect(() => {
     if (countPenghuni < targetPenghuni) {
@@ -155,13 +166,13 @@ export default function LamanPublikRutan() {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
       <section className="slider-container" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-        <button className="nav-arrow arrow-left" onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
+        <button className="nav-arrow arrow-left" style={{ zIndex: 20, cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
         </button>
-        <div className="slider-wrapper" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+        <div className="slider-wrapper" style={{ display: 'flex', transform: `translateX(-${currentSlide * 100}%)`, transition: 'transform 0.6s ease-in-out' }}>
           {banners.map((item, i) => (
-            <div key={i} className="slide">
-              <img src={item.img} alt={`Banner ${i + 1}`} />
+            <div key={i} className="slide" style={{ minWidth: '100%', flexShrink: 0 }}>
+              <img src={item.img} alt={`Banner ${i + 1}`} style={{ width: '100%' }} />
               {item.showText && (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -176,7 +187,7 @@ export default function LamanPublikRutan() {
             </div>
           ))}
         </div>
-        <button className="nav-arrow arrow-right" onClick={(e) => { e.stopPropagation(); nextSlide(); }}>
+        <button className="nav-arrow arrow-right" style={{ zIndex: 20, cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); nextSlide(); }}>
           <i className="fa-solid fa-chevron-right"></i>
         </button>
       </section>
@@ -240,15 +251,30 @@ export default function LamanPublikRutan() {
         variants={fadeInVariant}
       >
         <div className="container">
-          <div className="news-slider-wrapper">
-            <button className="slide-arrow prev" onClick={prevNews}><i className="fa-solid fa-chevron-left"></i></button>
-            <div className="news-viewport">
-              <div className="news-grid-4">
+          <div className="news-slider-wrapper" style={{ position: 'relative' }}>
+            <button className="slide-arrow prev" onClick={prevNews} style={{ zIndex: 10 }}><i className="fa-solid fa-chevron-left"></i></button>
+            <div className="news-viewport" style={{ overflow: 'hidden', width: '100%' }}>
+              <div className="news-track" style={{ 
+                display: 'flex', 
+                transition: 'transform 0.5s ease-in-out', 
+                transform: `translateX(-${newsIndex * (isMobile ? 100 : 33.333)}%)` 
+              }}>
                 {extendedNews.map((item, index) => (
-                  <Link href={`/berita/${item.id}`} key={index} className="news-item-link">
+                  <Link 
+                    href={`/berita/${item.id}`} 
+                    key={index} 
+                    className="news-item-link" 
+                    style={{ 
+                      flexGrow: 0,
+                      flexShrink: 0,
+                      flexBasis: isMobile ? '100%' : '33.333%', 
+                      padding: '0 10px', 
+                      boxSizing: 'border-box' 
+                    }}
+                  >
                     <div className="news-card-v2">
                       <div className="news-thumb">
-                        <img src={item.img} alt="Berita" />
+                        <img src={item.img} alt="Berita" style={{ width: '100%', display: 'block' }} />
                       </div>
                       <div className="news-content-v2">
                         <span className="badge-berita">Berita Utama</span>
@@ -262,13 +288,13 @@ export default function LamanPublikRutan() {
                 ))}
               </div>
             </div>
-            <button className="slide-arrow next" onClick={nextNews}><i className="fa-solid fa-chevron-right"></i></button>
+            <button className="slide-arrow next" onClick={nextNews} style={{ zIndex: 10 }}><i className="fa-solid fa-chevron-right"></i></button>
           </div>
         </div>
       </motion.section>
 
       <section className="wbp-info-section" style={{ width: '100%', padding: isMobile ? '20px 0 40px 0' : '40px 0' }}>
-        <div className="container-wbp" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px', marginTop: isMobile ? '-10px' : '0' }}>
+        <div className="container-wbp" style={{ maxWidth: '1150px', margin: '0 auto', padding: '0 20px', marginTop: isMobile ? '-10px' : '0' }}>
           <motion.div 
             className="wbp-header-text"
             initial="hidden"
@@ -289,11 +315,11 @@ export default function LamanPublikRutan() {
           >
             <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
               <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
-              <div className="stat-label" style={{ color: '#fff' }}>TOTAL PENGHUNI SAAT INI</div>
+              <div className="stat-label" style={{ color: '#fff' }}>Penghuni Saat Ini</div>
             </motion.div>
             <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
               <div className="stat-number" style={{ color: '#ffc107' }}>{countKunjungan}</div>
-              <div className="stat-label" style={{ color: '#fff' }}>KUNJUNGAN BULAN INI</div>
+              <div className="stat-label" style={{ color: '#fff' }}>Kunjungan Bulan Ini</div>
             </motion.div>
           </motion.div>
           
