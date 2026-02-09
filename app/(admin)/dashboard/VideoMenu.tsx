@@ -64,19 +64,20 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
   };
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
-      <div style={{ marginBottom: '30px' }}>
-        <h3 style={{ color: '#093661', fontSize: '20px', fontWeight: '700', margin: '0 0 10px 0', fontFamily: 'inherit' }}>🎥 Galeri Video</h3>
-        <p style={{ color: '#718096', fontSize: '14px', margin: 0, fontFamily: 'inherit' }}>Kelola konten video YouTube atau unggah file video manual.</p>
+    <div style={{ padding: '40px', backgroundColor: '#FFFFFF', borderRadius: '20px', fontFamily: "'Inter', sans-serif" }}>
+      
+      <div style={{ marginBottom: '35px' }}>
+        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>Galeri Video</h3>
+        <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>Kelola konten video YouTube atau unggah file video manual.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', padding: '30px', backgroundColor: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0' }}>
         <div>
           <label style={labelStyle}>Judul Video</label>
           <input 
             type="text" 
             placeholder="Masukkan judul video" 
-            value={judul}
+            value={judul || ''} 
             onChange={(e) => setJudul(e.target.value)}
             style={inputStyle} 
           />
@@ -86,74 +87,80 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
           <select 
             value={tipeVideo} 
             onChange={(e) => setTipeVideo(e.target.value)} 
-            style={inputStyle}
+            style={{ ...inputStyle, cursor: 'pointer', backgroundColor: 'white' }}
           >
             <option value="youtube">Link YouTube</option>
             <option value="manual">Upload File Manual</option>
           </select>
         </div>
+
+        <div style={{ gridColumn: 'span 2' }}>
+          {tipeVideo === 'youtube' ? (
+            <div>
+              <label style={labelStyle}>URL YouTube</label>
+              <input 
+                type="text" 
+                placeholder="https://www.youtube.com/watch?v=..." 
+                value={linkYoutube || ''} 
+                onChange={(e) => setLinkYoutube(e.target.value)}
+                style={inputStyle} 
+              />
+            </div>
+          ) : (
+            <div>
+              <label style={labelStyle}>Pilih File Video</label>
+              <input 
+                type="file" 
+                accept="video/*"
+                onChange={(e) => setFileVideo(e.target.files ? e.target.files[0] : null)}
+                style={{ ...inputStyle, padding: '10px', backgroundColor: 'white' }} 
+              />
+            </div>
+          )}
+        </div>
+
+        <button 
+          onClick={handleSimpan}
+          disabled={loading}
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
+          style={{
+            ...buttonStyle,
+            backgroundColor: loading ? '#A0AEC0' : (isHover ? '#0d4a85' : '#093661')
+          }}
+        >
+          {loading ? 'Sedang Memproses...' : 'Publikasikan Video'}
+        </button>
       </div>
 
-      {tipeVideo === 'youtube' ? (
-        <div style={{ marginBottom: '25px' }}>
-          <label style={labelStyle}>URL YouTube</label>
-          <input 
-            type="text" 
-            placeholder="https://www.youtube.com/watch?v=..." 
-            value={linkYoutube || ''} 
-            onChange={(e) => setLinkYoutube(e.target.value)}
-            style={inputStyle} 
-            />
-        </div>
-      ) : (
-        <div style={{ marginBottom: '25px' }}>
-          <label style={labelStyle}>Pilih File Video</label>
-          <input 
-            type="file" 
-            accept="video/*"
-            onChange={(e) => setFileVideo(e.target.files ? e.target.files[0] : null)}
-            style={{ ...inputStyle, padding: '10px' }} 
-          />
-        </div>
-      )}
+      <div style={{ height: '1px', backgroundColor: '#EDF2F7', margin: '45px 0' }} />
 
-      <button 
-        onClick={handleSimpan}
-        disabled={loading}
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
-        style={{
-          ...buttonStyle,
-          backgroundColor: loading ? '#A0AEC0' : (isHover ? '#0d4a85' : '#093661'),
-          cursor: loading ? 'not-allowed' : 'pointer'
-        }}
-      >
-        {loading ? 'Sedang Memproses...' : 'Publikasikan Video'}
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+        <h4 style={{ fontSize: '18px', fontWeight: '800', color: '#2D3748', margin: 0 }}>
+          Riwayat Video Terbit
+        </h4>
+      </div>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '40px 0 30px 0' }} />
-
-      <h4 style={{ color: '#2D3748', fontSize: '16px', fontWeight: '600', marginBottom: '15px', fontFamily: 'inherit' }}>Riwayat Video Terbit</h4>
-      <div style={{ overflowX: 'auto', border: '1px solid #E2E8F0', borderRadius: '12px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white' }}>
+      <div style={{ border: '1px solid #E2E8F0', borderRadius: '16px', overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
           <thead>
-            <tr style={{ backgroundColor: '#F8FAFC' }}>
-              <th style={thStyle}>Preview</th>
-              <th style={thStyle}>Judul Video</th>
-              <th style={thStyle}>Tipe</th>
-              <th style={{ ...thStyle, textAlign: 'center' }}>Aksi</th>
+            <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
+              <th style={{ ...thStyle, width: '15%' }}>PREVIEW</th>
+              <th style={{ ...thStyle, width: '45%' }}>JUDUL VIDEO</th>
+              <th style={{ ...thStyle, width: '20%' }}>TIPE</th>
+              <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>NAVIGASI</th>
             </tr>
           </thead>
           <tbody>
             {daftarVideo.length > 0 ? (
               daftarVideo.map((vid: any) => (
-                <tr key={vid.id} style={{ borderBottom: '1px solid #EDF2F7' }}>
+                <tr key={vid.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                   <td style={tdStyle}>
-                    <div style={{ width: '70px', height: '40px', backgroundColor: '#2D3748', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px' }}>▶</div>
+                    <div style={{ width: '60px', height: '40px', backgroundColor: '#2D3748', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px' }}>▶</div>
                   </td>
-                  <td style={{ ...tdStyle, fontWeight: '500', color: '#2D3748' }}>{vid.judul}</td>
+                  <td style={{ ...tdStyle, fontWeight: '800', color: '#2D3748' }}>{vid.judul}</td>
                   <td style={tdStyle}>
-                    <span style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', backgroundColor: vid.tipe === 'youtube' ? '#FFF5F5' : '#F0FFF4', color: vid.tipe === 'youtube' ? '#C53030' : '#2F855A', fontFamily: 'inherit' }}>
+                    <span style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', backgroundColor: vid.tipe === 'youtube' ? '#FFF5F5' : '#F0FFF4', color: vid.tipe === 'youtube' ? '#C53030' : '#2F855A', border: vid.tipe === 'youtube' ? '1px solid #FED7D7' : '1px solid #C6F6D5' }}>
                       {vid.tipe}
                     </span>
                   </td>
@@ -169,7 +176,9 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
               ))
             ) : (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center', padding: '40px', color: '#A0AEC0', fontSize: '14px', fontFamily: 'inherit' }}>Belum ada video yang diterbitkan.</td>
+                <td colSpan={4} style={{ textAlign: 'center', padding: '100px 20px', color: '#A0AEC0', fontSize: '14px' }}>
+                  Belum ada video yang diterbitkan.
+                </td>
               </tr>
             )}
           </tbody>
@@ -179,9 +188,9 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#4A5568', fontFamily: 'inherit' };
-const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '14px', boxSizing: 'border-box' as 'border-box', fontFamily: 'inherit' };
-const buttonStyle = { width: '100%', padding: '14px', color: 'white', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 'bold', transition: '0.2s', fontFamily: 'inherit' };
-const thStyle = { padding: '15px', textAlign: 'left' as 'left', fontSize: '12px', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '0.5px', fontFamily: 'inherit' };
-const tdStyle = { padding: '15px', fontSize: '14px', fontFamily: 'inherit' };
-const deleteBtnStyle = { color: '#E53E3E', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '13px', fontFamily: 'inherit' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748' };
+const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as 'border-box', transition: '0.3s' };
+const buttonStyle: any = { gridColumn: 'span 2', padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '800', cursor: 'pointer', fontSize: '15px', transition: '0.3s' };
+const thStyle = { padding: '18px 20px', textAlign: 'left' as 'left', fontSize: '11px', fontWeight: '800', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '1px' };
+const tdStyle = { padding: '20px', fontSize: '14px' };
+const deleteBtnStyle = { color: '#E53E3E', border: '1px solid #FED7D7', background: '#FFF5F5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px' };

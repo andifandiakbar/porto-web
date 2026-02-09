@@ -181,6 +181,7 @@ export default function RutanSinjaiDashboard() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: "'Inter', sans-serif", position: 'fixed', top: 0, left: 0 }}>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
       {isMobile && isSidebarVisible && (
         <div onClick={() => setIsSidebarVisible(false)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 999 }}></div>
       )}
@@ -195,13 +196,13 @@ export default function RutanSinjaiDashboard() {
             </div>
           </div>
           <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
-            <NavItem active={activeMenu === 'dashboard'} onClick={() => { setActiveMenu('dashboard'); if(isMobile) setIsSidebarVisible(false); }} icon="📊" label="Dashboard" />
-            <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="📩" label="Pengaduan" />
-            <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="👥" label="Data WBP" />
-            <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="📰" label="Update Berita" />
-            <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="🎨" label="Karya WBP" />
-            <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="📸" label="Galeri Foto" />
-            <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="🎥" label="Galeri Video" />
+            <NavItem active={activeMenu === 'dashboard'} onClick={() => { setActiveMenu('dashboard'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-chart-line" label="Dashboard" />
+            <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-envelope-open-text" label="Pengaduan" />
+            <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-users-rectangle" label="Data WBP" />
+            <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-newspaper" label="Update Berita" />
+            <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-palette" label="Karya WBP" />
+            <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-image" label="Galeri Foto" />
+            <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-video" label="Galeri Video" />
           </nav>
           <div style={{ padding: '20px 15px', borderTop: '1px solid #F1F1F1', display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#FFF', flexShrink: 0 }}>
             <div style={avatarCircle}>AD</div>
@@ -215,7 +216,7 @@ export default function RutanSinjaiDashboard() {
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100vh' }}>
         <header style={{ ...topHeaderStyle, height: isMobile ? '60px' : '75px', padding: isMobile ? '0 15px' : '0 30px', flexShrink: 0 }}>
-          <span onClick={() => setIsSidebarVisible(!isSidebarVisible)} style={{ cursor: 'pointer', fontSize: '22px', color: '#093661' }}>☰</span>
+          <span onClick={() => setIsSidebarVisible(!isSidebarVisible)} style={{ cursor: 'pointer', fontSize: '22px', color: '#093661' }}><i className="fa-solid fa-bars"></i></span>
           <div style={{ fontSize: isMobile ? '12px' : '14px', color: '#666', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Dashboard Manajemen Data & Informasi – Rutan Kelas IIB Sinjai
           </div>
@@ -228,13 +229,6 @@ export default function RutanSinjaiDashboard() {
               <p style={{ margin: 0, opacity: 0.9, fontSize: isMobile ? '12px' : '14px' }}>Manajemen data warga binaan yang modern dan transparan.</p>
             </div>
             <div style={glassCircle1}></div><div style={glassCircle2}></div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? '10px' : '20px', marginBottom: '30px' }}>
-            <StatCard isMobile={isMobile} label="TOTAL PENGHUNI" value={daftarWBP.length.toString()} sub="Orang" color="#4680FF" />
-            <StatCard isMobile={isMobile} label="PENGUNJUNG" value="110" sub="Bulan Ini" color="#FFB811" />
-            <StatCard isMobile={isMobile} label="PRODUK KARYA" value={daftarKarya.length.toString()} sub="Unit" color="#2ECC71" />
-            <StatCard isMobile={isMobile} label="BERITA" value={daftarBerita.length.toString()} sub="Total" color="#E74C3C" />
           </div>
 
           <div style={contentCard}>
@@ -254,18 +248,9 @@ export default function RutanSinjaiDashboard() {
 
 function NavItem({ active, onClick, icon, label }: NavItemProps) {
   return (
-    <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400', whiteSpace: 'nowrap' }}>
-      <span style={{ fontSize: '18px' }}>{icon}</span><span style={{ fontSize: '14px' }}>{label}</span>
-    </div>
-  );
-}
-
-function StatCard({ label, value, sub, color, isMobile }: StatCardProps) {
-  return (
-    <div style={{ backgroundColor: 'white', padding: isMobile ? '15px' : '25px', borderRadius: '16px', border: '1px solid #EBEBEB' }}>
-      <p style={{ margin: 0, fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold', color: '#A0AEC0' }}>{label}</p>
-      <h2 style={{ margin: '8px 0', fontSize: isMobile ? '20px' : '28px', color: '#2D3748' }}>{value} <span style={{ fontSize: '12px', color: '#CBD5E0' }}>{sub}</span></h2>
-      <div style={{ height: '4px', background: '#F0F2F5', borderRadius: '2px' }}><div style={{ width: '60%', height: '100%', background: color, borderRadius: '2px' }}></div></div>
+    <div onClick={onClick} style={{ padding: '12px 18px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '5px', backgroundColor: active ? '#F0F4FF' : 'transparent', color: active ? '#093661' : '#5B6B79', fontWeight: active ? '700' : '400', whiteSpace: 'nowrap', transition: 'all 0.3s ease' }}>
+      <i className={icon} style={{ fontSize: '18px', width: '20px', textAlign: 'center' }}></i>
+      <span style={{ fontSize: '14px' }}>{label}</span>
     </div>
   );
 }
@@ -274,6 +259,6 @@ const avatarCircle: React.CSSProperties = { width: '38px', height: '38px', borde
 const exitBtn: React.CSSProperties = { padding: '8px 15px', backgroundColor: '#FFF5F5', color: '#E53E3E', border: '1px solid #FED7D7', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontWeight: '600' };
 const topHeaderStyle: React.CSSProperties = { backgroundColor: '#FFF', borderBottom: '1px solid #EBEBEB', display: 'flex', alignItems: 'center', gap: '20px', flexShrink: 0 };
 const contentCard: React.CSSProperties = { backgroundColor: 'white', borderRadius: '20px', border: '1px solid #EBEBEB', minHeight: '400px', marginBottom: '40px' };
-const glassBanner: React.CSSProperties = { background: 'linear-gradient(135deg, #4680FF 0%, #0046E5 100%)', borderRadius: '20px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
+const glassBanner: React.CSSProperties = { background: 'linear-gradient(135deg, #093661 0%, #0046E5 100%)', borderRadius: '20px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
 const glassCircle1: React.CSSProperties = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
 const glassCircle2: React.CSSProperties = { position: 'absolute', bottom: '-30px', left: '10%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };

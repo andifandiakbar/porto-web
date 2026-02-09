@@ -16,8 +16,15 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
   const [deskripsi, setDeskripsi] = useState('');
   const [fileGambar, setFileGambar] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  
+  const [loading, setLoading] = useState(false); 
+  const [updateLoading, setUpdateLoading] = useState(false); 
+  
   const [isHover, setIsHover] = useState(false);
+
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState({ nama: '', harga: '', kategori: '' });
+  const [editFileGambar, setEditFileGambar] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -27,13 +34,77 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
     }
   };
 
+  const handleEditFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setEditFileGambar(e.target.files[0]);
+    }
+  };
+
+  const startEdit = (item: any) => {
+    setEditingId(item.id);
+    setEditForm({
+      nama: item.nama,
+      harga: item.harga,
+      kategori: item.kategori
+    });
+    setEditFileGambar(null);
+  };
+
+  const handleInlineUpdate = async (id: number) => {
+    setUpdateLoading(true); 
+    try {
+      let updatedImgUrl = null;
+
+      if (editFileGambar) {
+        const fileExt = editFileGambar.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `produk/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('images')
+          .upload(filePath, editFileGambar);
+
+        if (uploadError) throw new Error("Gagal upload gambar baru.");
+
+        const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
+        updatedImgUrl = urlData.publicUrl;
+      }
+
+      const updateData: any = {
+        nama: editForm.nama,
+        harga: editForm.harga,
+        kategori: editForm.kategori
+      };
+
+      if (updatedImgUrl) {
+        updateData.img = updatedImgUrl;
+      }
+
+      const { error } = await supabase
+        .from('daftar_karya')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+
+      alert("Data berhasil diperbarui!");
+      setEditingId(null);
+      setEditFileGambar(null);
+      fetchKarya();
+    } catch (error: any) {
+      alert("Gagal update: " + error.message);
+    } finally {
+      setUpdateLoading(false); 
+    }
+  };
+
   const handleSimpan = async () => {
     if (!nama || !harga || !fileGambar || !kategori) {
       alert("Mohon lengkapi Nama, Harga, Kategori, dan Foto Produk");
       return;
     }
 
-    setLoading(true);
+    setLoading(true); 
     try {
       const fileExt = fileGambar.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
@@ -72,142 +143,119 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
   };
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
-      <div style={{ marginBottom: '30px' }}>
-        <h3 style={{ color: '#093661', fontSize: '20px', fontWeight: '700', margin: '0 0 10px 0' }}>🎨 Manajemen Karya WBP</h3>
+    <div style={{ padding: '40px', backgroundColor: '#FFFFFF', borderRadius: '20px', fontFamily: "'Inter', sans-serif" }}>
+      
+      <div style={{ marginBottom: '35px' }}>
+        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>Manajemen Karya WBP</h3>
         <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>Kelola dan publikasikan produk hasil karya warga binaan ke galeri publik.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', padding: '30px', backgroundColor: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0' }}>
         <div>
           <label style={labelStyle}>Nama Produk</label>
-          <input 
-            type="text" 
-            placeholder="Nama barang karya WBP" 
-            value={nama}
-            onChange={(e) => setNama(e.target.value)}
-            style={inputStyle} 
-          />
+          <input type="text" placeholder="Nama barang karya WBP" value={nama} onChange={(e) => setNama(e.target.value)} style={inputStyle} />
         </div>
         <div>
           <label style={labelStyle}>Harga (Rp)</label>
-          <input 
-            type="text" 
-            placeholder="Masukkan nominal harga" 
-            value={harga}
-            onChange={(e) => setHarga(e.target.value)}
-            style={inputStyle} 
-          />
+          <input type="text" placeholder="Masukkan nominal harga" value={harga} onChange={(e) => setHarga(e.target.value)} style={inputStyle} />
         </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
         <div>
           <label style={labelStyle}>Kategori Produk</label>
-          <input 
-            type="text" 
-            placeholder="Contoh: Aksesoris" 
-            value={kategori}
-            onChange={(e) => setKategori(e.target.value)}
-            style={inputStyle} 
-          />
+          <input type="text" placeholder="Contoh: Aksesoris" value={kategori} onChange={(e) => setKategori(e.target.value)} style={inputStyle} />
         </div>
         <div>
-          <label style={labelStyle}>Unit Produksi</label>
-          <input 
-            type="text" 
-            placeholder="Unit Produksi" 
-            value={unit}
-            onChange={(e) => setUnit(e.target.value)}
-            style={inputStyle} 
-          />
+          <label style={labelStyle}>Foto Produk</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} style={{ ...inputStyle, padding: '10px', backgroundColor: 'white' }} />
         </div>
-      </div>
-
-      <div style={{ marginBottom: '20px' }}>
-        <label style={labelStyle}>Upload Foto Produk</label>
-        <div style={uploadBoxStyle}>
-          <input type="file" accept="image/*" onChange={handleFileChange} style={{ fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit' }} />
-          {previewUrl && (
-            <div style={{ marginTop: '15px' }}>
-              <img src={previewUrl} alt="Preview" style={{ maxHeight: '150px', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
-            </div>
-          )}
+        <div style={{ gridColumn: 'span 2' }}>
+          <label style={labelStyle}>Deskripsi Produk</label>
+          <textarea placeholder="Jelaskan detail produk secara singkat..." value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} style={{ ...inputStyle, height: '100px', resize: 'none' }} />
         </div>
+
+        <button 
+          onClick={handleSimpan}
+          disabled={loading}
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
+          style={{ 
+            ...buttonStyle, 
+            backgroundColor: loading ? '#A0AEC0' : (isHover ? '#0d4a85' : '#093661') 
+          }}
+        >
+          {loading ? 'Sedang Menyimpan...' : 'Simpan Produk Karya Binaan'}
+        </button>
       </div>
 
-      <div style={{ marginBottom: '25px' }}>
-        <label style={labelStyle}>Deskripsi Produk</label>
-        <textarea 
-          placeholder="Jelaskan detail produk secara singkat..." 
-          value={deskripsi}
-          onChange={(e) => setDeskripsi(e.target.value)}
-          style={{ ...inputStyle, height: '100px', resize: 'none' }}
-        />
+      <div style={{ height: '1px', backgroundColor: '#EDF2F7', margin: '45px 0' }} />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+        <h4 style={{ fontSize: '18px', fontWeight: '800', color: '#2D3748', margin: 0 }}>Daftar Produk Aktif</h4>
       </div>
 
-      <button 
-        onClick={handleSimpan}
-        disabled={loading}
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
-        style={{ 
-          ...buttonStyle, 
-          backgroundColor: loading ? '#A0AEC0' : (isHover ? '#0d4a85' : '#093661') 
-        }}
-      >
-        {loading ? 'Sedang Menyimpan...' : 'Tambah Produk Karya Binaan'}
-      </button>
-
-      <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '40px 0 30px 0' }} />
-
-      <h4 style={{ color: '#2D3748', fontSize: '16px', fontWeight: '600', marginBottom: '15px' }}>Produk Terbit</h4>
-      <div style={{ overflowX: 'auto', border: '1px solid #E2E8F0', borderRadius: '12px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div style={{ border: '1px solid #E2E8F0', borderRadius: '16px', overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
           <thead>
-            <tr style={{ backgroundColor: '#F8FAFC' }}>
-              <th style={thStyle}>Foto</th>
-              <th style={thStyle}>Nama Produk</th>
-              <th style={thStyle}>Kategori</th>
-              <th style={thStyle}>Unit</th>
-              <th style={thStyle}>Harga</th>
-              <th style={{ ...thStyle, textAlign: 'center' }}>Aksi</th>
+            <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
+              <th style={{ ...thStyle, width: '15%' }}>FOTO</th>
+              <th style={{ ...thStyle, width: '30%' }}>NAMA PRODUK</th>
+              <th style={{ ...thStyle, width: '20%' }}>KATEGORI</th>
+              <th style={{ ...thStyle, width: '15%' }}>HARGA</th>
+              <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>NAVIGASI</th>
             </tr>
           </thead>
           <tbody>
             {daftarKarya.length > 0 ? (
               daftarKarya.map((item: any) => (
-                <tr key={item.id} style={{ borderBottom: '1px solid #EDF2F7' }}>
+                <tr key={item.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                   <td style={tdStyle}>
-                    <img 
-                      src={item.img || item.image_url || 'https://via.placeholder.com/50'} 
-                      alt="produk" 
-                      style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} 
-                    />
+                    {editingId === item.id ? (
+                      <input type="file" accept="image/*" onChange={handleEditFileChange} style={{ fontSize: '10px', width: '100%' }} />
+                    ) : (
+                      <img src={item.img || item.image_url} alt="produk" style={{ width: '60px', height: '45px', objectFit: 'cover', borderRadius: '8px' }} />
+                    )}
                   </td>
-                  <td style={{ ...tdStyle, fontWeight: '600', color: '#2D3748' }}>{item.nama}</td>
                   <td style={tdStyle}>
-                    <span style={{ backgroundColor: '#FFF7D6', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', color: '#000' }}>
-                      {item.kategori}
-                    </span>
+                    {editingId === item.id ? (
+                      <input style={inlineInputStyle} value={editForm.nama} onChange={(e) => setEditForm({...editForm, nama: e.target.value})} />
+                    ) : (
+                      <div style={{ fontWeight: '800', color: '#2D3748', fontSize: '14px' }}>{item.nama}</div>
+                    )}
                   </td>
-                  <td style={{ ...tdStyle, fontSize: '12px', color: '#718096' }}>{item.unit}</td>
-                  <td style={{ ...tdStyle, color: '#4A5568' }}>{item.harga}</td>
+                  <td style={tdStyle}>
+                    {editingId === item.id ? (
+                      <input style={inlineInputStyle} value={editForm.kategori} onChange={(e) => setEditForm({...editForm, kategori: e.target.value})} />
+                    ) : (
+                      <div style={{ fontSize: '13px', color: '#4A5568', fontWeight: '500' }}>{item.kategori}</div>
+                    )}
+                  </td>
+                  <td style={tdStyle}>
+                    {editingId === item.id ? (
+                      <input style={inlineInputStyle} value={editForm.harga} onChange={(e) => setEditForm({...editForm, harga: e.target.value})} />
+                    ) : (
+                      <div style={{ fontSize: '13px', fontWeight: '700', color: '#2D3748' }}>{item.harga}</div>
+                    )}
+                  </td>
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
-                    <button 
-                      onClick={() => handleDelete(item.id, 'daftar_karya')} 
-                      style={deleteBtnStyle}
-                    >
-                      Hapus
-                    </button>
+                    <div style={{display: 'flex', justifyContent: 'center', gap: '10px'}}>
+                      {editingId === item.id ? (
+                        <button 
+                          onClick={() => handleInlineUpdate(item.id)} 
+                          disabled={updateLoading} 
+                          style={{...btnEditInline, color: '#38A169'}}
+                        >
+                          {updateLoading ? '...' : 'Simpan'}
+                        </button>
+                      ) : (
+                        <button onClick={() => startEdit(item)} style={btnEditInline}>Edit</button>
+                      )}
+                      <button onClick={() => handleDelete(item.id, 'daftar_karya')} style={btnDeleteInline}>Hapus</button>
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: '#A0AEC0', fontSize: '14px' }}>
-                  Belum ada produk terbit.
-                </td>
+                <td colSpan={5} style={{ textAlign: 'center', padding: '100px 20px', color: '#A0AEC0', fontSize: '14px' }}>Data produk belum tersedia</td>
               </tr>
             )}
           </tbody>
@@ -217,10 +265,11 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#4A5568', fontFamily: 'inherit' };
-const inputStyle = { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '14px', boxSizing: 'border-box' as 'border-box', fontFamily: 'inherit' };
-const uploadBoxStyle = { padding: '15px', border: '1px solid #E2E8F0', borderRadius: '8px', backgroundColor: '#F8FAFC' };
-const buttonStyle = { width: '100%', padding: '14px', color: 'white', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s', fontFamily: 'inherit' };
-const thStyle = { padding: '15px', textAlign: 'left' as 'left', fontSize: '12px', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '0.5px', fontFamily: 'inherit' };
-const tdStyle = { padding: '15px', fontSize: '14px', fontFamily: 'inherit' };
-const deleteBtnStyle = { color: '#E53E3E', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '13px', fontFamily: 'inherit' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748' };
+const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as 'border-box' };
+const inlineInputStyle = { width: '100%', padding: '5px 8px', borderRadius: '5px', border: '1px solid #093661', fontSize: '13px' };
+const buttonStyle: any = { gridColumn: 'span 2', padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '800', cursor: 'pointer', fontSize: '15px' };
+const thStyle = { padding: '18px 20px', textAlign: 'left' as 'left', fontSize: '11px', fontWeight: '800', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '1px' };
+const tdStyle = { padding: '20px', fontSize: '14px' };
+const btnEditInline = { color: '#093661', border: '1px solid #E2E8F0', background: 'white', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' };
+const btnDeleteInline = { color: '#E53E3E', border: '1px solid #FED7D7', background: '#FFF5F5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' };
