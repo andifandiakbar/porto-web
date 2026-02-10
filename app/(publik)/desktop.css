@@ -13,7 +13,7 @@ body {
 
 .container {
   width: 90%;
-  max-width: 1300px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -31,6 +31,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .topbar-social {
@@ -57,10 +60,10 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #f1c40f; 
+  color: #f1c40f;
   text-decoration: none;
   transition: 0.3s ease;
-  font-size: 13px; 
+  font-size: 13px;
 }
 
 .topbar-info a:hover {
@@ -80,6 +83,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .logo {
@@ -167,8 +173,8 @@ body {
 }
 
 .slider-container {
-  width: 100%;
-  max-width: 1000px;
+  width: 90%;
+  max-width: 1100px;
   margin: 30px auto;
   position: relative;
   overflow: hidden;
@@ -240,8 +246,9 @@ body {
   color: #f1c40f;
   font-weight: 690;
   text-shadow: 2px 4px 15px rgba(0, 0, 0, 0.329);
-  max-width: 900px;
+  max-width: 800px;
   line-height: 1.2;
+  font-size: 32px;
 }
 
 .services-section {
@@ -252,8 +259,8 @@ body {
 }
 
 .services-wrapper {
-  width: 100%;
-  max-width: 1000px; 
+  width: 90%;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 5px;
 }
@@ -261,7 +268,7 @@ body {
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
+  gap: 25px;
 }
 
 .card {
@@ -289,15 +296,15 @@ body {
 
 .card h3 {
   color: #0b2d57;
-  font-size: 16px;
-  margin-bottom: 0px;
+  font-size: 18px;
+  margin-bottom: 5px;
   font-weight: 700;
 }
 
 .card p {
-  font-size: 11px;
+  font-size: 13px;
   color: #666;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   line-height: 1.4;
 }
 
@@ -305,10 +312,10 @@ body {
   display: inline-block;
   background: #f1c40f;
   color: #0b2d57;
-  padding: 8px 13px;
+  padding: 10px 18px;
   font-weight: bold;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 13px;
   text-decoration: none;
   border: none;
   cursor: pointer;
@@ -322,8 +329,8 @@ body {
 }
 
 .announcement-bar {
-  width: 100%;
-  max-width: 1088px;
+  width: 90%;
+  max-width: 1090px;
   margin: 15px auto 0px;
   background-color: #e9f0f8;
   display: flex;
@@ -365,13 +372,13 @@ body {
 
 .news-slider-wrapper {
   position: relative;
-  width: 85%;
-  max-width: 1200px;
+  width: 95%;
+  max-width: 1900px;
   margin: 0 auto;
 }
 
 .news-viewport {
-  overflow: visible;
+  overflow: hidden;
   width: 100%;
 }
 
@@ -382,7 +389,7 @@ body {
 }
 
 .news-item-link {
-  min-width: 33.333%; 
+  min-width: calc(0% / 3);
   flex-shrink: 0;
   padding: 0 10px;
   text-decoration: none;
@@ -391,9 +398,10 @@ body {
 
 .news-card-v2 {
   position: relative;
-  height: 370px; 
+  height: 350px;
   overflow: hidden;
   background-color: #000;
+  border-radius: 0px;
 }
 
 .news-thumb {
@@ -406,6 +414,7 @@ body {
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
+  display: block;
 }
 
 .news-card-v2:hover .news-thumb img {
@@ -431,22 +440,22 @@ body {
 }
 
 .badge-berita {
-  background-color: #ff4500; 
+  background-color: #ff4500;
   color: white;
-  padding: 4px 12px;
-  border-radius: 50px;
+  padding: 3px 12px;
+  border-radius: 10px;
   font-size: 12px;
   font-weight: 600;
   width: fit-content;
-  margin-bottom: 15px;
+  margin-bottom: 11px;
 }
 
 .news-title-v2 {
   color: #ffffff;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 1.3;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -457,40 +466,42 @@ body {
 
 .news-date-v2 {
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.8;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 15px;
+  padding-top: 8px;
 }
 
 .slide-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 10px;
-  height: 20px;
-  background: transparent;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
   cursor: pointer;
   z-index: 1000;
   color: #f1c40f;
-  font-size: 30px;
+  font-size: 24px;
+  transition: 0.3s ease;
 }
 
 .slide-arrow:first-of-type {
-  left: -10px;
+  left: -30px;
 }
 
 .slide-arrow:last-of-type {
-  right: -10px;
+  right: -30px;
 }
 
 .slide-arrow:hover {
-  color: #063166;
-  transform: translateY(-50%) scale(1.2);
+  color: #0b2d57;
+  transform: translateY(-50%) scale(1.1);
 }
 
 .wbp-info-section {
@@ -501,7 +512,8 @@ body {
 }
 
 .container-wbp {
-  max-width: 550px;
+  width: 90%;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -538,7 +550,7 @@ body {
 }
 
 .stat-number {
-  font-size: 70px;
+  font-size: 80px;
   font-weight: 700;
   color: #f1c40f;
   line-height: 1;
