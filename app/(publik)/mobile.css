@@ -118,14 +118,15 @@
     cursor: pointer;
   }
 
-  .mobile-menu-list {
-    list-style: none;
+  .mobile-menu-list, .mobile-menu-list ul {
+    list-style: none !important;
     padding: 0;
     margin: 0;
   }
 
   .mobile-menu-list li {
     border-bottom: 1px solid #eee;
+    list-style-type: none !important;
   }
 
   .mobile-menu-list li a {
@@ -135,10 +136,16 @@
     text-decoration: none;
     font-size: 17px;
     font-weight: 600;
+    transition: background-color 0.2s;
+  }
+
+  .mobile-menu-list li a:active {
+    background-color: #f0f4f8;
+    color: #007bff;
   }
 
   .slider-container {
-    width: 102% !important;
+    width: 100% !important;
     height: auto !important;
     max-height: none !important;
     margin: 0px auto !important;
@@ -357,7 +364,7 @@
   }
 
   .container-wbp {
-    padding: 0 15px !important;
+    padding: 0 2px !important;
   }
 
   .wbp-stats-grid {
@@ -368,7 +375,7 @@
 
   .wbp-stat-card {
     flex: 1 !important;
-    padding: 18px 30px !important;
+    padding: 18px 31px !important;
     transform: translateY(50px);
     view-timeline-name: --stat-reveal;
     view-timeline-axis: block;
