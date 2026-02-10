@@ -11,7 +11,7 @@
 
   .topbar-social {
     display: flex !important;
-    gap: 8px !important;
+    gap: 6px !important;
     flex-shrink: 0; 
   }
 
@@ -23,7 +23,7 @@
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    gap: 12px !important;
+    gap: 10px !important;
     overflow-x: auto !important;
     white-space: nowrap !important;
     scrollbar-width: none;
@@ -220,19 +220,19 @@
     padding: 20px !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-    transform: translateY(100px);
+    transform: none;
     view-timeline-name: --scroll-reveal;
     view-timeline-axis: block;
     animation: scrollReveal linear forwards;
     animation-timeline: --scroll-reveal;
-    animation-range: entry 0% cover 30%;
+    animation-range: entry 5% cover 25%;
   }
 
   .announcement-bar {
-    width: 95% !important;
+    width: 88% !important;
     max-width: none !important;
     margin: 10px auto !important;
-    height: 35px !important;
+    height: 30px !important;
     border-radius: 0px !important;
     display: flex !important;
     align-items: center !important;
@@ -290,7 +290,7 @@
   .news-track {
     display: flex !important;
     width: max-content !important;
-    gap: 12px !important;
+    gap: 18px !important;
     transform: none !important; 
   }
 
@@ -306,12 +306,12 @@
     height: 300px !important;
     border-radius: 0px !important;
     overflow: hidden !important;
-    transform: translateY(60px);
+    transform: none;
     view-timeline-name: --news-reveal;
     view-timeline-axis: block;
     animation: scrollReveal linear forwards;
     animation-timeline: --news-reveal;
-    animation-range: entry 0% cover 25%;
+    animation-range: entry 5% cover 25%;
   }
 
   .news-thumb {
@@ -376,12 +376,12 @@
   .wbp-stat-card {
     flex: 1 !important;
     padding: 18px 31px !important;
-    transform: translateY(50px);
+    transform: none;
     view-timeline-name: --stat-reveal;
     view-timeline-axis: block;
     animation: scrollReveal linear forwards;
     animation-timeline: --stat-reveal;
-    animation-range: entry 0% cover 20%;
+    animation-range: entry 5% cover 20%;
   }
 
   .stat-number {
@@ -419,7 +419,7 @@
   }
 
   @keyframes scrollReveal {
-    from { transform: translateY(100px); }
+    from { transform: translateY(50px); }
     to { transform: translateY(0); }
   }
 }

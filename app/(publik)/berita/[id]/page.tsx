@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
-import { motion, Variants } from 'framer-motion';
 
 const supabase = createClient(
   'https://xnwqcxaehvaqxzodqidc.supabase.co', 
@@ -18,8 +17,6 @@ export default function DetailBerita() {
   const [loading, setLoading] = useState(true);
   const [kategoriAktif, setKategoriAktif] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  
-  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -47,7 +44,7 @@ export default function DetailBerita() {
 
         const safeList = list || [];
         setBeritaLain(safeList);
-        setBeritaDisplay(safeList.slice(0, 12));
+        setBeritaDisplay(safeList.slice(0, 5));
 
       } catch (err) {
         console.error("Gagal mengambil data:", err);
@@ -57,14 +54,6 @@ export default function DetailBerita() {
     }
     fetchData();
   }, [params?.id]);
-
-  const scrollSlider = (direction: 'left' | 'right') => {
-    if (sliderRef.current) {
-      const { scrollLeft, clientWidth } = sliderRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-      sliderRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
 
   const handleFilterKategori = (kat: string) => {
     setKategoriAktif(kat);
@@ -78,24 +67,19 @@ export default function DetailBerita() {
   const resetFilter = () => {
     setKategoriAktif(null);
     setSearchTerm('');
-    setBeritaDisplay(beritaLain.slice(0, 12));
+    setBeritaDisplay(beritaLain.slice(0, 5));
   };
 
   const handleSearch = () => {
     setKategoriAktif(null);
     if (!searchTerm.trim()) {
-      setBeritaDisplay(beritaLain.slice(0, 12));
+      setBeritaDisplay(beritaLain.slice(0, 5));
       return;
     }
     const hasilCari = beritaLain.filter(item => 
       item.judul.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setBeritaDisplay(hasilCari);
-  };
-
-  const fadeInVariant: Variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
 
   if (loading) return (
@@ -123,66 +107,33 @@ export default function DetailBerita() {
       <style dangerouslySetInnerHTML={{ __html: `
         .container-utama { max-width: 1140px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; }
         .area-berita { flex: 1; min-width: 300px; background: #fff; }
-        .slider-wrapper { position: relative; display: flex; align-items: center; width: 100%; margin-top: 20px; }
-        .grid-slider { 
-          display: grid; 
-          grid-auto-flow: column; 
-          grid-auto-columns: calc(25% - 15px); 
-          gap: 20px; 
-          overflow-x: hidden; 
-          scroll-behavior: smooth;
-          width: 100%;
-          padding: 10px 0;
-        }
-        .card-berita-mini { 
-          background: #fff; 
-          border-radius: 8px; 
-          overflow: hidden; 
-          box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-          cursor: pointer;
-          transition: transform 0.3s;
-        }
-        .card-berita-mini:hover { transform: translateY(-5px); }
-        .nav-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          background: #002e5b;
-          color: white;
-          border: none;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          cursor: pointer;
-          z-index: 10;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .prev-btn { left: -20px; }
-        .next-btn { right: -20px; }
+        .sidebar { width: 320px; }
+        .sidebar-box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .sidebar-title { color: #002e5b; font-size: 18px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; }
+        
+        .news-item { margin-bottom: 20px; cursor: pointer; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+        .news-item h4 { margin: 0 0 5px 0; font-size: 14px; color: #333; transition: color 0.2s; line-height: 1.4; font-weight: 600; }
+        .news-item:hover h4 { color: #007bff; }
+        .news-item small { color: #aaa; font-size: 11px; }
+
+        .cat-item { display: block; padding: 10px 0; color: #555; text-decoration: none; font-size: 14px; cursor: pointer; transition: 0.2s; border-bottom: 1px solid #f9f9f9; }
+        .cat-item:hover { color: #007bff; }
+        .cat-aktif { color: #007bff; font-weight: bold; }
+
         .meta-ikon { color: #007bff; margin-right: 5px; }
         .form-input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; outline: none; font-size: 14px; width: 100%; }
-        .btn-submit { margin-top: 15px; padding: 12px 25px; background-color: #002e5b; color: #ffffff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
         
-        @media (max-width: 992px) { 
-          .grid-slider { grid-auto-columns: calc(50% - 10px); } 
-          .container-utama { flex-direction: column; }
-        }
-        @media (max-width: 576px) { 
-          .grid-slider { grid-auto-columns: 100%; } 
-        }
+        .btn-submit { margin-top: 15px; padding: 12px 25px; background-color: #002e5b; color: #ffffff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
+        .btn-submit:hover { background-color: #004080; }
+
+        .btn-search { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background-color: #002e5b; color: #ffffff; border: none; border-radius: 4px; width: 35px; height: 35px; cursor: pointer; transition: background-color 0.2s; }
+        .btn-search:hover { background-color: #004080; }
+
+        @media (max-width: 992px) { .container-utama { flex-direction: column; } .sidebar { width: 100%; } }
       `}} />
 
       <div className="container-utama">
-        <motion.div 
-          className="area-berita"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInVariant}
-        >
+        <div className="area-berita">
           <img 
             src={berita.img || '/assets/berita1.png'} 
             style={{ width: '100%', maxHeight: '500px', borderRadius: '12px', marginBottom: '25px', objectFit: 'cover' }} 
@@ -204,32 +155,6 @@ export default function DetailBerita() {
             dangerouslySetInnerHTML={{ __html: berita.isi }} 
           />
 
-          <div style={{ marginTop: '50px' }}>
-            <h3 style={{ color: '#002e5b', borderLeft: '4px solid #002e5b', paddingLeft: '15px' }}>Berita Terkait</h3>
-            
-            <div className="slider-wrapper">
-              <button className="nav-btn prev-btn" onClick={() => scrollSlider('left')}>
-                <i className="fa-solid fa-chevron-left"></i>
-              </button>
-              
-              <div className="grid-slider" ref={sliderRef}>
-                {beritaDisplay.map((item) => (
-                  <div key={item.id} className="card-berita-mini" onClick={() => window.location.href = `/berita/${item.id}`}>
-                    <img src={item.img || '/assets/berita1.png'} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
-                    <div style={{ padding: '12px' }}>
-                      <h4 style={{ fontSize: '13px', margin: '0 0 8px 0', height: '36px', overflow: 'hidden', color: '#333' }}>{item.judul}</h4>
-                      <small style={{ color: '#999', fontSize: '10px' }}><i className="fa-regular fa-calendar"></i> {item.tanggal}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button className="nav-btn next-btn" onClick={() => scrollSlider('right')}>
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
-            </div>
-          </div>
-
           <div style={{ marginTop: '60px' }}>
             <h3 style={{ margin: '0 0 20px 0', color: '#333', fontSize: '20px', fontWeight: 'bold' }}>0 Komentar</h3>
             <div style={{ backgroundColor: '#f8f9fa', padding: '30px', borderRadius: '8px' }}>
@@ -242,7 +167,51 @@ export default function DetailBerita() {
               <button className="btn-submit">Kirim</button>
             </div>
           </div>
-        </motion.div>
+        </div>
+
+        <div className="sidebar">
+          <div className="sidebar-box">
+            <div className="sidebar-title">Search</div>
+            <div style={{ position: 'relative', marginBottom: '30px', marginTop: '15px' }}>
+              <input 
+                type="text" 
+                placeholder="Cari berita..." 
+                className="form-input" 
+                style={{ paddingRight: '45px' }} 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <button onClick={handleSearch} className="btn-search">
+                <i className="fa-solid fa-search"></i>
+              </button>
+            </div>
+
+            <div className="sidebar-title">Kategori</div>
+            <div style={{ marginBottom: '30px' }}>
+              <span onClick={resetFilter} className={`cat-item ${!kategoriAktif && !searchTerm ? 'cat-aktif' : ''}`}>Semua Kategori</span>
+              <span onClick={() => handleFilterKategori('Informasi')} className={`cat-item ${kategoriAktif === 'Informasi' ? 'cat-aktif' : ''}`}>Informasi</span>
+              <span onClick={() => handleFilterKategori('Wawasan')} className={`cat-item ${kategoriAktif === 'Wawasan' ? 'cat-aktif' : ''}`}>Wawasan</span>
+            </div>
+
+            <div className="sidebar-title">
+              {searchTerm ? `Hasil Cari: "${searchTerm}"` : (kategoriAktif ? `Berita ${kategoriAktif}` : 'Berita Terakhir')}
+            </div>
+            
+            <div style={{ marginTop: '15px' }}>
+              {beritaDisplay.length > 0 ? (
+                beritaDisplay.map((item) => (
+                  <div key={item.id} className="news-item" onClick={() => window.location.href = `/berita/${item.id}`}>
+                    <h4>{item.judul}</h4>
+                    <small><i className="fa-regular fa-calendar" style={{ marginRight: '5px' }}></i>{item.tanggal}</small>
+                  </div>
+                ))
+              ) : (
+                <p style={{ fontSize: '13px', color: '#999' }}>Tidak ada berita yang sesuai.</p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
