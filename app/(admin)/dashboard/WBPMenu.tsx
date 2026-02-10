@@ -7,7 +7,6 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
   const [editId, setEditId] = useState<number | null>(null);
   const [tempData, setTempData] = useState<any>({});
   const [isMobile, setIsMobile] = useState(false);
-  // State baru untuk fitur pencarian
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
     }
   }, [wbpForm.status_wbp]);
 
-  // Logika filter diperbarui untuk mendukung pencarian nama atau NIK
   const filteredData = daftarWBP.filter((item: any) => {
     const matchesFilter = viewFilter === 'Narapidana' 
       ? (!item.status_wbp || item.status_wbp === 'Narapidana')
@@ -89,14 +87,12 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
 
       <div style={dividerStyle} />
 
-      {/* Header Tabel dengan Menu Pencarian */}
       <div style={{ ...tableHeaderActionStyle, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', gap: isMobile ? '15px' : '20px' }}>
         <h4 style={{ ...tableTitleStyle, flexShrink: 0 }}>
           Daftar Aktif : <span style={{color: '#093661', marginLeft: '5px'}}>{viewFilter}</span>
         </h4>
         
         <div style={{ display: 'flex', gap: '15px', width: isMobile ? '100%' : 'auto', flexWrap: 'wrap', alignItems: 'center' }}>
-          {/* Input Pencarian */}
           <div style={{ position: 'relative', flex: isMobile ? 1 : 'none' }}>
             <i className="fa fa-search" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#A0AEC0', fontSize: '13px' }}></i>
             <input 

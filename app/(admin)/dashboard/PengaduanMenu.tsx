@@ -19,22 +19,20 @@ export default function PengaduanMenu({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // PERUBAHAN: Hanya menangani status Selesai dan Proses
   const getStatusStyle = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'selesai':
-        return { bg: '#E6FFFA', text: '#285E61' }; // Hijau Toska untuk Selesai
+        return { bg: '#E6FFFA', text: '#285E61' };
       case 'proses':
-        return { bg: '#EBF8FF', text: '#2C5282' }; // Biru untuk Proses
+        return { bg: '#EBF8FF', text: '#2C5282' };
       default:
-        return { bg: '#E6FFFA', text: '#285E61' }; // Default dialihkan ke Selesai (pengganti pending)
+        return { bg: '#E6FFFA', text: '#285E61' };
     }
   };
 
   return (
     <div style={{ padding: isMobile ? '20px' : '40px', backgroundColor: '#FFFFFF', borderRadius: '20px', fontFamily: "'Inter', sans-serif" }}>
       
-      {/* MODAL DETAIL */}
       {selectedDetail && (
         <div style={modalOverlayStyle} onClick={() => setSelectedDetail(null)}>
           <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
@@ -50,7 +48,6 @@ export default function PengaduanMenu({
         </div>
       )}
 
-      {/* HEADER */}
       <div style={{ marginBottom: '35px' }}>
         <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>
           Manajemen Pengaduan Layanan
@@ -60,7 +57,6 @@ export default function PengaduanMenu({
         </p>
       </div>
 
-      {/* FORM */}
       <div style={{ backgroundColor: '#F8FAFC', padding: '30px', borderRadius: '18px', border: '1px solid #E2E8F0', marginBottom: '40px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '20px' }}>
           <div>
@@ -145,7 +141,6 @@ export default function PengaduanMenu({
                         onClick={() => toggleStatusPengaduan(item.id, item.status)} 
                         style={{ ...statusBtnBase, backgroundColor: style.bg, color: style.text }}
                       >
-                        {/* PERUBAHAN: Menampilkan Selesai jika data kosong/pending */}
                         {item.status?.toLowerCase() === 'proses' ? 'Proses' : 'Selesai'}
                       </button>
                     </td>
@@ -167,7 +162,6 @@ export default function PengaduanMenu({
   );
 }
 
-// Styles
 const modalOverlayStyle: React.CSSProperties = { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '20px', backdropFilter: 'blur(4px)' };
 const modalContentStyle: React.CSSProperties = { backgroundColor: 'white', padding: '30px', borderRadius: '20px', width: '100%', maxWidth: '500px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' };
 const closeBtnStyle: React.CSSProperties = { marginTop: '25px', width: '100%', padding: '14px', backgroundColor: '#093661', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: '800', fontSize: '14px' };

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from 'react'; // Menambahkan useRef untuk navigasi slider
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import { motion, Variants } from 'framer-motion';
@@ -19,7 +19,6 @@ export default function DetailBerita() {
   const [kategoriAktif, setKategoriAktif] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Ref untuk mengontrol scroll horizontal slider
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,7 +47,6 @@ export default function DetailBerita() {
 
         const safeList = list || [];
         setBeritaLain(safeList);
-        // Mengambil lebih banyak data untuk fungsi slider (misal 12 item)
         setBeritaDisplay(safeList.slice(0, 12));
 
       } catch (err) {
@@ -60,7 +58,6 @@ export default function DetailBerita() {
     fetchData();
   }, [params?.id]);
 
-  // Fungsi navigasi slider kiri/kanan
   const scrollSlider = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
       const { scrollLeft, clientWidth } = sliderRef.current;
@@ -126,8 +123,6 @@ export default function DetailBerita() {
       <style dangerouslySetInnerHTML={{ __html: `
         .container-utama { max-width: 1140px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; }
         .area-berita { flex: 1; min-width: 300px; background: #fff; }
-        
-        /* CSS Baru untuk Grid 4 Kolom dan Slider */
         .slider-wrapper { position: relative; display: flex; align-items: center; width: 100%; margin-top: 20px; }
         .grid-slider { 
           display: grid; 
@@ -167,7 +162,6 @@ export default function DetailBerita() {
         }
         .prev-btn { left: -20px; }
         .next-btn { right: -20px; }
-
         .meta-ikon { color: #007bff; margin-right: 5px; }
         .form-input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; outline: none; font-size: 14px; width: 100%; }
         .btn-submit { margin-top: 15px; padding: 12px 25px; background-color: #002e5b; color: #ffffff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
@@ -182,7 +176,6 @@ export default function DetailBerita() {
       `}} />
 
       <div className="container-utama">
-        {/* Bagian Utama Berita */}
         <motion.div 
           className="area-berita"
           initial="hidden"
@@ -211,7 +204,6 @@ export default function DetailBerita() {
             dangerouslySetInnerHTML={{ __html: berita.isi }} 
           />
 
-          {/* BAGIAN SLIDER BERITA LAIN (4 GRID DENGAN ARROW) */}
           <div style={{ marginTop: '50px' }}>
             <h3 style={{ color: '#002e5b', borderLeft: '4px solid #002e5b', paddingLeft: '15px' }}>Berita Terkait</h3>
             
@@ -238,7 +230,6 @@ export default function DetailBerita() {
             </div>
           </div>
 
-          {/* Form Komentar */}
           <div style={{ marginTop: '60px' }}>
             <h3 style={{ margin: '0 0 20px 0', color: '#333', fontSize: '20px', fontWeight: 'bold' }}>0 Komentar</h3>
             <div style={{ backgroundColor: '#f8f9fa', padding: '30px', borderRadius: '8px' }}>
