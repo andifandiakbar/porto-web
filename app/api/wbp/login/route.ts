@@ -9,10 +9,20 @@ export async function POST(request: NextRequest) {
     const ADMIN_PASS = "123";
 
     if (username === ADMIN_USER && password === ADMIN_PASS) {
-      return NextResponse.json({ 
+      const response = NextResponse.json({ 
         success: true, 
         message: "Login Berhasil!" 
       });
+
+      response.cookies.set('admin_session', 'authenticated_token_123', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 86400,
+        path: '/',
+      });
+
+      return response;
     } else {
       return NextResponse.json(
         { success: false, message: "Username atau Password Salah" },

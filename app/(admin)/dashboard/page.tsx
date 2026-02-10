@@ -11,7 +11,6 @@ import VideoMenu from './VideoMenu';
 import ProdukMenu from './ProdukMenu'; 
 
 interface NavItemProps { active: boolean; onClick: () => void; icon: string; label: string; }
-interface StatCardProps { label: string; value: string; sub: string; color: string; isMobile: boolean; }
 
 export default function RutanSinjaiDashboard() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
@@ -84,6 +83,18 @@ export default function RutanSinjaiDashboard() {
   const fetchVideo = async () => {
     const { data } = await supabase.from('daftar_video').select('*').order('id', { ascending: false });
     if (data) setDaftarVideo(data);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/wbp/logout', { method: 'POST' });
+      if (res.ok) {
+        router.push('/login');
+        router.refresh();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handlePublikasiBerita = async () => {
@@ -209,7 +220,7 @@ export default function RutanSinjaiDashboard() {
             <div style={{ flex: 1, overflow: 'hidden' }}>
               <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#2D3748', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Staf Admin</div>
             </div>
-            <button onMouseDown={() => setActiveExit(true)} onMouseUp={() => setActiveExit(false)} onClick={() => router.push('/admin')} style={{ ...exitBtn, transform: activeExit ? 'scale(0.92)' : 'scale(1)' }}>Keluar</button>
+            <button onMouseDown={() => setActiveExit(true)} onMouseUp={() => setActiveExit(false)} onClick={handleLogout} style={{ ...exitBtn, transform: activeExit ? 'scale(0.92)' : 'scale(1)' }}>Keluar</button>
           </div>
         </div>
       </aside>
