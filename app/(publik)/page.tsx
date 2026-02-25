@@ -208,12 +208,6 @@ export default function LamanPublikRutan() {
               <Link href="/JadwalKunjungan" className="btn">Lihat Jadwal</Link>
             </motion.div>
             <motion.div variants={fadeInVariant} className="card">
-              <div className="icon"><i className="fa-solid fa-clipboard-list"></i></div>
-              <h3>Sistem Antrian</h3>
-              <p>Pendaftaran antrian kunjungan online</p>
-              <a href="https://docs.google.com/forms/..." className="btn">Daftar Sekarang</a>
-            </motion.div>
-            <motion.div variants={fadeInVariant} className="card">
               <div className="icon"><i className="fa-solid fa-file-lines"></i></div>
               <h3>Syarat & Ketentuan</h3>
               <p>Prosedur dan ketentuan kunjungan</p>
