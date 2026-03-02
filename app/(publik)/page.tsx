@@ -261,7 +261,7 @@ export default function LamanPublikRutan() {
                         <img src={item.img} alt="Berita" style={{ width: '100%', display: 'block' }} />
                       </div>
                       <div className="news-content-v2">
-                        <span className="badge-berita">Berita Utama</span>
+                        <span className="badge-berita">Beritaa Utama</span>
                         <h3 className="news-title-v2">{item.headline}</h3>
                         <p className="news-date-v2">
                           By Humas Rutan Sinjai  |  {item.meta.includes('|') ? item.meta.split('|')[1]?.trim() : item.meta}
