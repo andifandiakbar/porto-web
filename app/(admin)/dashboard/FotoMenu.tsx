@@ -69,7 +69,7 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
     <div style={{ padding: '40px', backgroundColor: '#FFFFFF', borderRadius: '20px', fontFamily: "'Inter', sans-serif" }}>
       
       <div style={{ marginBottom: '35px' }}>
-        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>Galeri Foto</h3>
+        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '700', margin: '0 0 5px 0' }}>Galeri Foto</h3>
         <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>Kelola dan publikasikan dokumentasi kegiatan ke website publik.</p>
       </div>
 

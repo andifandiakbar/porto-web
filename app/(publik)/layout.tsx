@@ -81,7 +81,7 @@ export default function RootLayout({ children }: LayoutProps) {
 
               <ul className={`menu ${isMenuOpen ? 'active' : ''}`}>
                 <li><a href="/"><i className="fa-solid fa-house"></i>Beranda</a></li>
-                <li><a href="#"><i className="fa-solid fa-user"></i> Profil</a></li>
+                <li><a href="/profil"><i className="fa-solid fa-user"></i> Profil</a></li>
                 <li className="dropdown">
                   <a href="#"><i className="fa-solid fa-image"></i> Media</a>
                   <ul className="dropdown-menu">
@@ -95,7 +95,7 @@ export default function RootLayout({ children }: LayoutProps) {
                   <ul className="dropdown-menu">
                     <li><a href="/Layanan">Informasi Layanan</a></li>
                     <li><a href="#">Administrasi</a></li>
-                    <li><a href="#">Pusat Terpadu (PTSP)</a></li>
+                    <li><a href="/ptsp">Pusat Terpadu (PTSP)</a></li>
                   </ul>
                 </li>
                 <li><a href="/Pengaduan"><i className="fa-solid fa-headset"></i> Pengaduan</a></li>
@@ -111,7 +111,7 @@ export default function RootLayout({ children }: LayoutProps) {
                 </div>
                 <ul className="mobile-menu-list">
                   <li><a href="/">Beranda</a></li>
-                  <li><a href="#">Profil</a></li>
+                  <li><a href="/profil">Profil</a></li>
 
                   <li className={`mobile-dropdown ${activeMediaMenu ? 'active-parent-blue' : ''}`}>
                     <a href="#" onClick={(e) => { e.preventDefault(); setActiveMediaMenu(!activeMediaMenu); }}>
@@ -146,7 +146,7 @@ export default function RootLayout({ children }: LayoutProps) {
                           </a>
                         </li>
                         <li className={activeItem === 'ptsp' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '#'); }}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '/ptsp'); }}>
                             Pusat Terpadu (PTSP)
                           </a>
                         </li>
@@ -199,10 +199,10 @@ export default function RootLayout({ children }: LayoutProps) {
                 <div className="footer-col">
                   <h4>Profil Unit Pelaksana Teknis</h4>
                   <ul>
-                    <li><a href="#">Sejarah Pemasyarakatan</a></li>
-                    <li><a href="#">Selayang Pandang Satuan Kerja</a></li>
-                    <li><a href="#">Kedudukan Tugas dan Fungsi</a></li>
-                    <li><a href="#">Visi Misi dan Tata Nilai</a></li>
+                    <li><a href="/profil/sejarah">Sejarah Pemasyarakatan</a></li>
+                    <li><a href="/profil/pejabat">Selayang Pandang Satuan Kerja</a></li>
+                    <li><a href="/profil/tugas-fungsi">Kedudukan Tugas dan Fungsi</a></li>
+                    <li><a href="/profil/visi-misi">Visi Misi dan Tata Nilai</a></li>
                     <li><a href="#">Mars Pemasyarakatan</a></li>
                   </ul>
                 </div>
@@ -210,8 +210,8 @@ export default function RootLayout({ children }: LayoutProps) {
                 <div className="footer-col">
                   <div className="footer-map-container" style={{ position: 'relative' }}>
                     <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.115810052989!2d120.25043017589574!3d-5.12858525287739!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x302fbcd7be14bb21%3A0x1df1482e91046273!2sRumah%20Tahanan%20Negara%20Kelas%20IIB%20Sinjai!5e0!3m2!1sid!2sid!4v1716300000000!5m2!1sid!2sid" 
-                      width="180%" 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.7164998826763!2d120.25039377501066!3d-5.128683694848525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbe25d7967ea149%3A0x95616f676330edc8!2sRutan%20Sinjai!5e0!3m2!1sid!2sid!4v1740983400000!5m2!1sid!2sid" 
+                      width="100%" 
                       height="209" 
                       style={{ border: 0 }}
                       allowFullScreen={true} 

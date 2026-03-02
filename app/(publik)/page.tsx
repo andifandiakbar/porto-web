@@ -309,8 +309,7 @@ export default function LamanPublikRutan() {
               viewport={{ once: true }}
               variants={fadeInVariant}
             >
-              <h3 style={{ color: '#093661', fontSize: '30px', fontWeight: '760', marginTop: '0', marginBottom: '10px' }}>Cari Data WBP</h3>
-              <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '0', marginBottom: '30px' }}>Gunakan fitur pencarian di bawah untuk menemukan lokasi atau status warga binaan.</p>
+              <h3 style={{ color: '#093661', fontSize: '30px', fontWeight: '760', marginTop: '0', marginBottom: '40px' }}>Silahkan Cari Nama WBP yang akan dikunjungi</h3>
               
               <div style={{ position: 'relative', width: '100%' }}>
                 <i className="fa-solid fa-magnifying-glass" style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}></i>
@@ -327,7 +326,7 @@ export default function LamanPublikRutan() {
               <motion.button 
                 type="button" 
                 style={{ width: '100%', marginTop: '20px', backgroundColor: '#093661', color: 'white', border: 'none', paddingTop: '16px', paddingBottom: '16px', fontSize: '16px', borderRadius: '14px', cursor: 'pointer', fontWeight: '700' }}
-                whileHover={{ backgroundColor: '#0c467e', y: -2 }}
+                whileHover={{ backgroundColor: '#0c467e' }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleSearch} 
               >

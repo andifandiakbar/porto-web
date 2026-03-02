@@ -92,7 +92,7 @@ export default function SyaratKetentuan() {
             </div>
             <div className="k-info">
               <h4 style={titleStyle}>Izin Pihak Penahan</h4>
-              <p style={descStyle}>Wajib Membawa Surat Izin Dari Pihak Penahan (Bagi Tahanan).</p>
+              <p style={descStyle}>Wajib Membawa Surat Izin Dari Pihak Penahan (Bagi Tahanan)</p>
             </div>
           </motion.div>
 

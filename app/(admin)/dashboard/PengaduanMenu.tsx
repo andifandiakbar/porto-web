@@ -49,7 +49,7 @@ export default function PengaduanMenu({
       )}
 
       <div style={{ marginBottom: '35px' }}>
-        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>
+        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '700', margin: '0 0 5px 0' }}>
           Manajemen Pengaduan Layanan
         </h3>
         <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>
@@ -104,7 +104,7 @@ export default function PengaduanMenu({
 
       <div style={{ height: '1px', backgroundColor: '#EDF2F7', margin: '45px 0' }} />
 
-      <h4 style={{ fontSize: '18px', fontWeight: '800', color: '#2D3748', marginBottom: '25px' }}>
+      <h4 style={{ fontSize: '18px', fontWeight: '700', color: '#093661', marginBottom: '25px' }}>
         Daftar Laporan Masyarakat
       </h4>
 

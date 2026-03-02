@@ -70,23 +70,37 @@ function PencarianContent() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid #eef0f7', backgroundColor: '#f0f2f9' }}>
-                  <th style={{ padding: '15px 12px', textAlign: 'left' }}>NAMA LENGKAP</th>
-                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>NO. REG</th>
-                  <th style={{ padding: '15px 12px', textAlign: 'left' }}>PERKARA / PASAL</th>
-                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>MASA PIDANA</th>
-                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>EKSPIRASI</th>
-                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>AKSI</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>Foto</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'left' }}>Nama Lengkap</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>No. Reg</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'left' }}>Perkara / Pasal</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>Masa Pidana</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>Ekspirasi</th>
+                  <th style={{ padding: '15px 12px', textAlign: 'center' }}>Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={6} style={{ textAlign: 'center', padding: '30px', color: '#666' }}>Memuat data...</td>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '30px', color: '#666' }}>Memuat data...</td>
                   </tr>
                 ) : filteredData.length > 0 ? (
                   filteredData.map((wbp, idx) => (
                     <tr key={idx} style={{ borderBottom: '1px solid #eef0f7' }}>
-                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#1f70b8' }}>{wbp.nama?.toUpperCase()}</td>
+                      <td style={{ padding: '12px', textAlign: 'center' }}>
+                        <div style={{ width: '50px', height: '60px', backgroundColor: '#f0f0f0', borderRadius: '4px', overflow: 'hidden', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #ddd' }}>
+                          {wbp.foto_url ? (
+                            <img 
+                              src={wbp.foto_url} 
+                              alt={wbp.nama} 
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                            />
+                          ) : (
+                            <span style={{ fontSize: '10px', color: '#999' }}>No Pic</span>
+                          )}
+                        </div>
+                      </td>
+                      <td style={{ padding: '12px', fontWeight: 'bold', color: '#1f70b8' }}>{wbp.nama}</td>
                       <td style={{ padding: '12px', textAlign: 'center' }}>{wbp.nik}</td>
                       <td style={{ padding: '12px' }}>{wbp.kasus}</td>
                       <td style={{ padding: '12px', textAlign: 'center' }}>{wbp.lama_pidana || '-'}</td>
@@ -107,7 +121,7 @@ function PencarianContent() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} style={{ textAlign: 'center', padding: '30px', color: '#999' }}>Data tidak ditemukan</td>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '30px', color: '#999' }}>Data tidak ditemukan</td>
                   </tr>
                 )}
               </tbody>

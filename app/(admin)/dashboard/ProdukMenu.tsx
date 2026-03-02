@@ -153,7 +153,7 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
       `}</style>
       
       <div style={{ marginBottom: '35px' }}>
-        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>Manajemen Karya WBP</h3>
+        <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '700', margin: '0 0 5px 0' }}>Manajemen Karya WBP</h3>
         <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>Kelola dan publikasikan produk hasil karya warga binaan ke galeri publik.</p>
       </div>
 

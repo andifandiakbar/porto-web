@@ -9,6 +9,7 @@ import BeritaMenu from './BeritaMenu';
 import FotoMenu from './FotoMenu';
 import VideoMenu from './VideoMenu';
 import ProdukMenu from './ProdukMenu'; 
+import Profil from './Profil';
 
 interface NavItemProps { active: boolean; onClick: () => void; icon: string; label: string; }
 
@@ -229,8 +230,8 @@ export default function RutanSinjaiDashboard() {
           <div style={{ padding: '27px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
             <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '90px', objectFit: 'contain' }} />
             <div>
-              <h2 style={{ fontSize: '15px', fontWeight: '800', color: '#093661', margin: 1 }}>Rutan Kelas II B</h2>
-              <p style={{ fontSize: '15px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
+              <h2 style={{ fontSize: '15px', fontWeight: '700', color: '#093661', margin: 1 }}>Rutan Kelas II B</h2>
+              <p style={{ fontSize: '14px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
             </div>
           </div>
           <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
@@ -238,6 +239,7 @@ export default function RutanSinjaiDashboard() {
             <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-envelope-open-text" label="Pengaduan" />
             <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-users-rectangle" label="Data WBP" />
             <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-newspaper" label="Update Berita" />
+            <NavItem active={activeMenu === 'profil'} onClick={() => { setActiveMenu('profil'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-user-tie" label="Profil" />
             <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-palette" label="Karya WBP" />
             <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-image" label="Galeri Foto" />
             <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-video" label="Galeri Video" />
@@ -277,6 +279,7 @@ export default function RutanSinjaiDashboard() {
             {activeMenu === 'foto' && <FotoMenu daftarFoto={daftarFoto} fetchFoto={fetchFoto} handleDelete={handleDelete} />}
             {activeMenu === 'video' && <VideoMenu daftarVideo={daftarVideo} fetchVideo={fetchVideo} handleDelete={handleDelete} />}
             {activeMenu === 'produk' && <ProdukMenu daftarKarya={daftarKarya} fetchKarya={fetchKarya} handleDelete={handleDelete} />}
+            {activeMenu === 'profil' && <Profil />}
           </div>
         </main>
       </div>

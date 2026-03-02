@@ -32,7 +32,7 @@ export default function BeritaMenu({
       `}</style>
       
       <div style={{ marginBottom: '35px' }}>
-        <h3 style={{ color: '#093661', fontSize: isMobile ? '18px' : '22px', fontWeight: '800', margin: '0 0 5px 0' }}>
+        <h3 style={{ color: '#093661', fontSize: isMobile ? '18px' : '22px', fontWeight: '700', margin: '0 0 5px 0' }}>
           Posting Berita Terbaru
         </h3>
         <p style={{ color: '#718096', fontSize: isMobile ? '13px' : '14px', margin: 0 }}>
@@ -102,7 +102,7 @@ export default function BeritaMenu({
       <div style={{ height: '1px', backgroundColor: '#EDF2F7', margin: '45px 0' }} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h4 style={{ color: '#2D3748', fontSize: '18px', fontWeight: '800', margin: 0 }}>
+        <h4 style={{ color: '#2D3748', fontSize: '18px', fontWeight: '700', margin: 0 }}>
           Riwayat Berita
         </h4>
       </div>
