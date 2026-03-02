@@ -23,6 +23,13 @@ export default function BeritaMenu({
   return (
     <div style={{ padding: isMobile ? '15px' : '40px', backgroundColor: '#FFFFFF', borderRadius: '20px', fontFamily: "'Inter', sans-serif" }}>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+      <style>{`
+        .btn-press:active {
+          filter: brightness(0.85);
+          transform: scale(0.98);
+          opacity: 0.9;
+        }
+      `}</style>
       
       <div style={{ marginBottom: '35px' }}>
         <h3 style={{ color: '#093661', fontSize: isMobile ? '18px' : '22px', fontWeight: '800', margin: '0 0 5px 0' }}>
@@ -78,6 +85,7 @@ export default function BeritaMenu({
         </div>
 
         <button 
+          className="btn-press"
           onClick={handlePublikasiBerita} 
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
@@ -139,6 +147,7 @@ export default function BeritaMenu({
                   </td>
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
                     <button 
+                      className="btn-press"
                       onClick={() => handleDelete(news.id, 'daftar_berita')} 
                       style={deleteBtnStyle}
                     >

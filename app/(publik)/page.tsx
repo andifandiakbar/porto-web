@@ -28,8 +28,6 @@ export default function LamanPublikRutan() {
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [countPenghuni, setCountPenghuni] = useState<number>(0);
   const [targetPenghuni, setTargetPenghuni] = useState<number>(0);
-  const [countKunjungan, setCountKunjungan] = useState<number>(0);
-  const [targetKunjungan, setTargetKunjungan] = useState<number>(110);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [newsIndex, setNewsIndex] = useState<number>(0); 
 
@@ -139,15 +137,6 @@ export default function LamanPublikRutan() {
       return () => clearTimeout(timer);
     }
   }, [countPenghuni, targetPenghuni]);
-
-  useEffect(() => {
-    if (countKunjungan < targetKunjungan) {
-      const timer = setTimeout(() => {
-        setCountKunjungan(prev => prev + 1);
-      }, 15);
-      return () => clearTimeout(timer);
-    }
-  }, [countKunjungan, targetKunjungan]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -262,7 +251,8 @@ export default function LamanPublikRutan() {
                       flexGrow: 0,
                       flexShrink: 0,
                       flexBasis: isMobile ? '100%' : '33.333%', 
-                      padding: '0 10px', 
+                      paddingLeft: '10px',
+                      paddingRight: '10px', 
                       boxSizing: 'border-box' 
                     }}
                   >
@@ -287,73 +277,67 @@ export default function LamanPublikRutan() {
         </div>
       </motion.section>
 
-      <section className="wbp-info-section" style={{ width: '100%', padding: isMobile ? '20px 0 40px 0' : '40px 0' }}>
-        <div className="container-wbp" style={{ maxWidth: '1150px', margin: '0 auto', padding: '0 20px', marginTop: isMobile ? '-10px' : '0' }}>
-          <motion.div 
-            className="wbp-header-text"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInVariant}
-          >
-            <h2 style={{ color: '#093661', fontWeight: 'bold' }}>RUTAN KELAS IIB SINJAI</h2>
-            <p style={{ color: '#555' }}>SISTEM INFORMASI DATA WARGA BINAAN</p>
-          </motion.div>
-          
-          <motion.div 
-            className="wbp-stats-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{ visible: { transition: { staggerChildren: 0 } } }}
-          >
-            <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
-              <div className="stat-number" style={{ color: '#ffc107' }}>{countPenghuni}</div>
-              <div className="stat-label" style={{ color: '#fff' }}>Penghuni Saat Ini</div>
-            </motion.div>
-            <motion.div variants={fadeInVariant} className="wbp-stat-card" style={{ backgroundColor: '#093661' }}>
-              <div className="stat-number" style={{ color: '#ffc107' }}>{countKunjungan}</div>
-              <div className="stat-label" style={{ color: '#fff' }}>Kunjungan Bulan Ini</div>
-            </motion.div>
-          </motion.div>
-          
-          <motion.div 
-            className="wbp-search-container" 
-            style={{ backgroundColor: '#FAFBFF', padding: '40px', borderRadius: '12px', width: '100%', boxSizing: 'border-box' }}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeInVariant}
-          >
-            <div 
-              className="search-header-btn" 
-              style={{ backgroundColor: '#093661', color: 'white', padding: '18px', borderRadius: '8px', fontSize: isMobile ? '18px' : '24px', fontWeight: '600', marginBottom: '25px', width: '100%', textAlign: 'center', boxSizing: 'border-box' }}
+      <section className="wbp-info-section" style={{ width: '100%', paddingTop: '80px', paddingBottom: '80px', backgroundColor: '#F8FAFC' }}>
+        <div className="container-wbp" style={{ maxWidth: '1150px', marginLeft: 'auto', marginRight: 'auto', paddingLeft: '20px', paddingRight: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1.3fr', gap: '40px', alignItems: 'center' }}>
+            
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInVariant}
+              style={{ textAlign: 'center' }}
             >
-              Silahkan Cari Nama WBP yang akan dikunjungi
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <input 
-                type="text" 
-                style={{ width: '100%', padding: '10px', border: '2px solid #EEEEEE', borderRadius: '4px', outline: 'none', textAlign: 'center', fontSize: '16px' }}
-                placeholder="Masukkan nama wbp..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              />
-              <div style={{ marginTop: '15px' }}>
-                <motion.button 
-                  type="button" 
-                  style={{ backgroundColor: '#093661', color: 'white', border: 'none', padding: '10px 60px', fontSize: '18px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', outline: 'none', boxShadow: '0 4px 6px rgba(9, 54, 97, 0.2)' }}
-                  whileHover={{ backgroundColor: '#f1c407', color: '#093661' }}
-                  whileTap={{ backgroundColor: '#d4ac0d' }}
-                  transition={{ duration: 0.2 }}
-                  onClick={handleSearch} 
-                >
-                  Cari
-                </motion.button>
+              <h2 style={{ color: '#093661', fontWeight: '700', fontSize: isMobile ? '28px' : '40px', lineHeight: '1.2', marginTop: '0', marginBottom: '15px' }}>
+                Data Pelayanan
+              </h2>
+              <p style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.3', marginTop: '0', marginBottom: '25px', marginLeft: 'auto', marginRight: 'auto', maxWidth: '450px' }}>
+                Informasi jumlah penghuni Rumah Tahanan Negara Kelas II B Sinjai yang diperbarui secara berkala untuk transparansi publik.
+              </p>
+              
+              <div>
+                <div style={{ color: '#ebbc00', fontSize: '100px', fontWeight: '700', lineHeight: '1' }}>{countPenghuni}</div>
+                <div style={{ color: '#64748b', fontSize: '18px', fontWeight: '600', marginTop: '10px', textTransform: 'none' }}>Total Penghuni Saat Ini</div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            <motion.div 
+              className="wbp-search-container" 
+              style={{ backgroundColor: '#ffffff', paddingTop: isMobile ? '30px' : '45px', paddingBottom: isMobile ? '30px' : '45px', paddingLeft: isMobile ? '20px' : '45px', paddingRight: isMobile ? '20px' : '45px', borderRadius: '28px', boxShadow: '0 10px 40px rgba(0,0,0,0.04)', borderStyle: 'solid', borderWidth: '1px', borderColor: '#f1f5f9' }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInVariant}
+            >
+              <h3 style={{ color: '#093661', fontSize: '30px', fontWeight: '760', marginTop: '0', marginBottom: '10px' }}>Cari Data WBP</h3>
+              <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '0', marginBottom: '30px' }}>Gunakan fitur pencarian di bawah untuk menemukan lokasi atau status warga binaan.</p>
+              
+              <div style={{ position: 'relative', width: '100%' }}>
+                <i className="fa-solid fa-magnifying-glass" style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}></i>
+                <input 
+                  type="text" 
+                  style={{ width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '55px', paddingRight: '20px', borderStyle: 'solid', borderWidth: '2px', borderColor: '#f1f5f9', backgroundColor: '#f8fafc', borderRadius: '14px', outline: 'none', fontSize: '16px', color: '#1e293b', boxSizing: 'border-box' }}
+                  placeholder="Ketik nama warga binaan..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                />
+              </div>
+              
+              <motion.button 
+                type="button" 
+                style={{ width: '100%', marginTop: '20px', backgroundColor: '#093661', color: 'white', border: 'none', paddingTop: '16px', paddingBottom: '16px', fontSize: '16px', borderRadius: '14px', cursor: 'pointer', fontWeight: '700' }}
+                whileHover={{ backgroundColor: '#0c467e', y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleSearch} 
+              >
+                Mulai Pencarian
+              </motion.button>
+              
+
+            </motion.div>
+
+          </div>
         </div>
       </section>
     </main>

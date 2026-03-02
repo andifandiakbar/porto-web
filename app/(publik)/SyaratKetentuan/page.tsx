@@ -34,9 +34,8 @@ export default function SyaratKetentuan() {
         
         <motion.div 
           className="section-title" 
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           style={{ textAlign: 'center', marginBottom: '40px' }}
         >
@@ -61,8 +60,7 @@ export default function SyaratKetentuan() {
           className="ketentuan-stack" 
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          animate="visible"
           style={{
             display: 'flex',
             flexDirection: 'column',

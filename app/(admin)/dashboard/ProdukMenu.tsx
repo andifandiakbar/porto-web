@@ -144,6 +144,13 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
 
   return (
     <div style={{ padding: '40px', backgroundColor: '#FFFFFF', borderRadius: '20px', fontFamily: "'Inter', sans-serif" }}>
+      <style>{`
+        .btn-act:active {
+          filter: brightness(0.85);
+          opacity: 0.9;
+          transform: scale(0.98);
+        }
+      `}</style>
       
       <div style={{ marginBottom: '35px' }}>
         <h3 style={{ color: '#093661', fontSize: '24px', fontWeight: '800', margin: '0 0 5px 0' }}>Manajemen Karya WBP</h3>
@@ -173,13 +180,15 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
         </div>
 
         <button 
+          className="btn-act"
           onClick={handleSimpan}
           disabled={loading}
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
           style={{ 
             ...buttonStyle, 
-            backgroundColor: loading ? '#A0AEC0' : (isHover ? '#0d4a85' : '#093661') 
+            backgroundColor: loading ? '#A0AEC0' : (isHover ? '#0d4a85' : '#093661'),
+            transition: '0.2s'
           }}
         >
           {loading ? 'Sedang Menyimpan...' : 'Simpan Produk Karya Binaan'}
@@ -239,16 +248,17 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
                     <div style={{display: 'flex', justifyContent: 'center', gap: '10px'}}>
                       {editingId === item.id ? (
                         <button 
+                          className="btn-act"
                           onClick={() => handleInlineUpdate(item.id)} 
                           disabled={updateLoading} 
-                          style={{...btnEditInline, color: '#38A169'}}
+                          style={{...btnEditInline, color: '#38A169', transition: '0.2s'}}
                         >
                           {updateLoading ? '...' : 'Simpan'}
                         </button>
                       ) : (
-                        <button onClick={() => startEdit(item)} style={btnEditInline}>Edit</button>
+                        <button className="btn-act" onClick={() => startEdit(item)} style={{...btnEditInline, transition: '0.2s'}}>Edit</button>
                       )}
-                      <button onClick={() => handleDelete(item.id, 'daftar_karya')} style={btnDeleteInline}>Hapus</button>
+                      <button className="btn-act" onClick={() => handleDelete(item.id, 'daftar_karya')} style={{...btnDeleteInline, transition: '0.2s'}}>Hapus</button>
                     </div>
                   </td>
                 </tr>

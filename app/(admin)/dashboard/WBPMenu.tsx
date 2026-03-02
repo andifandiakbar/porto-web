@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
-export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWBP, handleDelete, handleUpdate }: any) {
+export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWBP, handleDelete, handleUpdate, setSelectedImage }: any) {
   const [isHover, setIsHover] = useState(false);
   const [viewFilter, setViewFilter] = useState('Narapidana');
   const [editId, setEditId] = useState<number | null>(null);
@@ -27,8 +27,11 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
       ? (!item.status_wbp || item.status_wbp === 'Narapidana')
       : item.status_wbp === 'Tahanan';
     
-    const matchesSearch = item.nama?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          item.nik?.toLowerCase().includes(searchTerm.toLowerCase());
+    const namaWBP = item.nama || "";
+    const nikWBP = item.nik || "";
+    
+    const matchesSearch = namaWBP.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          nikWBP.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesFilter && matchesSearch;
   });
@@ -38,14 +41,62 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
     setTempData({ ...item });
   };
 
-  const saveEdit = async () => {
-    await handleUpdate(tempData);
+  const cancelEdit = () => {
     setEditId(null);
+    setTempData({});
+  };
+
+  const saveEdit = async () => {
+    let dataToUpdate = { ...tempData };
+    
+    if (tempData.foto instanceof File) {
+      try {
+        const formData = new FormData();
+        formData.append('file', tempData.foto);
+        
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const uploadRes = await res.json();
+          if (uploadRes.url) {
+            dataToUpdate.foto_url = uploadRes.url;
+          }
+        }
+      } catch (error) {
+        console.error("Gagal mengunggah foto baru:", error);
+      }
+    }
+
+    delete dataToUpdate.foto;
+    await handleUpdate(dataToUpdate);
+    setEditId(null);
+    setTempData({});
+  };
+
+  const handleFileChange = (e: any, isEdit = false) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      if (isEdit) {
+        setTempData({ ...tempData, foto: file, foto_url: URL.createObjectURL(file) });
+      } else {
+        setWbpForm({ ...wbpForm, foto: file });
+      }
+    }
   };
 
   return (
-    <div style={{ ...containerStyle, padding: isMobile ? '20px' : '40px' }}>
+    <div style={{ ...containerStyle, padding: isMobile ? '20px' : '40px', maxWidth: '100%', overflowX: 'hidden' }}>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+      <style>{`
+        .btn-react:active {
+          filter: brightness(0.8);
+          opacity: 0.9;
+        }
+      `}</style>
       
       <div style={{ marginBottom: '35px' }}>
         <h3 style={headerTitleStyle}>Manajemen Data WBP</h3>
@@ -71,7 +122,28 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
         <FormInput label="Putusan Pidana" placeholder="... THN ... BLN ... HR" value={wbpForm.lama_pidana} onChange={(e: any) => setWbpForm({...wbpForm, lama_pidana: e.target.value})} />
         <FormInput label="Tanggal Ekspirasi" type="date" value={wbpForm.ekspirasi} onChange={(e: any) => setWbpForm({...wbpForm, ekspirasi: e.target.value})} />
         
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={labelStyle}>Foto WBP</label>
+          <input type="file" accept="image/*" onChange={(e) => handleFileChange(e)} style={inputStyle} />
+          {wbpForm.foto && (
+            <div style={{ position: 'relative', width: '60px', marginTop: '10px' }}>
+              <img 
+                src={wbpForm.foto instanceof File ? URL.createObjectURL(wbpForm.foto) : wbpForm.foto} 
+                alt="Preview" 
+                onClick={() => {
+                  if (typeof setSelectedImage === 'function') {
+                    setSelectedImage(wbpForm.foto instanceof File ? URL.createObjectURL(wbpForm.foto) : wbpForm.foto);
+                  }
+                }}
+                style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', cursor: 'zoom-in' }} 
+              />
+              <button className="btn-react" onClick={() => setWbpForm({...wbpForm, foto: null})} style={{ position: 'absolute', top: '-5px', right: '-5px', backgroundColor: '#E53E3E', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '10px' }}>×</button>
+            </div>
+          )}
+        </div>
+
         <button 
+          className="btn-react"
           onClick={handleSimpanWBP} 
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
@@ -114,25 +186,48 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
         </div>
       </div>
 
-      <div style={{ ...tableWrapperStyle, border: isMobile ? 'none' : '1px solid #E2E8F0' }}>
+      <div style={{ ...tableWrapperStyle, border: isMobile ? 'none' : '1px solid #E2E8F0', width: '100%' }}>
         {isMobile ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             {filteredData.length > 0 ? (
               filteredData.map((item: any) => (
                 <div key={item.id} style={{ backgroundColor: '#F8FAFC', padding: '20px', borderRadius: '15px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ marginBottom: '10px' }}>
-                    <div style={{ fontSize: '11px', color: '#718096', fontWeight: 'bold' }}>BIODATA & NO. REG</div>
-                    {editId === item.id ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '5px' }}>
-                        <input style={editInputStyle} value={tempData.nama} onChange={(e) => setTempData({...tempData, nama: e.target.value})} />
-                        <input style={editInputStyle} value={tempData.nik} onChange={(e) => setTempData({...tempData, nik: e.target.value})} />
-                      </div>
-                    ) : (
-                      <div style={{ marginTop: '5px' }}>
-                        <div style={{ fontWeight: '800', color: '#2D3748', fontSize: '15px' }}>{item.nama}</div>
-                        <div style={{ fontSize: '12px', color: '#093661', fontWeight: '800' }}>{item.nik}</div>
-                      </div>
-                    )}
+                  <div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+                    <div 
+                      style={{ width: '60px', height: '75px', backgroundColor: '#E2E8F0', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, cursor: (editId === item.id ? tempData.foto_url : item.foto_url) ? 'zoom-in' : 'default' }} 
+                      onClick={() => {
+                        const currentFoto = editId === item.id ? tempData.foto_url : item.foto_url;
+                        if (currentFoto && typeof setSelectedImage === 'function') {
+                          setSelectedImage(currentFoto);
+                        }
+                      }}
+                    >
+                      {(editId === item.id ? tempData.foto_url : item.foto_url) ? (
+                        <img src={editId === item.id ? tempData.foto_url : item.foto_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                          <i className="fa fa-user" style={{ color: '#A0AEC0' }}></i>
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '11px', color: '#718096', fontWeight: 'bold' }}>BIODATA & NO. REG</div>
+                      {editId === item.id ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                          <input style={editInputStyle} value={tempData.nama} onChange={(e) => setTempData({...tempData, nama: e.target.value})} />
+                          <input style={editInputStyle} value={tempData.nik} onChange={(e) => setTempData({...tempData, nik: e.target.value})} />
+                          <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, true)} style={{ ...editInputStyle, padding: '4px' }} />
+                          <button className="btn-react" onClick={() => setTempData({...tempData, foto: null, foto_url: ""})} style={{ fontSize: '10px', color: '#E53E3E', background: 'none', border: 'none', cursor: 'pointer', padding: '0', textAlign: 'left' }}>
+                            <i className="fa fa-trash-can"></i> Hapus Foto
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ marginTop: '5px' }}>
+                          <div style={{ fontWeight: '800', color: '#2D3748', fontSize: '15px' }}>{item.nama}</div>
+                          <div style={{ fontSize: '12px', color: '#093661', fontWeight: '800' }}>{item.nik}</div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div style={{ marginBottom: '10px' }}>
                     <div style={{ fontSize: '11px', color: '#718096', fontWeight: 'bold' }}>KASUS</div>
@@ -162,11 +257,14 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
                   </div>
                   <div style={{ display: 'flex', gap: '10px', paddingTop: '15px', borderTop: '1px solid #E2E8F0' }}>
                     {editId === item.id ? (
-                      <button onClick={saveEdit} style={{...btnEditInline, flex: 1, justifyContent: 'center', color: '#38A169'}}>Simpan</button>
+                      <>
+                        <button className="btn-react" onClick={saveEdit} style={{...btnEditInline, flex: 1, justifyContent: 'center', color: '#38A169'}}>Simpan</button>
+                        <button className="btn-react" onClick={cancelEdit} style={{...btnEditInline, flex: 1, justifyContent: 'center', color: '#2B6CB0', borderColor: '#BEE3F8'}}>Batal</button>
+                      </>
                     ) : (
-                      <button onClick={() => startEdit(item)} style={{...btnEditInline, flex: 1, justifyContent: 'center'}}>Edit</button>
+                      <button className="btn-react" onClick={() => startEdit(item)} style={{...btnEditInline, flex: 1, justifyContent: 'center'}}>Edit</button>
                     )}
-                    <button onClick={() => handleDelete(item.id, 'daftar_wbp')} style={{...btnDeleteInline, flex: 1, justifyContent: 'center'}}>Hapus</button>
+                    <button className="btn-react" onClick={() => handleDelete(item.id, 'daftar_wbp')} style={{...btnDeleteInline, flex: 1, justifyContent: 'center'}}>Hapus</button>
                   </div>
                 </div>
               ))
@@ -175,14 +273,15 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
             )}
           </div>
         ) : (
-          <table style={tableStyle}>
+          <table style={{...tableStyle, width: '100%', tableLayout: 'auto'}}>
             <thead>
               <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
+                <th style={{ ...thStyle, width: '60px' }}>FOTO</th>
                 <th style={{ ...thStyle, width: '25%' }}>BIODATA & NO. REG</th>
                 <th style={{ ...thStyle, width: '25%' }}>KASUS / PERKARA</th>
                 <th style={{ ...thStyle, width: '15%' }}>MASA PIDANA</th>
                 <th style={{ ...thStyle, width: '15%' }}>EKSPIRASI</th>
-                <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>NAVIGASI</th>
+                <th style={{ ...thStyle, textAlign: 'center', width: '15%' }}>NAVIGASI</th>
               </tr>
             </thead>
             <tbody>
@@ -190,10 +289,33 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
                 filteredData.map((item: any) => (
                   <tr key={item.id} style={trStyle}>
                     <td style={tdStyle}>
+                      <div 
+                        style={{ width: '45px', height: '55px', backgroundColor: '#F1F5F9', borderRadius: '6px', overflow: 'hidden', border: '1px solid #E2E8F0', cursor: (editId === item.id ? tempData.foto_url : item.foto_url) ? 'zoom-in' : 'default' }} 
+                        onClick={() => {
+                          const currentFoto = editId === item.id ? tempData.foto_url : item.foto_url;
+                          if (currentFoto && typeof setSelectedImage === 'function') {
+                            setSelectedImage(currentFoto);
+                          }
+                        }}
+                      >
+                        {(editId === item.id ? tempData.foto_url : item.foto_url) ? (
+                          <img src={editId === item.id ? tempData.foto_url : item.foto_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                          <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                            <i className="fa fa-user" style={{ color: '#CBD5E0' }}></i>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td style={tdStyle}>
                       {editId === item.id ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <input style={editInputStyle} value={tempData.nama} onChange={(e) => setTempData({...tempData, nama: e.target.value})} />
-                            <input style={editInputStyle} value={tempData.nik} onChange={(e) => setTempData({...tempData, nik: e.target.value})} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            <input style={{...editInputStyle, marginBottom: '4px'}} value={tempData.nama} onChange={(e) => setTempData({...tempData, nama: e.target.value})} placeholder="Nama" />
+                            <input style={{...editInputStyle, marginBottom: '4px'}} value={tempData.nik} onChange={(e) => setTempData({...tempData, nik: e.target.value})} placeholder="No. Reg" />
+                            <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, true)} style={{ fontSize: '10px', width: '100%' }} />
+                            <button className="btn-react" onClick={() => setTempData({...tempData, foto: null, foto_url: ""})} style={{ fontSize: '10px', color: '#E53E3E', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', marginTop: '2px' }}>
+                              <i className="fa fa-trash-can"></i> Hapus Foto
+                            </button>
                         </div>
                       ) : (
                         <div>
@@ -224,20 +346,23 @@ export default function WBPMenu({ wbpForm, setWbpForm, handleSimpanWBP, daftarWB
                       )}
                     </td>
                     <td style={{ ...tdStyle, textAlign: 'center' }}>
-                      <div style={{display: 'flex', justifyContent: 'center', gap: '10px'}}>
+                      <div style={{display: 'flex', justifyContent: 'center', gap: '5px', flexWrap: 'wrap'}}>
                         {editId === item.id ? (
-                          <button onClick={saveEdit} style={{...btnEditInline, color: '#38A169'}}>Simpan</button>
+                          <>
+                            <button className="btn-react" onClick={saveEdit} style={{...btnEditInline, padding: '4px 8px', color: '#38A169', borderColor: '#C6F6D5'}}>Simpan</button>
+                            <button className="btn-react" onClick={cancelEdit} style={{...btnEditInline, padding: '4px 8px', color: '#2B6CB0', borderColor: '#BEE3F8'}}>Batal</button>
+                          </>
                         ) : (
-                          <button onClick={() => startEdit(item)} style={btnEditInline}>Edit</button>
+                          <button className="btn-react" onClick={() => startEdit(item)} style={btnEditInline}>Edit</button>
                         )}
-                        <button onClick={() => handleDelete(item.id, 'daftar_wbp')} style={btnDeleteInline}>Hapus</button>
+                        <button className="btn-react" onClick={() => handleDelete(item.id, 'daftar_wbp')} style={btnDeleteInline}>Hapus</button>
                       </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '100px 20px', color: '#A0AEC0', fontSize: '14px', fontStyle: 'italic' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '100px 20px', color: '#A0AEC0', fontSize: '14px', fontStyle: 'italic' }}>
                     Data tidak ditemukan
                   </td>
                 </tr>
@@ -272,12 +397,12 @@ const dividerStyle = { height: '1px', backgroundColor: '#EDF2F7', margin: '45px 
 const tableHeaderActionStyle = { display: 'flex', justifyContent: 'space-between', marginBottom: '25px' };
 const tableTitleStyle = { fontSize: '18px', fontWeight: '800', color: '#2D3748', margin: 0, display: 'flex', alignItems: 'center' };
 const filterSelectStyle = { padding: '10px 15px', borderRadius: '10px', border: '2px solid #093661', fontSize: '13px', fontWeight: '700', color: '#093661', outline: 'none', cursor: 'pointer' };
-const tableWrapperStyle = { overflow: 'hidden' };
-const tableStyle = { width: '100%', borderCollapse: 'collapse' as 'collapse', tableLayout: 'fixed' as 'fixed' };
-const thStyle = { padding: '18px 20px', textAlign: 'left' as 'left', fontSize: '11px', fontWeight: '800', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '1px' };
-const tdStyle = { padding: '20px', fontSize: '14px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as 'nowrap' };
+const tableWrapperStyle = { overflowX: 'auto' as 'auto' };
+const tableStyle = { borderCollapse: 'collapse' as 'collapse' };
+const thStyle = { padding: '18px 15px', textAlign: 'left' as 'left', fontSize: '11px', fontWeight: '800', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '1px' };
+const tdStyle = { padding: '15px', fontSize: '14px', verticalAlign: 'top' as 'top', overflow: 'visible', whiteSpace: 'normal' as 'normal', wordBreak: 'break-word' as 'break-word' };
 const trStyle = { borderBottom: '1px solid #F1F5F9', transition: '0.2s' };
-const editInputStyle = { width: '100%', padding: '8px 12px', borderRadius: '8px', border: '2px solid #093661', outline: 'none', fontSize: '13px' };
+const editInputStyle = { width: '100%', padding: '6px 10px', borderRadius: '6px', border: '2px solid #093661', outline: 'none', fontSize: '12px' };
 const badgeStyle = { padding: '6px 12px', borderRadius: '8px', backgroundColor: '#FFF5F5', color: '#E53E3E', fontSize: '12px', fontWeight: '800', display: 'inline-flex', alignItems: 'center' };
 const btnEditInline = { color: '#093661', border: '1px solid #E2E8F0', background: 'white', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' };
 const btnDeleteInline = { color: '#E53E3E', border: '1px solid #FED7D7', background: '#FFF5F5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' };

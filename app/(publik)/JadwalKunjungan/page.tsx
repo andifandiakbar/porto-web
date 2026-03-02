@@ -34,9 +34,8 @@ export default function JadwalKunjunganPage() {
         
         <motion.div 
           className="section-title" 
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           style={{ textAlign: 'center', marginBottom: '40px' }}
         >
@@ -61,8 +60,7 @@ export default function JadwalKunjunganPage() {
           className="jadwal-grid" 
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          animate="visible"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -130,10 +128,9 @@ export default function JadwalKunjunganPage() {
 
         <motion.div 
           className="footer-note" 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
           style={{
             textAlign: 'center',
             marginTop: '35px',

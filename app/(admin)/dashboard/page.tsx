@@ -14,6 +14,7 @@ interface NavItemProps { active: boolean; onClick: () => void; icon: string; lab
 
 export default function RutanSinjaiDashboard() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function RutanSinjaiDashboard() {
   const [pengaduanForm, setPengaduanForm] = useState({ pelapor: '', kontak: '', isi: '' });
   
   const [wbpForm, setWbpForm] = useState({ 
-    nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana' 
+    nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana', foto: null 
   });
 
   const [daftarPengaduan, setDaftarPengaduan] = useState<any[]>([]);
@@ -115,6 +116,28 @@ export default function RutanSinjaiDashboard() {
 
   const handleSimpanWBP = async () => {
     if(!wbpForm.nama) { alert("Nama wajib diisi"); return; }
+    
+    let publicUrl = '';
+    
+    if (wbpForm.foto && (wbpForm.foto as any).name) {
+      const file = wbpForm.foto as File;
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `wbp/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        alert("Gagal upload foto: " + uploadError.message);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
+      publicUrl = urlData.publicUrl;
+    }
+
     const payload = { 
         nama: wbpForm.nama, 
         nik: wbpForm.nik, 
@@ -122,14 +145,17 @@ export default function RutanSinjaiDashboard() {
         lama_pidana: wbpForm.lama_pidana, 
         ekspirasi: wbpForm.ekspirasi || null, 
         blok_kamar: wbpForm.blok_kamar,
-        status_wbp: wbpForm.status_wbp 
+        status_wbp: wbpForm.status_wbp,
+        foto_url: publicUrl
     };
+
     const { error } = await supabase.from('daftar_wbp').insert([payload]);
+    
     if (!error) { 
       alert(`Berhasil menyimpan data ${wbpForm.status_wbp}`); 
       setWbpForm({ 
         nama: '', nik: '', kasus: '', lama_pidana: '', 
-        ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana' 
+        ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana', foto: null 
       }); 
       fetchWBP(); 
     } else {
@@ -147,7 +173,8 @@ export default function RutanSinjaiDashboard() {
         lama_pidana: data.lama_pidana,
         ekspirasi: data.ekspirasi,
         blok_kamar: data.blok_kamar,
-        status_wbp: data.status_wbp
+        status_wbp: data.status_wbp,
+        foto_url: data.foto_url
       })
       .eq('id', data.id);
 
@@ -199,11 +226,11 @@ export default function RutanSinjaiDashboard() {
 
       <aside style={{ width: isSidebarVisible ? '210px' : '0px', backgroundColor: '#FFFFFF', borderRight: isSidebarVisible ? '1px solid #EBEBEB' : 'none', display: 'flex', flexDirection: 'column', zIndex: 1000, transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden', flexShrink: 0, position: isMobile ? 'fixed' : 'relative', height: '100vh' }}>
         <div style={{ width: '210px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '27px 27px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
-            <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+          <div style={{ padding: '27px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
+            <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '90px', objectFit: 'contain' }} />
             <div>
-              <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#093661', margin: 3 }}>Rutan Kelas II B</h2>
-              <p style={{ fontSize: '17px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
+              <h2 style={{ fontSize: '15px', fontWeight: '800', color: '#093661', margin: 1 }}>Rutan Kelas II B</h2>
+              <p style={{ fontSize: '15px', color: '#A0AEC0', margin: 3 }}>Sinjai</p>
             </div>
           </div>
           <nav style={{ flex: 1, padding: '20px 15px', overflowY: 'auto', backgroundColor: '#FFF' }}>
@@ -245,7 +272,7 @@ export default function RutanSinjaiDashboard() {
           <div style={contentCard}>
             {activeMenu === 'dashboard' && <DashboardHome setActiveMenu={setActiveMenu} daftarWBP={daftarWBP} daftarPengaduan={daftarPengaduan} daftarBerita={daftarBerita} />}
             {activeMenu === 'pengaduan' && <PengaduanMenu pengaduanForm={pengaduanForm} setPengaduanForm={setPengaduanForm} handleSimpanPengaduan={handleSimpanPengaduan} daftarPengaduan={daftarPengaduan} toggleStatusPengaduan={toggleStatusPengaduan} handleDelete={handleDelete} />}
-            {activeMenu === 'wbp' && <WBPMenu wbpForm={wbpForm} setWbpForm={setWbpForm} handleSimpanWBP={handleSimpanWBP} daftarWBP={daftarWBP} handleDelete={handleDelete} handleUpdate={handleUpdateWBP} />}
+            {activeMenu === 'wbp' && <WBPMenu wbpForm={wbpForm} setWbpForm={setWbpForm} handleSimpanWBP={handleSimpanWBP} daftarWBP={daftarWBP} handleDelete={handleDelete} handleUpdate={handleUpdateWBP} setSelectedImage={setSelectedImage} />}
             {activeMenu === 'berita' && <BeritaMenu judulBerita={judulBerita} setJudulBerita={setJudulBerita} kategoriBerita={kategoriBerita} setKategoriBerita={setKategoriBerita} setFileGambar={setFileGambar} isiBerita={isiBerita} setIsiBerita={setIsiBerita} handlePublikasiBerita={handlePublikasiBerita} daftarBerita={daftarBerita} toggleStatusBerita={toggleStatusBerita} handleDelete={handleDelete} />}
             {activeMenu === 'foto' && <FotoMenu daftarFoto={daftarFoto} fetchFoto={fetchFoto} handleDelete={handleDelete} />}
             {activeMenu === 'video' && <VideoMenu daftarVideo={daftarVideo} fetchVideo={fetchVideo} handleDelete={handleDelete} />}
@@ -253,6 +280,15 @@ export default function RutanSinjaiDashboard() {
           </div>
         </main>
       </div>
+
+      {selectedImage && (
+        <div onClick={() => setSelectedImage(null)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out', padding: '20px' }}>
+          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }}>
+            <img src={selectedImage} alt="Preview" style={{ maxWidth: '100%', maxHeight: '90vh', borderRadius: '12px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }} />
+            <button onClick={() => setSelectedImage(null)} style={{ position: 'absolute', top: '-40px', right: '-40px', background: 'none', border: 'none', color: 'white', fontSize: '30px', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -271,5 +307,5 @@ const exitBtn: React.CSSProperties = { padding: '8px 15px', backgroundColor: '#F
 const topHeaderStyle: React.CSSProperties = { backgroundColor: '#FFF', borderBottom: '1px solid #EBEBEB', display: 'flex', alignItems: 'center', gap: '20px', flexShrink: 0 };
 const contentCard: React.CSSProperties = { backgroundColor: 'white', borderRadius: '20px', border: '1px solid #EBEBEB', minHeight: '400px', marginBottom: '40px' };
 const glassBanner: React.CSSProperties = { background: 'linear-gradient(135deg, #093661 0%, #0046E5 100%)', borderRadius: '20px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '30px' };
-const glassCircle1: React.CSSProperties = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
 const glassCircle2: React.CSSProperties = { position: 'absolute', bottom: '-30px', left: '10%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' };
+const glassCircle1: React.CSSProperties = { position: 'absolute', top: '-20px', right: '-20px', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' };
