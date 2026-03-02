@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function proxy(request: NextRequest) {
+// Gunakan 'export default function middleware'
+// Ini adalah cara paling aman agar Turbopack mengenalinya
+export default function middleware(request: NextRequest) {
   const session = request.cookies.get('admin_session');
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isDashboardPage = request.nextUrl.pathname.startsWith('/dashboard');
