@@ -93,9 +93,9 @@ export default function RootLayout({ children }: LayoutProps) {
                 <li className="dropdown">
                   <a href="#"><i className="fa-solid fa-circle-info"></i> Layanan</a>
                   <ul className="dropdown-menu">
-                    <li><a href="/Layanan">Informasi Layanan</a></li>
-                    <li><a href="#">Administrasi</a></li>
-                    <li><a href="/ptsp">Pusat Terpadu (PTSP)</a></li>
+                    <li><a href="/Layanan/informasi-layanan">Informasi Layanan</a></li>
+                    <li><a href="/Layanan/administrasi">Administrasi</a></li>
+                    <li><a href="/Layanan/ptsp">Pusat Terpadu (PTSP)</a></li>
                   </ul>
                 </li>
                 <li><a href="/Pengaduan"><i className="fa-solid fa-headset"></i> Pengaduan</a></li>
@@ -136,17 +136,17 @@ export default function RootLayout({ children }: LayoutProps) {
                     {activeSubMenu && (
                       <ul className="mobile-submenu">
                         <li className={activeItem === 'info' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('info', '/Layanan'); }}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('info', '/Layanan/informasi-layanan'); }}>
                             Informasi Layanan
                           </a>
                         </li>
                         <li className={activeItem === 'admin' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('admin', '#'); }}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('admin', '/Layanan/administrasi'); }}>
                             Administrasi
                           </a>
                         </li>
                         <li className={activeItem === 'ptsp' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '/ptsp'); }}>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '/Layanan/ptsp'); }}>
                             Pusat Terpadu (PTSP)
                           </a>
                         </li>

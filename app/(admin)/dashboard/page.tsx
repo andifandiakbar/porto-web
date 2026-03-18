@@ -5,6 +5,7 @@ import { supabase } from '../../../lib/supabase';
 import DashboardHome from './DashboardHome';
 import PengaduanMenu from './PengaduanMenu';
 import WBPMenu from './WBPMenu'; 
+import RunningTextMenu from './RunningTextMenu';
 import BeritaMenu from './BeritaMenu';
 import FotoMenu from './FotoMenu';
 import VideoMenu from './VideoMenu';
@@ -243,6 +244,7 @@ export default function RutanSinjaiDashboard() {
             <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-palette" label="Karya WBP" />
             <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-image" label="Galeri Foto" />
             <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-video" label="Galeri Video" />
+            <NavItem active={activeMenu === 'runningtext'} onClick={() => { setActiveMenu('runningtext'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-scroll" label="Running Text" />
           </nav>
           <div style={{ padding: '20px 15px', borderTop: '1px solid #F1F1F1', display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#FFF', flexShrink: 0 }}>
             <div style={avatarCircle}>AD</div>
@@ -280,6 +282,7 @@ export default function RutanSinjaiDashboard() {
             {activeMenu === 'video' && <VideoMenu daftarVideo={daftarVideo} fetchVideo={fetchVideo} handleDelete={handleDelete} />}
             {activeMenu === 'produk' && <ProdukMenu daftarKarya={daftarKarya} fetchKarya={fetchKarya} handleDelete={handleDelete} />}
             {activeMenu === 'profil' && <Profil />}
+            {activeMenu === 'runningtext' && <RunningTextMenu />}
           </div>
         </main>
       </div>

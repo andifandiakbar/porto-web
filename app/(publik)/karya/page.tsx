@@ -35,7 +35,9 @@ export default function KaryaBinaanPage() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
+      transition: { 
+        staggerChildren: 0.15 
+      }
     }
   };
 
@@ -44,7 +46,7 @@ export default function KaryaBinaanPage() {
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.5, ease: "easeOut" } 
+      transition: { duration: 0.6, ease: "easeOut" } 
     }
   };
 
@@ -84,7 +86,7 @@ export default function KaryaBinaanPage() {
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px' }}>
         
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           style={{ textAlign: 'center', marginBottom: '60px' }}
@@ -106,8 +108,7 @@ export default function KaryaBinaanPage() {
             className="grid-karya"
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
+            animate="visible"
           >
             {daftarKarya.map((item) => (
               <motion.div 

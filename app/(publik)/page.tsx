@@ -33,6 +33,8 @@ export default function LamanPublikRutan() {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [newsFromCMS, setNewsFromCMS] = useState<News[]>([]);
+  
+  const [dbRunningText, setDbRunningText] = useState<string>("Selamat Datang di Website Resmi Rutan Kelas II B Sinjai");
 
   const banners: Banner[] = [
     {
@@ -55,7 +57,7 @@ export default function LamanPublikRutan() {
 
   useEffect(() => {
     const fetchBeritaOnline = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('daftar_berita')
         .select('*')
         .order('id', { ascending: false });
@@ -78,8 +80,18 @@ export default function LamanPublikRutan() {
       if (count) setTargetPenghuni(count);
     };
 
+    const fetchRunningText = async () => {
+      const { data } = await supabase
+        .from('running_text')
+        .select('content')
+        .eq('id', 1)
+        .single();
+      if (data) setDbRunningText(data.content);
+    };
+
     fetchBeritaOnline();
     fetchWBPCount();
+    fetchRunningText();
   }, []);
 
   const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
@@ -218,10 +230,10 @@ export default function LamanPublikRutan() {
           <motion.div 
             className="running-text"
             animate={{ x: ["100%", "-100%"] }}
-            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+            transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
             style={{ whiteSpace: 'nowrap', position: 'relative', width: 'max-content' }}
           >
-            Selamat Datang di Website Resmi Rutan Kelas II B Sinjai - Pantau terus jadwal kunjungan dan informasi terbaru di sini.
+            {dbRunningText}
           </motion.div>
         </div>
       </motion.div>
@@ -291,9 +303,9 @@ export default function LamanPublikRutan() {
               <h2 style={{ color: '#093661', fontWeight: '700', fontSize: isMobile ? '28px' : '40px', lineHeight: '1.2', marginTop: '0', marginBottom: '15px' }}>
                 Data Pelayanan
               </h2>
-              <p style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.3', marginTop: '0', marginBottom: '25px', marginLeft: 'auto', marginRight: 'auto', maxWidth: '450px' }}>
+              <h1 style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.3', marginTop: '0', marginBottom: '25px', marginLeft: 'auto', marginRight: 'auto', maxWidth: '450px' }}>
                 Informasi jumlah penghuni Rumah Tahanan Negara Kelas II B Sinjai yang diperbarui secara berkala untuk transparansi publik.
-              </p>
+              </h1>
               
               <div>
                 <div style={{ color: '#ebbc00', fontSize: '100px', fontWeight: '700', lineHeight: '1' }}>{countPenghuni}</div>
@@ -332,10 +344,7 @@ export default function LamanPublikRutan() {
               >
                 Mulai Pencarian
               </motion.button>
-              
-
             </motion.div>
-
           </div>
         </div>
       </section>
