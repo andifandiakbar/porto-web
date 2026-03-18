@@ -119,7 +119,7 @@ export default function SyaratKetentuan() {
               <i className="fa-solid fa-calendar-xmark"></i>
             </div>
             <div className="k-info">
-              <h4 style={titleStyle}>Hari Libur</h4>
+              <h4 style={titleStyle}>Hari Libur & tanggal Merah</h4>
               <p style={descStyle}>Hari Minggu dan Libur Nasional Kunjungan Ditiadakan</p>
             </div>
           </motion.div>
