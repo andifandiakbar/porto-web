@@ -41,19 +41,19 @@ export default function Footer() {
               <h4 style={{ textTransform: 'capitalize' }}>Kontak</h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 <li style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '15px' }}>
-                  <i className="fa-solid fa-location-dot" style={{ color: '#ffffff', marginRight: '10px', marginTop: '4px', fontSize: '16px' }}></i>
+                  <i className="fa-solid fa-location-dot" style={{ color: '#ebbc00', marginRight: '10px', marginTop: '4px', fontSize: '16px' }}></i>
                   <span style={{ color: '#e2e8f0', lineHeight: '1.5', display: 'inline-block' }}>
                     Jl. Teuku Umar No. 3, Biringere,<br />Sinjai Utara, Kab. Sinjai
                   </span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-                  <i className="fa-solid fa-phone" style={{ color: '#ffffff', marginRight: '10px', fontSize: '16px' }}></i>
+                  <i className="fa-solid fa-phone" style={{ color: '#ebbc00', marginRight: '10px', fontSize: '16px' }}></i>
                   <span style={{ color: '#e2e8f0' }}>
                     +62 851-6768-7099
                   </span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <i className="fa-solid fa-envelope" style={{ color: '#ffffff', marginRight: '10px', fontSize: '16px' }}></i>
+                  <i className="fa-solid fa-envelope" style={{ color: '#ebbc00', marginRight: '10px', fontSize: '16px' }}></i>
                   <span style={{ color: '#e2e8f0' }}>
                     Sinjairutan@yahoo.co.id
                   </span>

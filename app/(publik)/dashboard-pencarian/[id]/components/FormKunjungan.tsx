@@ -164,7 +164,7 @@ export default function FormKunjungan({ id }: { id: string }) {
           </div>
           <div className="receipt-box" style={{ backgroundColor: '#ffffff', borderRadius: '16px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0', padding: '25px', overflow: 'hidden', boxSizing: 'border-box', position: 'relative' }}>
             <div style={{ textAlign: 'center', borderBottom: '2px dashed #cbd5e1', paddingBottom: '15px', marginBottom: '20px' }}>
-              <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#093661', fontWeight: 'bold' }}>TANDA TERIMA RESI DIGITAL</h3>
+              <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#093661', fontWeight: 'bold' }}>TANDA TERIMA RESI</h3>
               <span style={{ backgroundColor: '#e0f2fe', color: '#0369a1', padding: '6px 16px', borderRadius: '30px', fontSize: '12px', fontWeight: 'bold', display: 'inline-block', letterSpacing: '0.5px' }}>Status: Kunjungan</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
