@@ -9,27 +9,34 @@ export default function SyaratKetentuan() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15
+        staggerChildren: 0.2,
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 15 },
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.6, ease: "easeOut" } 
+      transition: { duration: 1.0, ease: [0.25, 0.1, 0.25, 1] } 
     }
   };
 
   return (
-    <section className="content-layanan" style={{
-      padding: '60px 20px',
-      backgroundColor: '#ffffff',
-      minHeight: '70vh',
-      fontFamily: "Roboto, Arial, sans-serif"
-    }}>
+    <motion.section 
+      className="content-layanan" 
+      style={{
+        padding: '60px 20px',
+        backgroundColor: '#ffffff',
+        minHeight: '70vh',
+        fontFamily: "Roboto, Arial, sans-serif"
+      }}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 768px) {
           .card-responsive {
@@ -49,9 +56,7 @@ export default function SyaratKetentuan() {
         
         <motion.div 
           className="section-title" 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          variants={itemVariants}
           style={{ textAlign: 'center', marginBottom: '40px' }}
         >
           <h2 style={{ 
@@ -75,8 +80,6 @@ export default function SyaratKetentuan() {
         <motion.div 
           className="ketentuan-stack" 
           variants={containerVariants}
-          initial="hidden"
-          animate="visible"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -142,7 +145,7 @@ export default function SyaratKetentuan() {
 
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

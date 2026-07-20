@@ -5,16 +5,21 @@ import { motion } from 'framer-motion';
 
 export default function LayananIntegrasi() {
   return (
-    <section className="content-layanan" style={{ padding: '60px 20px', backgroundColor: '#ffffff', minHeight: '100vh', fontFamily: '"Roboto", Arial, sans-serif' }}>
-      <div className="container-minimalist" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+    <motion.section 
+      className="content-layanan" 
+      style={{ padding: '60px 20px', backgroundColor: '#f8fafc', minHeight: '100vh', fontFamily: '"Roboto", Arial, sans-serif' }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      <div className="container-minimalist" style={{ maxWidth: '750px', margin: '0 auto' }}>
         
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }}
           className="box-container" 
-          style={{ background: 'white', borderRadius: '16px', boxShadow: '0 4px 25px rgba(0, 0, 0, 0.03)', border: '1px solid #f1f5f9', overflow: 'hidden', marginBottom: '50px' }}
+          style={{ background: '#ffffff', borderRadius: '24px', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)', border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: '50px' }}
         >
           
           <div className="header-blue" style={{ background: '#093b77', color: 'white', padding: '24px 30px', display: 'flex', alignItems: 'center', gap: '15px', fontFamily: '"Roboto", Arial, sans-serif' }}>
@@ -22,7 +27,7 @@ export default function LayananIntegrasi() {
             <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 'bold', fontFamily: '"Roboto", Arial, sans-serif' }}>Layanan Integrasi CB/PB dan Remisi</h2>
           </div>
 
-          <div className="body-text" style={{ padding: '40px', color: '#475569', lineHeight: '1.85', fontSize: '15px', textAlign: 'left', fontFamily: '"Roboto", Arial, sans-serif' }}>
+          <div className="body-text" style={{ padding: '50px 40px', color: '#475569', lineHeight: '1.85', fontSize: '15px', textAlign: 'left', fontFamily: '"Roboto", Arial, sans-serif' }}>
             
             <p style={{ marginBottom: '16px' }}>Cuti bersyarat atau CB adalah proses pembinaan di luar Rutan atau Lembaga Pemasyarakatan bagi Narapidana yang dipidana paling lama 1 (satu) tahun 6 (enam) bulan, sekurang-kurangnya telah menjalani 2/3 ( dua pertiga ) masa pidana dengan syarat sebagai berikut :</p>
             <ul style={{ marginTop: '10px', paddingLeft: '20px', listStyleType: 'decimal', marginBottom: '24px' }}>
@@ -81,6 +86,6 @@ export default function LayananIntegrasi() {
           </div>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

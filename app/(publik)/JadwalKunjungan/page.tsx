@@ -9,27 +9,34 @@ export default function JadwalKunjunganPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15
+        staggerChildren: 0.2,
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 15 },
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.6, ease: "easeOut" } 
+      transition: { duration: 1.0, ease: [0.25, 0.1, 0.25, 1] } 
     }
   };
 
   return (
-    <section className="content-layanan" style={{
-      padding: '60px 20px',
-      backgroundColor: '#ffffff',
-      minHeight: '70vh',
-      fontFamily: "Roboto, Arial, sans-serif"
-    }}>
+    <motion.section 
+      className="content-layanan" 
+      style={{
+        padding: '60px 20px',
+        backgroundColor: '#ffffff',
+        minHeight: '70vh',
+        fontFamily: "Roboto, Arial, sans-serif"
+      }}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <style dangerouslySetInnerHTML={{__html: `
         .jadwal-grid-responsive {
           display: grid;
@@ -58,9 +65,7 @@ export default function JadwalKunjunganPage() {
         
         <motion.div 
           className="section-title" 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          variants={itemVariants}
           style={{ textAlign: 'center', marginBottom: '40px' }}
         >
           <h2 style={{ 
@@ -84,8 +89,6 @@ export default function JadwalKunjunganPage() {
         <motion.div 
           className="jadwal-grid-responsive" 
           variants={containerVariants}
-          initial="hidden"
-          animate="visible"
         >
           
           <motion.div 
@@ -93,21 +96,21 @@ export default function JadwalKunjunganPage() {
             variants={itemVariants}
             style={cardStyle}
           >
-            <div className="k-icon-wrapper" style={{ ...iconWrapperStyle, color: '#093b77', background: '#f0f7ff' }}>
+            <div className="k-icon-wrapper" style={{ ...iconWrapperStyle, color: '#093b77' }}>
               <i className="fa-solid fa-calendar-check" style={{ fontSize: '24px' }}></i>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={groupStyle}>
                 <span className="label-responsive" style={labelStyle}>Jadwal Kunjungan (Senin - Kamis)</span>
-                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Sesi 1 :</span> 09.00 - 11.15 <span style={witaStyle}>WITA</span></h4>
-                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Sesi 2 :</span> 13.15 - 14.15 <span style={witaStyle}>WITA</span></h4>
+                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Pagi :</span> 09.00 - 11.15 <span style={witaStyle}>WITA</span></h4>
+                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Siang :</span> 13.15 - 14.15 <span style={witaStyle}>WITA</span></h4>
               </div>
               
               <div style={dividerStyle}></div>
 
               <div style={groupStyle}>
                 <span className="label-responsive" style={labelStyle}>Jadwal Kunjungan (Jumat)</span>
-                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Sesi 1 :</span> 09.00 - 11.15 <span style={witaStyle}>WITA</span></h4>
+                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Pagi :</span> 09.00 - 11.15 <span style={witaStyle}>WITA</span></h4>
               </div>
             </div>
           </motion.div>
@@ -117,21 +120,21 @@ export default function JadwalKunjunganPage() {
             variants={itemVariants}
             style={cardStyle}
           >
-            <div className="k-icon-wrapper" style={{ ...iconWrapperStyle, color: '#093b77', background: '#f0f7ff' }}>
-              <i className="fa-solid fa-box-open" style={{ fontSize: '24px' }}></i>
+            <div className="k-icon-wrapper" style={{ ...iconWrapperStyle, color: '#093b77' }}>
+              <i className="fa-solid fa-boxes-packing" style={{ fontSize: '24px' }}></i>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={groupStyle}>
                 <span className="label-responsive" style={labelStyle}>Penitipan Barang (Senin - Kamis)</span>
-                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Sesi 1 :</span> 09.00 - 11.30 <span style={witaStyle}>WITA</span></h4>
-                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Sesi 2 :</span> 13.15 - 14.30 <span style={witaStyle}>WITA</span></h4>
+                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Pagi :</span> 09.00 - 11.30 <span style={witaStyle}>WITA</span></h4>
+                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Siang :</span> 13.15 - 14.30 <span style={witaStyle}>WITA</span></h4>
               </div>
 
               <div style={dividerStyle}></div>
 
               <div style={groupStyle}>
                 <span className="label-responsive" style={labelStyle}>Penitipan Barang (Jumat - Sabtu)</span>
-                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Sesi 1 :</span> 09.00 - 11.30 <span style={witaStyle}>WITA</span></h4>
+                <h4 className="title-responsive" style={titleStyle}><span style={sessionStyle}>Pagi :</span> 09.00 - 11.30 <span style={witaStyle}>WITA</span></h4>
               </div>
             </div>
           </motion.div>
@@ -140,9 +143,7 @@ export default function JadwalKunjunganPage() {
 
         <motion.div 
           className="footer-note" 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
+          variants={itemVariants}
           style={{
             textAlign: 'center',
             marginTop: '35px',
@@ -153,7 +154,7 @@ export default function JadwalKunjunganPage() {
           <p><i className="fa-solid fa-circle-info"></i> Hari Minggu & Libur Nasional Layanan Ditiadakan</p>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

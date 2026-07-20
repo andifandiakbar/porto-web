@@ -166,11 +166,11 @@ export default function PejabatMenu({ setSelectedImage }: any) {
         <table style={{...tableStyle, width: '100%', tableLayout: 'fixed' }}>
           <thead>
             <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
-              <th style={{ ...thStyle, width: '80px' }}>FOTO</th>
-              <th style={thStyle}>BIODATA</th>
-              <th style={thStyle}>JABATAN</th>
-              <th style={{ ...thStyle, width: '100px', textAlign: 'center' }}>URUTAN</th>
-              <th style={{ ...thStyle, textAlign: 'center', width: '150px' }}>NAVIGASI</th>
+              <th style={{ ...thStyle, width: '80px' }}>Foto</th>
+              <th style={thStyle}>Biodata</th>
+              <th style={thStyle}>Jabatan</th>
+              <th style={{ ...thStyle, width: '100px', textAlign: 'center' }}>Urutan</th>
+              <th style={{ ...thStyle, textAlign: 'center', width: '150px' }}>Navigasi</th>
             </tr>
           </thead>
           <tbody>
@@ -206,13 +206,13 @@ export default function PejabatMenu({ setSelectedImage }: any) {
                         </div>
                       </div>
                     ) : (
-                      <div style={{fontWeight: '700', color: '#2D3748', fontSize: '14px', letterSpacing: '-0.3px' }}>{item.nama}</div>
+                      <div style={{fontWeight: 'normal', color: '#2D3748', fontSize: '14px', letterSpacing: '-0.3px' }}>{item.nama}</div>
                     )}
                   </td>
                   <td style={tdStyle}>
                     {editId === item.id ? 
                       <input style={editInputStyle} value={tempData.jabatan} onChange={(e) => setTempData({...tempData, jabatan: e.target.value})} /> : 
-                      <div style={{color: '#4A5568', fontWeight: '700', fontSize: '14px', letterSpacing: '-0.2px'}}>{item.jabatan}</div>
+                      <div style={{color: '#4A5568', fontWeight: 'normal', fontSize: '14px', letterSpacing: '-0.2px'}}>{item.jabatan}</div>
                     }
                   </td>
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
@@ -320,7 +320,7 @@ const containerStyle = { backgroundColor: '#FFFFFF', borderRadius: '20px', fontF
 const headerTitleStyle = { color: '#093b77', fontSize: '24px', fontWeight: '700', margin: '0 0 5px 0', letterSpacing: '-0.5px' };
 const headerSubStyle = { color: '#718096', fontSize: '14px', margin: 0, letterSpacing: '-0.2px' };
 const formContainerStyle = { display: 'grid', gap: '20px', padding: '30px', backgroundColor: '#F8FAFC', borderRadius: '18px', marginTop: '20px', border: '1px solid #E2E8F0' };
-const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: 'normal', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const inputStyle = { padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', backgroundColor: 'white', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const submitButtonStyle: any = { padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', fontSize: '15px', transition: '0.2s', marginTop: '10px', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const dividerStyle = { height: '1px', backgroundColor: '#EDF2F7', margin: '45px 0' };

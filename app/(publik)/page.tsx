@@ -37,7 +37,6 @@ export default function LamanPublikRutan() {
   const [dbRunningText, setDbRunningText] = useState<string>("Selamat Datang di Website Resmi Rutan Kelas II B Sinjai");
   const [banners, setBanners] = useState<Banner[]>([
     {
-      img: '/assets/Banner.png',
       headline: "SELAMAT DATANG DI LAMAN RESMI RUTAN KELAS IIB SINJAI",
       showText: true
     }
@@ -61,7 +60,7 @@ export default function LamanPublikRutan() {
 
       if (data && data.length > 0) {
         const formattedBanners = data.map((item: any, index: number) => ({
-          img: item.url,
+          img: item.img_url,
           headline: index === 0 ? "SELAMAT DATANG DI LAMAN RESMI RUTAN KELAS IIB SINJAI" : "",
           showText: index === 0
         }));
@@ -171,16 +170,25 @@ export default function LamanPublikRutan() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);   
 
-  const fadeInVariant: Variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  const smoothVariant: Variants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1.0, ease: [0.25, 0.1, 0.25, 1] } }
   };
   
   return (
-    <main className="main-wrapper" style={{ fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
+    <motion.main 
+      className="main-wrapper" 
+      style={{ fontFamily: '"Segoe UI", Roboto, Helvetica, Arial, sans-serif', overscrollBehaviorY: 'none' }}
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.8, staggerChildren: 0.2 } }
+      }}
+    >
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-      <section className="slider-container" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      <motion.section variants={smoothVariant} className="slider-container" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
         <button className="nav-arrow arrow-left" style={{ zIndex: 20, cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
         </button>
@@ -189,15 +197,12 @@ export default function LamanPublikRutan() {
             <div key={i} className="slide" style={{ minWidth: '100%', flexShrink: 0 }}>
               <img src={item.img} alt={`Banner ${i + 1}`} style={{ width: '100%' }} />
               {item.showText && (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1 }}
+                <div 
                   className="headline-overlay" 
                   style={{ background: 'transparent' }}
                 >
                   <h1 className="headline-text" style={{ fontSize: isMobile ? '20px' : '38px' }}>{item.headline}</h1>
-                </motion.div>
+                </div>
               )}
             </div>
           ))}
@@ -205,39 +210,33 @@ export default function LamanPublikRutan() {
         <button className="nav-arrow arrow-right" style={{ zIndex: 20, cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); nextSlide(); }}>
           <i className="fa-solid fa-chevron-right"></i>
         </button>
-      </section>
+      </motion.section>
 
       <motion.section 
         className="services-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={{ visible: { transition: { staggerChildren: 0 } } }}
+        variants={smoothVariant}
       >
         <div className="services-wrapper">
           <div className="services-grid">
-            <motion.div variants={fadeInVariant} className="card">
+            <div className="card">
               <div className="icon"><i className="fa-solid fa-calendar-days"></i></div>
-              <h3>Jadwal Kunjungan & Penitipan</h3>
+              <h3>JADWAL KUNJUNGAN & PENITIPAN</h3>
               <p>Cek jadwal operasional kunjungan</p>
               <Link href="/JadwalKunjungan" className="btn">Lihat Jadwal</Link>
-            </motion.div>
-            <motion.div variants={fadeInVariant} className="card">
+            </div>
+            <div className="card">
               <div className="icon"><i className="fa-solid fa-file-lines"></i></div>
-              <h3>Syarat & Ketentuan</h3>
+              <h3>SYARAT & KETENTUAN</h3>
               <p>Prosedur dan ketentuan kunjungan</p>
               <Link href="/SyaratKetentuan" className="btn">Baca Detail</Link>
-            </motion.div>
+            </div>
           </div>
         </div>
       </motion.section>
 
       <motion.div 
         className="announcement-bar"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeInVariant}
+        variants={smoothVariant}
       >
         <div className="announcement-label">Berita Terkini </div>
         <div className="announcement-content" style={{ overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
@@ -254,10 +253,7 @@ export default function LamanPublikRutan() {
 
       <motion.section 
         className="latest-news-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeInVariant}
+        variants={smoothVariant}
       >
         <div className="container">
           <div className="news-slider-wrapper" style={{ position: 'relative' }}>
@@ -303,17 +299,15 @@ export default function LamanPublikRutan() {
         </div>
       </motion.section>
 
-      <section className="wbp-info-section" style={{ width: '100%', paddingTop: '80px', paddingBottom: '80px', backgroundColor: '#F8FAFC' }}>
+      <motion.section 
+        className="wbp-info-section" 
+        style={{ width: '100%', paddingTop: '80px', paddingBottom: '80px', backgroundColor: '#F8FAFC' }}
+        variants={smoothVariant}
+      >
         <div className="container-wbp" style={{ maxWidth: '1150px', marginLeft: 'auto', marginRight: 'auto', paddingLeft: '20px', paddingRight: '20px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1.3fr', gap: '40px', alignItems: 'center' }}>
             
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInVariant}
-              style={{ textAlign: 'center' }}
-            >
+            <div style={{ textAlign: 'center' }}>
               <h2 style={{ color: '#093661', fontWeight: '700', fontSize: isMobile ? '28px' : '40px', lineHeight: '1.2', marginTop: '0', marginBottom: '15px' }}>
                 DATA PELAYANAN
               </h2>
@@ -325,15 +319,11 @@ export default function LamanPublikRutan() {
                 <div style={{ color: '#ebbc00', fontSize: '100px', fontWeight: '700', lineHeight: '1' }}>{countPenghuni}</div>
                 <div style={{ color: '#64748b', fontSize: '18px', fontWeight: '600', marginTop: '10px', textTransform: 'none' }}>Total Penghuni Saat Ini</div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div 
+            <div 
               className="wbp-search-container" 
               style={{ backgroundColor: '#ffffff', paddingTop: isMobile ? '30px' : '45px', paddingBottom: isMobile ? '30px' : '45px', paddingLeft: isMobile ? '20px' : '45px', paddingRight: isMobile ? '20px' : '45px', borderRadius: '28px', boxShadow: '0 10px 40px rgba(0,0,0,0.04)', borderStyle: 'solid', borderWidth: '1px', borderColor: '#f1f5f9' }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInVariant}
             >
               <h3 style={{ color: '#093661', fontSize: '30px', fontWeight: '760', marginTop: '0', marginBottom: '40px' }}>Silahkan Cari Nama WBP yang akan dikunjungi</h3>
               
@@ -358,10 +348,16 @@ export default function LamanPublikRutan() {
               >
                 Mulai Pencarian
               </motion.button>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </section>
-    </main>
+      </motion.section>
+
+      <style jsx global>{`
+        html, body {
+          overscroll-behavior-y: none;
+        }
+      `}</style>
+    </motion.main>
   );
 }

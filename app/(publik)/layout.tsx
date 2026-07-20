@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, ReactNode } from 'react';
-
+import React, { ReactNode } from 'react';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import "./desktop.css"; 
 import "./mobile.css";
 
@@ -10,229 +11,15 @@ interface LayoutProps {
 }
 
 export default function RootLayout({ children }: LayoutProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [activeSubMenu, setActiveSubMenu] = useState<boolean>(false);
-  const [activeMediaMenu, setActiveMediaMenu] = useState<boolean>(false); 
-  const [activeItem, setActiveItem] = useState<string | null>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const mobileStatus = window.innerWidth < 768;
-      setIsMobile(mobileStatus);
-      if (!mobileStatus) {
-        setIsMenuOpen(false);
-        setActiveSubMenu(false);
-        setActiveMediaMenu(false);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const handleItemClick = (id: string, href: string) => {
-    setActiveItem(id); 
-    setTimeout(() => {
-      setIsMenuOpen(false);
-      setActiveItem(null);
-      window.location.href = href;
-    }, 250); 
-  };
-
   return (
     <div className="layout-wrapper">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         
         <main className="main-wrapper">
-          <div className="topbar">
-            <div className="container topbar-flex">
-              <div className="topbar-social">
-                <a href="https://www.instagram.com/rutansinjai" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@rutansinjai" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-tiktok"></i></a>
-                <a href="https://www.facebook.com/share/1E2nTFHBkA/" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook"></i></a>
-                <a href="https://youtube.com/@rutansinjai3762?si=iec3-i3r6VG8yG3D" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube"></i></a>
-              </div>
-              <div className="topbar-info">
-                <a href="https://wa.me/6281356640175" target="_blank" rel="noopener noreferrer" className="info-item"><i className="fa-brands fa-whatsapp"></i> +62 851-6768-7099</a>
-                <a href="mailto:rutanIIBsinjai@email.go.id" className="info-item"><i className="fa-solid fa-envelope"></i> Sinjairutan@yahoo.co.id</a>
-              </div>
-            </div>
-          </div>
-
-          <nav className="navbar">
-            <div className="container nav-flex">
-              <div className="logo" style={{ cursor: 'pointer' }} onClick={() => window.location.href = '/'}>
-                <img 
-                  src="/assets/logo.png" 
-                  alt="Logo Rutan" 
-                  style={{ 
-                    objectFit: 'contain',
-                    flexShrink: 0
-                  }} 
-                />
-                <span>Rutan<br /><small style={{ fontWeight: 'normal' }}>Kelas IIB Sinjai</small></span>
-              </div>
-
-              <div className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                <i className={isMenuOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i>
-              </div>
-
-              <ul className={`menu ${isMenuOpen ? 'active' : ''}`}>
-                <li><a href="/"><i className="fa-solid fa-house"></i>Beranda</a></li>
-                <li><a href="/profil"><i className="fa-solid fa-user"></i> Profil</a></li>
-                <li className="dropdown">
-                  <a href="#"><i className="fa-solid fa-image"></i> Media</a>
-                  <ul className="dropdown-menu">
-                    <li><a href="/karya">Karya Binaan</a></li>
-                    <li><a href="#">Galeri Foto</a></li>
-                    <li><a href="#">Video Kegiatan</a></li>
-                  </ul>
-                </li>
-                <li className="dropdown">
-                  <a href="#"><i className="fa-solid fa-circle-info"></i> Layanan</a>
-                  <ul className="dropdown-menu">
-                    <li><a href="/Layanan/informasi-layanan">Informasi Layanan</a></li>
-                    <li><a href="/Layanan/survei">Survei</a></li>
-                    <li><a href="/Layanan/ptsp">Pusat Terpadu (PTSP)</a></li>
-                  </ul>
-                </li>
-                <li><a href="/Pengaduan"><i className="fa-solid fa-headset"></i> Pengaduan</a></li>
-              </ul>
-            </div>
-          </nav>
-
-          {isMenuOpen && isMobile && (
-            <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)}>
-              <div className="mobile-menu-modal" onClick={(e) => e.stopPropagation()}>
-                <div className="mobile-menu-header">
-                  <i className="fa-solid fa-xmark close-icon" onClick={() => setIsMenuOpen(false)}></i>
-                </div>
-                <ul className="mobile-menu-list">
-                  <li><a href="/">Beranda</a></li>
-                  <li><a href="/profil">Profil</a></li>
-
-                  <li className={`mobile-dropdown ${activeMediaMenu ? 'active-parent-blue' : ''}`}>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setActiveMediaMenu(!activeMediaMenu); }}>
-                      Media
-                      <i className={`fa-solid fa-chevron-${activeMediaMenu ? 'up' : 'down'}`} style={{float: 'right', fontSize: '14px', marginTop: '5px'}}></i>
-                    </a>
-                    {activeMediaMenu && (
-                      <ul className="mobile-submenu">
-                        <li><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('karya', '/karya'); }}>Karya Binaan</a></li>
-                        <li><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('foto', '#'); }}>Galeri Foto</a></li>
-                        <li><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('video', '#'); }}>Video Kegiatan</a></li>
-                      </ul>
-                    )}
-                  </li>
-                  
-                  <li className={`mobile-dropdown ${activeSubMenu ? 'active-parent-blue' : ''}`}>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setActiveSubMenu(!activeSubMenu); }}>
-                      Layanan 
-                      <i className={`fa-solid fa-chevron-${activeSubMenu ? 'up' : 'down'}`} style={{float: 'right', fontSize: '14px', marginTop: '5px'}}></i>
-                    </a>
-                    
-                    {activeSubMenu && (
-                      <ul className="mobile-submenu">
-                        <li className={activeItem === 'info' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('info', '/Layanan/informasi-layanan'); }}>
-                            Informasi Layanan
-                          </a>
-                        </li>
-                        <li className={activeItem === 'admin' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('admin', '/Layanan/survei'); }}>
-                            Survei
-                          </a>
-                        </li>
-                        <li className={activeItem === 'ptsp' ? 'active-item-blue' : ''}>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleItemClick('ptsp', '/Layanan/ptsp'); }}>
-                            Pusat Terpadu (PTSP)
-                          </a>
-                        </li>
-                      </ul>
-                    )}
-                  </li>
-                  
-                  <li><a href="/Pengaduan">Pengaduan</a></li>
-                </ul>
-              </div>
-            </div>
-          )}
-
+          <Navbar />
           {children}
-
-          <footer className="main-footer">
-            <div className="container">
-              <div className="footer-grid">
-                <div className="footer-col">
-                  <div className="footer-logo">
-                    <img 
-                      src="/assets/logo.png" 
-                      alt="logo" 
-                      style={{ 
-                        objectFit: 'contain'
-                      }} 
-                    />
-                  </div>
-                  <div className="footer-info">
-                    <p>Kementerian Imigrasi Dan</p>
-                    <p>Pemasyarakatan Kanwil</p>
-                    <p>Direktorat Jenderal</p>
-                    <p>Pemasyarakatan Sulsel</p>
-                    <p>Rutan Kelas IIB Sinjai</p>
-                  </div>
-                </div>
-
-                <div className="footer-col">
-                  <h4>Instansi Terkait</h4>
-                  <ul>
-                    <li><a href="/Instansi/Ditjen-Pemasyarakatan">Ditjen Pemasyarakatan</a></li>
-                    <li><a href="/Instansi/Kepolisian-RI">Kepolisian RI</a></li>
-                    <li><a href="/Instansi/Kejaksaan-RI">Kejaksaan RI</a></li>
-                    <li><a href="/Instansi/Mahkamah-Agung-RI">Mahkamah Agung RI</a></li>
-                    <li><a href="/Instansi/Peradi">Peradi</a></li>
-                  </ul>
-                </div>
-
-                <div className="footer-col">
-                  <h4>Profil Unit Pelaksana Teknis</h4>
-                  <ul>
-                    <li><a href="/Instansi/Sejarah-Pemasyarakatan">Sejarah Pemasyarakatan</a></li>
-                    <li><a href="/Instansi/Kedudukan-Tugas-dan-Fungsi">Kedudukan Tugas dan Fungsi</a></li>
-                    <li><a href="/Instansi/Visi-Misi">Visi Misi</a></li>
-                    <li><a href="/Instansi/Mars-Keminipas">Mars Keminipas</a></li>
-                  </ul>
-                </div>
-                
-                <div className="footer-col">
-                  <div className="footer-map-container" style={{ position: 'relative' }}>
-                    <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.7164998826763!2d120.25039377501066!3d-5.128683694848525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbe25d7967ea149%3A0x95616f676330edc8!2sRutan%20Sinjai!5e0!3m2!1sid!2sid!4v1740983400000!5m2!1sid!2sid" 
-                      width="100%" 
-                      height="209" 
-                      style={{ border: 0 }}
-                      allowFullScreen={true} 
-                      loading="lazy" 
-                      referrerPolicy="no-referrer-when-downgrade">
-                    </iframe>
-                  </div>
-                </div>
-              </div>
-              <div className="footer-copyright" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '40px', paddingTop: '20px', textAlign: 'center', fontSize: '14px', opacity: 0.8 }}>
-                <p>© 2026 Maganghub Kemnaker. All rights reserved.</p>
-              </div>
-            </div>
-          </footer>
+          <Footer />
         </main>
-    </div>
-  );
-}
-
-function FormInput({ label, value, ...props }: any) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <label>{label}</label>
-      <input value={value ?? ""} {...props} />
     </div>
   );
 }

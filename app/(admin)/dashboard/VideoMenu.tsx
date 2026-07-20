@@ -145,10 +145,10 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
           <thead>
             <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
-              <th style={{ ...thStyle, width: '15%' }}>PREVIEW</th>
-              <th style={{ ...thStyle, width: '45%' }}>JUDUL VIDEO</th>
-              <th style={{ ...thStyle, width: '20%' }}>TIPE</th>
-              <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>NAVIGASI</th>
+              <th style={{ ...thStyle, width: '15%' }}>Preview</th>
+              <th style={{ ...thStyle, width: '45%' }}>Judul Video</th>
+              <th style={{ ...thStyle, width: '20%' }}>Tipe</th>
+              <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>Navigasi</th>
             </tr>
           </thead>
           <tbody>
@@ -158,9 +158,9 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
                   <td style={tdStyle}>
                     <div style={{ width: '60px', height: '40px', backgroundColor: '#2D3748', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px' }}>▶</div>
                   </td>
-                  <td style={{ ...tdStyle, fontWeight: '700', color: '#2D3748', letterSpacing: '-0.2px' }}>{vid.judul}</td>
+                  <td style={{ ...tdStyle, fontWeight: 'normal', color: '#2D3748', letterSpacing: '-0.2px' }}>{vid.judul}</td>
                   <td style={tdStyle}>
-                    <span style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', backgroundColor: vid.tipe === 'youtube' ? '#FFF5F5' : '#F0FFF4', color: vid.tipe === 'youtube' ? '#C53030' : '#2F855A', border: vid.tipe === 'youtube' ? '1px solid #FED7D7' : '1px solid #C6F6D5' }}>
+                    <span style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: '700', textTransform: 'capitalize', backgroundColor: vid.tipe === 'youtube' ? '#FFF5F5' : '#F0FFF4', color: vid.tipe === 'youtube' ? '#C53030' : '#2F855A', border: vid.tipe === 'youtube' ? '1px solid #FED7D7' : '1px solid #C6F6D5' }}>
                       {vid.tipe}
                     </span>
                   </td>
@@ -188,9 +188,9 @@ export default function VideoMenu({ daftarVideo = [], fetchVideo, handleDelete }
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.1px' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: 'normal', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.1px' };
 const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as 'border-box', transition: '0.3s', fontFamily: '"Arial"' };
 const buttonStyle: any = { gridColumn: 'span 2', padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', fontSize: '15px', transition: '0.3s', fontFamily: '"Arial"' };
-const thStyle = { padding: '18px 20px', textAlign: 'left' as 'left', fontSize: '11px', fontWeight: '700', color: '#718096', textTransform: 'uppercase' as 'uppercase', letterSpacing: '0.5px', fontFamily: '"Arial"' };
+const thStyle = { padding: '18px 20px', textAlign: 'left' as 'left', fontSize: '11px', fontWeight: '700', color: '#718096', letterSpacing: '0.5px', fontFamily: '"Arial"' };
 const tdStyle = { padding: '20px', fontSize: '14px', fontFamily: '"Arial"' };
 const deleteBtnStyle = { color: '#E53E3E', border: '1px solid #FED7D7', background: '#FFF5F5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', fontFamily: '"Arial"', letterSpacing: '-0.1px' };

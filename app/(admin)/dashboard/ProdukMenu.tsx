@@ -205,11 +205,11 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
           <thead>
             <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
-              <th style={{ ...thStyle, width: '15%' }}>FOTO</th>
-              <th style={{ ...thStyle, width: '30%' }}>NAMA PRODUK</th>
-              <th style={{ ...thStyle, width: '20%' }}>KATEGORI</th>
-              <th style={{ ...thStyle, width: '15%' }}>HARGA</th>
-              <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>NAVIGASI</th>
+              <th style={{ ...thStyle, width: '15%' }}>Foto</th>
+              <th style={{ ...thStyle, width: '30%' }}>Nama Produk</th>
+              <th style={{ ...thStyle, width: '20%' }}>Kategori</th>
+              <th style={{ ...thStyle, width: '15%' }}>Harga</th>
+              <th style={{ ...thStyle, textAlign: 'center', width: '20%' }}>Navigasi</th>
             </tr>
           </thead>
           <tbody>
@@ -227,21 +227,21 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
                     {editingId === item.id ? (
                       <input style={inlineInputStyle} value={editForm.nama} onChange={(e) => setEditForm({...editForm, nama: e.target.value})} />
                     ) : (
-                      <div style={{ fontWeight: '700', color: '#2D3748', fontSize: '14px', letterSpacing: '-0.3px' }}>{item.nama}</div>
+                      <div style={{ fontWeight: 'normal', color: '#2D3748', fontSize: '14px', letterSpacing: '-0.3px' }}>{item.nama}</div>
                     )}
                   </td>
                   <td style={tdStyle}>
                     {editingId === item.id ? (
                       <input style={inlineInputStyle} value={editForm.kategori} onChange={(e) => setEditForm({...editForm, kategori: e.target.value})} />
                     ) : (
-                      <div style={{ fontSize: '13px', color: '#4A5568', fontWeight: '700', letterSpacing: '-0.2px' }}>{item.kategori}</div>
+                      <div style={{ fontSize: '13px', color: '#4A5568', fontWeight: 'normal', letterSpacing: '-0.2px' }}>{item.kategori}</div>
                     )}
                   </td>
                   <td style={tdStyle}>
                     {editingId === item.id ? (
                       <input style={inlineInputStyle} value={editForm.harga} onChange={(e) => setEditForm({...editForm, harga: e.target.value})} />
                     ) : (
-                      <div style={{ fontSize: '13px', fontWeight: '700', color: '#2D3748', letterSpacing: '-0.2px' }}>{item.harga}</div>
+                      <div style={{ fontSize: '13px', fontWeight: 'normal', color: '#2D3748', letterSpacing: '-0.2px' }}>{item.harga}</div>
                     )}
                   </td>
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
@@ -275,7 +275,7 @@ export default function ProdukMenu({ daftarKarya = [], fetchKarya, handleDelete 
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: 'normal', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as 'border-box', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const inlineInputStyle = { width: '100%', padding: '5px 8px', borderRadius: '5px', border: '1px solid #093b77', fontSize: '13px', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const buttonStyle: any = { gridColumn: 'span 2', padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', fontSize: '15px', fontFamily: '"Arial"', letterSpacing: '-0.2px' };

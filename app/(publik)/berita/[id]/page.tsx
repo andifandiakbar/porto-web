@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
+import { motion } from 'framer-motion';
 
 const supabase = createClient(
   'https://xnwqcxaehvaqxzodqidc.supabase.co', 
@@ -17,6 +18,7 @@ export default function DetailBerita() {
   const [loading, setLoading] = useState(true);
   const [kategoriAktif, setKategoriAktif] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +26,7 @@ export default function DetailBerita() {
       if (!newsId) return;
 
       setLoading(true);
+      setVisible(false);
       try {
         const { data: detail, error: detailError } = await supabase
           .from('daftar_berita')
@@ -50,6 +53,7 @@ export default function DetailBerita() {
         console.error("Gagal mengambil data:", err);
       } finally {
         setLoading(false);
+        setTimeout(() => setVisible(true), 50);
       }
     }
     fetchData();
@@ -82,29 +86,26 @@ export default function DetailBerita() {
     setBeritaDisplay(hasilCari);
   };
 
-  if (loading) return (
-    <div style={{ backgroundColor: '#f9fbff', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="loader"></div>
-      <p style={{ marginTop: '15px', color: '#093661', fontWeight: 'bold', fontFamily: 'sans-serif' }}>Memuat halaman...</p>
-      <style dangerouslySetInnerHTML={{ __html: `
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #093661; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      `}} />
-    </div>
-  );
-
-  if (!berita) return (
-    <div style={{ textAlign: 'center', padding: '100px', fontFamily: 'sans-serif' }}>
+  if (!berita && !loading) return (
+    <div style={{ textAlign: 'center', padding: '100px', fontFamily: 'sans-serif', overscrollBehaviorY: 'none' }}>
       <h3>Berita tidak ditemukan.</h3>
       <button onClick={() => router.push('/')} style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}>Kembali ke Home</button>
     </div>
   );
 
   return (
-    <div style={{ backgroundColor: '#fff', minHeight: '100vh', padding: '20px', fontFamily: 'sans-serif' }}>
+    <motion.div 
+      style={{ backgroundColor: '#fff', minHeight: '100vh', padding: '60px 20px', fontFamily: 'sans-serif', overscrollBehaviorY: 'none' }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+    >
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       
       <style dangerouslySetInnerHTML={{ __html: `
+        html, body {
+          overscroll-behavior-y: none;
+        }
         .container-utama { max-width: 1140px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; }
         .area-berita { flex: 1; min-width: 300px; background: #fff; }
         .sidebar { width: 320px; }
@@ -121,7 +122,7 @@ export default function DetailBerita() {
         .cat-aktif { color: #007bff; font-weight: bold; }
 
         .meta-ikon { color: #007bff; margin-right: 5px; }
-        .form-input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; outline: none; font-size: 14px; width: 100%; }
+        .form-input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; outline: none; font-size: 14px; width: 100%; box-sizing: border-box; }
         
         .btn-submit { margin-top: 15px; padding: 12px 25px; background-color: #002e5b; color: #ffffff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
         .btn-submit:hover { background-color: #004080; }
@@ -129,90 +130,102 @@ export default function DetailBerita() {
         .btn-search { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background-color: #002e5b; color: #ffffff; border: none; border-radius: 4px; width: 35px; height: 35px; cursor: pointer; transition: background-color 0.2s; }
         .btn-search:hover { background-color: #004080; }
 
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.show { opacity: 1; transform: translateY(0); }
+
         @media (max-width: 992px) { .container-utama { flex-direction: column; } .sidebar { width: 100%; } }
       `}} />
 
-      <div className="container-utama">
-        <div className="area-berita">
-          <img 
-            src={berita.img || '/assets/berita1.png'} 
-            style={{ width: '100%', maxHeight: '500px', borderRadius: '12px', marginBottom: '25px', objectFit: 'cover' }} 
-            alt="Thumbnail" 
-          />
-
-          <h1 style={{ color: '#002e5b', fontSize: '28px', marginBottom: '15px', fontWeight: 'bold' }}>{berita.judul}</h1>
-          
-          <div style={{ color: '#888', fontSize: '13px', marginBottom: '30px', display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
-             <span><i className="fa-solid fa-user meta-ikon"></i>Administrator</span>
-             <span>|</span>
-             <span><i className="fa-solid fa-calendar meta-ikon"></i>{berita.tanggal}</span>
-             <span>|</span>
-             <span style={{ textTransform: 'capitalize' }}><i className="fa-solid fa-tag meta-ikon"></i>{berita.status || 'Informasi'}</span>
-          </div>
-
-          <div 
-            style={{ lineHeight: '1.8', color: '#444', fontSize: '16px', textAlign: 'justify', whiteSpace: 'pre-line' }} 
-            dangerouslySetInnerHTML={{ __html: berita.isi }} 
-          />
-
-          <div style={{ marginTop: '60px' }}>
-            <h3 style={{ margin: '0 0 20px 0', color: '#333', fontSize: '20px', fontWeight: 'bold' }}>0 Komentar</h3>
-            <div style={{ backgroundColor: '#f8f9fa', padding: '30px', borderRadius: '8px' }}>
-              <h4 style={{ marginTop: 0, marginBottom: '20px' }}>Kirim Komentar</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
-                <input type="text" placeholder="Nama" className="form-input" />
-                <input type="email" placeholder="Email" className="form-input" />
-              </div>
-              <textarea placeholder="Pesan Anda" className="form-input" style={{ height: '100px', resize: 'none' }}></textarea>
-              <button className="btn-submit">Kirim</button>
-            </div>
-          </div>
-        </div>
-
-        <div className="sidebar">
-          <div className="sidebar-box">
-            <div className="sidebar-title">Search</div>
-            <div style={{ position: 'relative', marginBottom: '30px', marginTop: '15px' }}>
-              <input 
-                type="text" 
-                placeholder="Cari berita..." 
-                className="form-input" 
-                style={{ paddingRight: '45px' }} 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+      {!loading && berita && (
+        <motion.div 
+          className={`fade-in${visible ? ' show' : ''}`}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }}
+        >
+          <div className="container-utama">
+            <div className="area-berita">
+              <img 
+                src={berita.img || '/assets/berita1.png'} 
+                style={{ width: '100%', maxHeight: '500px', borderRadius: '12px', marginBottom: '25px', objectFit: 'cover' }} 
+                alt="Thumbnail" 
               />
-              <button onClick={handleSearch} className="btn-search">
-                <i className="fa-solid fa-search"></i>
-              </button>
-            </div>
 
-            <div className="sidebar-title">Kategori</div>
-            <div style={{ marginBottom: '30px' }}>
-              <span onClick={resetFilter} className={`cat-item ${!kategoriAktif && !searchTerm ? 'cat-aktif' : ''}`}>Semua Kategori</span>
-              <span onClick={() => handleFilterKategori('Informasi')} className={`cat-item ${kategoriAktif === 'Informasi' ? 'cat-aktif' : ''}`}>Informasi</span>
-              <span onClick={() => handleFilterKategori('Wawasan')} className={`cat-item ${kategoriAktif === 'Wawasan' ? 'cat-aktif' : ''}`}>Wawasan</span>
-            </div>
+              <h1 style={{ color: '#002e5b', fontSize: '28px', marginBottom: '15px', fontWeight: 'bold' }}>{berita.judul}</h1>
+              
+              <div style={{ color: '#888', fontSize: '13px', marginBottom: '30px', display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center' }}>
+                 <span><i className="fa-solid fa-user meta-ikon"></i>Administrator</span>
+                 <span>|</span>
+                 <span><i className="fa-solid fa-calendar meta-ikon"></i>{berita.tanggal}</span>
+                 <span>|</span>
+                 <span style={{ textTransform: 'capitalize' }}><i className="fa-solid fa-tag meta-ikon"></i>{berita.status || 'Informasi'}</span>
+              </div>
 
-            <div className="sidebar-title">
-              {searchTerm ? `Hasil Cari: "${searchTerm}"` : (kategoriAktif ? `Berita ${kategoriAktif}` : 'Berita Terakhir')}
-            </div>
-            
-            <div style={{ marginTop: '15px' }}>
-              {beritaDisplay.length > 0 ? (
-                beritaDisplay.map((item) => (
-                  <div key={item.id} className="news-item" onClick={() => window.location.href = `/berita/${item.id}`}>
-                    <h4>{item.judul}</h4>
-                    <small><i className="fa-regular fa-calendar" style={{ marginRight: '5px' }}></i>{item.tanggal}</small>
+              <div 
+                style={{ lineHeight: '1.8', color: '#444', fontSize: '16px', textAlign: 'justify', whiteSpace: 'pre-line' }} 
+                dangerouslySetInnerHTML={{ __html: berita.isi }} 
+              />
+
+              <div style={{ marginTop: '60px' }}>
+                <h3 style={{ margin: '0 0 20px 0', color: '#333', fontSize: '20px', fontWeight: 'bold' }}>0 Komentar</h3>
+                <div style={{ backgroundColor: '#f8f9fa', padding: '30px', borderRadius: '8px' }}>
+                  <h4 style={{ marginTop: 0, marginBottom: '20px' }}>Kirim Komentar</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
+                    <input type="text" placeholder="Nama" className="form-input" />
+                    <input type="email" placeholder="Email" className="form-input" />
                   </div>
-                ))
-              ) : (
-                <p style={{ fontSize: '13px', color: '#999' }}>Tidak ada berita yang sesuai.</p>
-              )}
+                  <textarea placeholder="Pesan Anda" className="form-input" style={{ height: '100px', resize: 'none' }}></textarea>
+                  <button className="btn-submit">Kirim</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="sidebar">
+              <div className="sidebar-box">
+                <div className="sidebar-title">Search</div>
+                <div style={{ position: 'relative', marginBottom: '30px', marginTop: '15px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="Cari berita..." 
+                    className="form-input" 
+                    style={{ paddingRight: '45px' }} 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  />
+                  <button onClick={handleSearch} className="btn-search">
+                    <i className="fa-solid fa-search"></i>
+                  </button>
+                </div>
+
+                <div className="sidebar-title">Kategori</div>
+                <div style={{ marginBottom: '30px' }}>
+                  <span onClick={resetFilter} className={`cat-item ${!kategoriAktif && !searchTerm ? 'cat-aktif' : ''}`}>Semua Kategori</span>
+                  <span onClick={() => handleFilterKategori('Informasi')} className={`cat-item ${kategoriAktif === 'Informasi' ? 'cat-aktif' : ''}`}>Informasi</span>
+                  <span onClick={() => handleFilterKategori('Wawasan')} className={`cat-item ${kategoriAktif === 'Wawasan' ? 'cat-aktif' : ''}`}>Wawasan</span>
+                </div>
+
+                <div className="sidebar-title">
+                  {searchTerm ? `Hasil Cari: "${searchTerm}"` : (kategoriAktif ? `Berita ${kategoriAktif}` : 'Berita Terakhir')}
+                </div>
+                
+                <div style={{ marginTop: '15px' }}>
+                  {beritaDisplay.length > 0 ? (
+                    beritaDisplay.map((item) => (
+                      <div key={item.id} className="news-item" onClick={() => window.location.href = `/berita/${item.id}`}>
+                        <h4>{item.judul}</h4>
+                        <small><i className="fa-regular fa-calendar" style={{ marginRight: '5px' }}></i>{item.tanggal}</small>
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ fontSize: '13px', color: '#999' }}>Tidak ada berita yang sesuai.</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      )}
+    </motion.div>
   );
 }

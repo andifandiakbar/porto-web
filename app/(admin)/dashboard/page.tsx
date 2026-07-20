@@ -31,7 +31,7 @@ export default function RutanSinjaiDashboard() {
   const [pengaduanForm, setPengaduanForm] = useState({ pelapor: '', kontak: '', isi: '' });
   
   const [wbpForm, setWbpForm] = useState({ 
-    nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana', foto: null 
+    nama: '', jenis_kelamin: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana', foto: null 
   });
 
   const [daftarPengaduan, setDaftarPengaduan] = useState<any[]>([]);
@@ -141,6 +141,7 @@ export default function RutanSinjaiDashboard() {
     }
     const payload = { 
         nama: wbpForm.nama, 
+        jenis_kelamin: wbpForm.jenis_kelamin || null,
         nik: wbpForm.nik, 
         kasus: wbpForm.kasus, 
         lama_pidana: wbpForm.lama_pidana, 
@@ -152,13 +153,13 @@ export default function RutanSinjaiDashboard() {
     const { error } = await supabase.from('daftar_wbp').insert([payload]);
     if (!error) { 
       alert(`Berhasil menyimpan data ${wbpForm.status_wbp}`); 
-      setWbpForm({ nama: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana', foto: null }); 
+      setWbpForm({ nama: '', jenis_kelamin: '', nik: '', kasus: '', lama_pidana: '', ekspirasi: '', blok_kamar: '', status_wbp: 'Narapidana', foto: null }); 
       fetchWBP(); 
     } else { alert("Error: " + error.message); }
   };
 
   const handleUpdateWBP = async (data: any) => {
-    const { error } = await supabase.from('daftar_wbp').update({ nama: data.nama, nik: data.nik, kasus: data.kasus, lama_pidana: data.lama_pidana, ekspirasi: data.ekspirasi, blok_kamar: data.blok_kamar, status_wbp: data.status_wbp, foto_url: data.foto_url }).eq('id', data.id);
+    const { error } = await supabase.from('daftar_wbp').update({ nama: data.nama, jenis_kelamin: data.jenis_kelamin, nik: data.nik, kasus: data.kasus, lama_pidana: data.lama_pidana, ekspirasi: data.ekspirasi, blok_kamar: data.blok_kamar, status_wbp: data.status_wbp, foto_url: data.foto_url }).eq('id', data.id);
     if (!error) { alert("Data berhasil diperbarui!"); fetchWBP(); } else { alert("Gagal memperbarui: " + error.message); }
   };
 
@@ -212,21 +213,21 @@ export default function RutanSinjaiDashboard() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: '"Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif', position: 'fixed', top: 0, left: 0 }}>
+    <div style={{ display: 'flex', height: '100vh', width: '100vw', backgroundColor: '#F4F7FE', overflow: 'hidden', fontFamily: '"Inter", "Roboto", "Segoe UI", sans-serif', position: 'fixed', top: 0, left: 0 }}>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
       
       {isMobile && isSidebarVisible && (
         <div onClick={() => setIsSidebarVisible(false)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.2)', zIndex: 999, backdropFilter: 'blur(5px)' }}></div>
       )}
 
-      <aside style={{ width: isSidebarVisible ? '280px' : '0px', backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column', zIndex: 1000, transition: 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)', overflow: 'hidden', flexShrink: 0, position: isMobile ? 'fixed' : 'relative', height: '100vh', borderRight: '0px solid #E2E8F0' }}>
-        <div style={{ width: '280px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '29px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
-            <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '100px', height: '90px', objectFit: 'contain' }} />
-            <div style={{ marginTop: '5px' }}>
+      <aside style={{ width: isSidebarVisible ? '260px' : '0px', backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', zIndex: 1000, transition: 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)', overflow: 'hidden', flexShrink: 0, position: isMobile ? 'fixed' : 'relative', height: '100vh', borderRight: '0px solid #E2E8F0' }}>
+        <div style={{ width: '260px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '10px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0px', flexShrink: 0, backgroundColor: '#FFF' }}>
+            <img src="/assets/logo.png" alt="Logo Rutan" style={{ width: '90px', height: '70px', objectFit: 'contain' }} />
+            <div style={{ marginTop: '1px' }}>
               <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#093b77', margin: '0 0 2px 0', letterSpacing: '-0.3px' }}>Rutan</h2>
-              <p style={{ fontSize: '13px', color: '#A0AEC0', margin: 0, fontWeight: '700', letterSpacing: '-0.1px' }}>Kelas IIB Sinjai</p>
+              <p style={{ fontSize: '13px', color: '#093b77', margin: 0, fontWeight: '500' }}>Kelas IIB Sinjai</p>
             </div>
           </div>
           
@@ -235,20 +236,20 @@ export default function RutanSinjaiDashboard() {
             <NavItem active={activeMenu === 'profil'} onClick={() => { setActiveMenu('profil'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-id-card" label="Profil" />
             <NavItem active={activeMenu === 'banner'} onClick={() => { setActiveMenu('banner'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-layer-group" label="Banner Header" />
             <NavItem active={activeMenu === 'wbp'} onClick={() => { setActiveMenu('wbp'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-folder-open" label="Data WBP" />
-            <NavItem active={activeMenu === 'ptsp'} onClick={() => { setActiveMenu('ptsp'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-square-poll-horizontal" label="Pelayanan PTSP" />
+            <NavItem active={activeMenu === 'ptsp'} onClick={() => { setActiveMenu('ptsp'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-clipboard-user" label="Pelayanan PTSP" />
             <NavItem active={activeMenu === 'pengaduan'} onClick={() => { setActiveMenu('pengaduan'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-comment-dots" label="Pengaduan" />
-            <NavItem active={activeMenu === 'runningtext'} onClick={() => { setActiveMenu('runningtext'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-heading" label="Running Text" />
+            <NavItem active={activeMenu === 'runningtext'} onClick={() => { setActiveMenu('runningtext'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-bullhorn" label="Running Text" />
             <NavItem active={activeMenu === 'berita'} onClick={() => { setActiveMenu('berita'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-file-invoice" label="Update Berita" />
-            <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-wand-magic-sparkles" label="Karya WBP" />
+            <NavItem active={activeMenu === 'produk'} onClick={() => { setActiveMenu('produk'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-bag-shopping" label="Karya WBP" />
             <NavItem active={activeMenu === 'foto'} onClick={() => { setActiveMenu('foto'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-images" label="Galeri Foto" />
             <NavItem active={activeMenu === 'video'} onClick={() => { setActiveMenu('video'); if(isMobile) setIsSidebarVisible(false); }} icon="fa-solid fa-clapperboard" label="Galeri Video" />
           </nav>
           
-          <div style={{ padding: '20px 24px', borderTop: '1px solid #F4F7FE', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0, backgroundColor: '#FAFBFC' }}>
+          <div style={{ padding: '20px 24px', borderTop: '0px solid #e1e7f5', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0, backgroundColor: '#FAFBFC' }}>
             <div style={avatarCircle}>AD</div>
             <div style={{ flex: 1, overflow: 'hidden' }}>
-              <div style={{ fontSize: '14px', fontWeight: '700', color: '#1B2559', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Staf Admin</div>
-              <div style={{ fontSize: '12px', color: '#A3AED0', fontWeight: '500' }}>Administrator</div>
+              <div style={{ fontSize: '14px', fontWeight: '700', color: '#093b77', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Staf Admin</div>
+              <div style={{ fontSize: '12px', color: '#1b25596e', fontWeight: '500' }}>Administrator</div>
             </div>
             <button 
                 onMouseEnter={() => setIsExitHover(true)}
@@ -278,7 +279,7 @@ export default function RutanSinjaiDashboard() {
               <i className="fa-solid fa-bars"></i>
             </button>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: isMobile ? '18px' : '28px', color: '#1B2559', fontWeight: '800', letterSpacing: '-0.5px', marginTop: '2px' }}>Dashboard Admin</div>
+              <div style={{ fontSize: isMobile ? '18px' : '28px', color: '#093b77', fontWeight: '700', letterSpacing: '-0.5px', marginTop: '2px' }}>Dashboard Admin</div>
             </div>
           </div>
         </header>
@@ -287,7 +288,7 @@ export default function RutanSinjaiDashboard() {
           <div style={{ ...glassBanner, padding: isMobile ? '35px 24px' : '40px' }}>
             <div style={{ position: 'relative', zIndex: 2 }}>
               <span style={{ display: 'inline-block', backgroundColor: 'rgba(255,255,255,0.15)', padding: '6px 16px', borderRadius: '20px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '14px' }}>{getMenuLabel()}</span>
-              <h2 style={{ margin: '0 0 6px 0', fontSize: isMobile ? '24px' : '32px', fontWeight: '800', color: '#ebbc00', letterSpacing: '-0.5px' }}>Sistem Informasi Layanan Rutan IIB Sinjai</h2>
+              <h2 style={{ margin: '0 0 6px 0', fontSize: isMobile ? '24px' : '32px', fontWeight: '700', color: '#ebbc00', letterSpacing: '-0.5px' }}>Sistem Informasi Layanan Rutan IIB Sinjai</h2>
               <p style={{ margin: 0, color: 'rgba(255,255,255,0.8)', fontSize: isMobile ? '13px' : '15px', fontWeight: '30', maxWidth: '650px', lineHeight: '1.5' }}>Pusat kendali modern terintegrasi untuk pengelolaan portal data informasi, monitoring pengaduan masyarakat, serta rekapitulasi data warga binaan.</p>
             </div>
             <div style={glassCircle1}></div><div style={glassCircle2}></div>

@@ -99,9 +99,7 @@ export default function BeritaMenu({
         </button>
       </div>
 
-      <div style={{ height: '1px', backgroundColor: '#EDF2F7', margin: '45px 0' }} />
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px', marginTop: '45px' }}>
         <h4 style={{ color: '#093b77', fontSize: '18px', fontWeight: '700', margin: 0, letterSpacing: '-0.3px' }}>
           Riwayat Berita
         </h4>
@@ -121,7 +119,7 @@ export default function BeritaMenu({
             {daftarBerita.length > 0 ? (
               daftarBerita.map((news: any) => (
                 <tr key={news.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                  <td style={{ ...tdStyle, fontWeight: '700', color: '#2D3748' }}>
+                  <td style={{ ...tdStyle, color: '#2D3748' }}>
                     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', letterSpacing: '-0.2px', lineHeight: '1.2' }}>
                       {news.judul}
                     </div>
@@ -138,7 +136,7 @@ export default function BeritaMenu({
                         padding: '6px 12px', 
                         borderRadius: '8px',
                         fontSize: '11px',
-                        textTransform: 'uppercase',
+                        textTransform: 'capitalize',
                         border: news.status === 'Informasi' ? '1px solid #093b7720' : '1px solid #C6F6D5',
                         letterSpacing: '-0.1px',
                         fontFamily: '"Arial"'
@@ -172,10 +170,10 @@ export default function BeritaMenu({
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
-const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', backgroundColor: 'white', boxSizing: 'border-box' as 'border-box', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
-const selectStyle = { ...inputStyle, cursor: 'pointer', fontWeight: '700', color: '#093b77' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: 'normal', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
+const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', backgroundColor: 'white', boxSizing: 'border-box' as 'border-box', fontFamily: '"Arial"', letterSpacing: '-0.2px', fontWeight: 'normal' };
+const selectStyle = { ...inputStyle, cursor: 'pointer', fontWeight: 'normal', color: '#093b77' };
 const buttonStyle: any = { width: '100%', padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontSize: '15px', fontWeight: '700', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const thStyle = { padding: '18px 20px', fontSize: '11px', fontWeight: '700', color: '#718096', letterSpacing: '0.5px', fontFamily: '"Arial"' };
 const tdStyle = { padding: '20px', fontSize: '14px', color: '#4A5568', fontFamily: '"Arial"' };
-const deleteBtnStyle = { color: '#E53E3E', border: '1px solid #FED7D7', background: '#FFF5F5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
+const deleteBtnStyle = { color: '#E53E3E', border: '1px solid #FED7D7', background: '#FFF5F5', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '12px', fontFamily: '"Arial"', letterSpacing: '-0.2px' }; 

@@ -121,9 +121,9 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
           <thead>
             <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid #EDF2F7' }}>
-              <th style={{ ...thStyle, width: '25%', textAlign: 'left' }}>PRATINJAU</th>
-              <th style={{ ...thStyle, width: '55%', textAlign: 'left' }}>KETERANGAN</th>
-              <th style={{ ...thStyle, width: '20%', textAlign: 'center' }}>NAVIGASI</th>
+              <th style={{ ...thStyle, width: '25%', textAlign: 'left' }}>Pratinjau</th>
+              <th style={{ ...thStyle, width: '55%', textAlign: 'left' }}>Keterangan</th>
+              <th style={{ ...thStyle, width: '20%', textAlign: 'center' }}>Navigasi</th>
             </tr>
           </thead>
           <tbody>
@@ -133,7 +133,7 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
                   <td style={tdStyle}>
                     <img src={foto.url} alt="galeri" style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} />
                   </td>
-                  <td style={{ ...tdStyle, fontWeight: '700', color: '#4A5568', letterSpacing: '-0.2px', lineHeight: '1.2' }}>{foto.keterangan}</td>
+                  <td style={{ ...tdStyle, color: '#4A5568', letterSpacing: '-0.2px', lineHeight: '1.2' }}>{foto.keterangan}</td>
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
                     <button 
                       onClick={() => handleDelete(foto.id, 'daftar_foto')} 
@@ -158,7 +158,7 @@ export default function FotoMenu({ daftarFoto = [], fetchFoto, handleDelete }: F
   );
 }
 
-const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: '700', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
+const labelStyle = { display: 'block', marginBottom: '10px', fontSize: '13px', fontWeight: 'normal', color: '#2D3748', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E2E8F0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as 'border-box', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const buttonStyle: any = { padding: '16px', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', fontSize: '15px', fontFamily: '"Arial"', letterSpacing: '-0.2px' };
 const thStyle = { padding: '18px 20px', fontSize: '11px', fontWeight: '700', color: '#718096', letterSpacing: '0.5px', fontFamily: '"Arial"' };
