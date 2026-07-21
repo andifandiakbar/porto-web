@@ -116,14 +116,14 @@ export default function SurveiLayanan() {
           </span>
         </div>
 
-        <h1 style={headerTitleStyle}>Survei Kepuasan Masyarakat</h1>
+        <h1 style={headerTitleStyle}>SURVEI KEPUASAN MASYARAKAT</h1>
 
         <div style={textContainerStyle}>
           <p style={{ ...paragraphStyle, fontWeight: 'bold', color: '#093b77', fontSize: '16px' }}>
             Assalamualaikum Warahmatullahi Wabarakatuh
           </p>
           <p style={paragraphStyle}>
-            Dalam rangka memberikan pelayanan publik yang berkualitas kepada masyarakat, perlu dilaksanakan survei untuk mengukur tingkat kepuasan masyarakat sebagai pengguna layanan Rutan Kelas II Sinjai.
+            Dalam rangka memberikan pelayanan publik yang berkualitas kepada masyarakat, perlu dilaksanakan survei untuk mengukur tingkat kepuasan masyarakat sebagai pengguna layanan Rutan Kelas IIB Sinjai.
           </p>
           <p style={{ ...paragraphStyle, margin: 0 }}>
             Kami meminta partisipasi Bapak/Ibu dalam pengisian <strong>Survei Mandiri Persepsi Anti Korupsi</strong> dan <strong>Survei Persepsi Kualitas Pelayanan</strong> melalui tautan resmi di bawah ini:
