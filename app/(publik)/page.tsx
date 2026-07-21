@@ -19,7 +19,6 @@ interface News {
   img: string;
   headline: string;
   meta: string;
-  status?: string; 
 }
 
 export default function LamanPublikRutan() {
@@ -29,6 +28,7 @@ export default function LamanPublikRutan() {
   const [countPenghuni, setCountPenghuni] = useState<number>(0);
   const [targetPenghuni, setTargetPenghuni] = useState<number>(0);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(true);
   const [newsIndex, setNewsIndex] = useState<number>(0); 
 
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -108,30 +108,31 @@ export default function LamanPublikRutan() {
   }, []);
 
   const combinedNews = newsFromCMS.length > 0 ? newsFromCMS : newsDataDefault;
-  const extendedNews = combinedNews;
 
   const nextSlide = () => {
     setIsPaused(true);
-    setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+    setIsTransitioning(true);
+    setCurrentSlide((prev) => prev + 1);
     setTimeout(() => setIsPaused(false), 5000);
   };
 
   const prevSlide = () => {
     setIsPaused(true);
+    setIsTransitioning(true);
     setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
     setTimeout(() => setIsPaused(false), 5000);
   };
 
   const nextNews = () => {
     const itemsToShow = isMobile ? 1 : 3;
-    const maxIndex = Math.max(0, extendedNews.length - itemsToShow);
+    const maxIndex = Math.max(0, combinedNews.length - itemsToShow);
     if (newsIndex < maxIndex) setNewsIndex(prev => prev + 1);
     else setNewsIndex(0);
   };
 
   const prevNews = () => {
     const itemsToShow = isMobile ? 1 : 3;
-    const maxIndex = Math.max(0, extendedNews.length - itemsToShow);
+    const maxIndex = Math.max(0, combinedNews.length - itemsToShow);
     if (newsIndex > 0) setNewsIndex(prev => prev - 1);
     else setNewsIndex(maxIndex);
   };
@@ -146,13 +147,24 @@ export default function LamanPublikRutan() {
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
-    if (!isPaused && banners.length > 0) {
+    if (!isPaused && banners.length > 1) {
       interval = setInterval(() => {
-        setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+        setIsTransitioning(true);
+        setCurrentSlide((prev) => prev + 1);
       }, 5000);
     }
     return () => { if (interval) clearInterval(interval); };
   }, [isPaused, banners.length]);
+
+  useEffect(() => {
+    if (banners.length > 0 && currentSlide === banners.length) {
+      const timer = setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentSlide(0);
+      }, 600); 
+      return () => clearTimeout(timer);
+    }
+  }, [currentSlide, banners.length]);
 
   useEffect(() => {
     if (countPenghuni < targetPenghuni) {
@@ -192,8 +204,8 @@ export default function LamanPublikRutan() {
         <button className="nav-arrow arrow-left" style={{ zIndex: 20, cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); prevSlide(); }}>
           <i className="fa-solid fa-chevron-left"></i>
         </button>
-        <div className="slider-wrapper" style={{ display: 'flex', transform: `translateX(-${currentSlide * 100}%)`, transition: 'transform 0.6s ease-in-out' }}>
-          {banners.map((item, i) => (
+        <div className="slider-wrapper" style={{ display: 'flex', transform: `translateX(-${currentSlide * 100}%)`, transition: isTransitioning ? 'transform 0.6s ease-in-out' : 'none' }}>
+          {(banners.length > 0 ? [...banners, banners[0]] : []).map((item, i) => (
             <div key={i} className="slide" style={{ minWidth: '100%', flexShrink: 0 }}>
               <img src={item.img} alt={`Banner ${i + 1}`} style={{ width: '100%' }} />
               {item.showText && (
@@ -264,7 +276,7 @@ export default function LamanPublikRutan() {
                 transition: 'transform 0.5s ease-in-out', 
                 transform: `translateX(-${newsIndex * (isMobile ? 100 : 33.333)}%)` 
               }}>
-                {extendedNews.map((item, index) => (
+                {combinedNews.map((item, index) => (
                   <Link 
                     href={`/berita/${item.id}`} 
                     key={index} 
